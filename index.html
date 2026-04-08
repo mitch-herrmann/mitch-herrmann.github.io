@@ -448,7 +448,7 @@ footer {
 <nav>
   <a href="#" class="nav-logo">
     <div class="logo-orb-wrap"><div class="logo-orb"></div></div>
-    Mitchell Herrmann
+    Your Name
   </a>
   <div class="nav-links">
     <a href="#work">Work</a>
@@ -464,16 +464,17 @@ footer {
 <div class="hero">
   <canvas id="waveCanvas"></canvas>
   <div class="hero-glow" id="heroGlow"></div>
-  <div class="hero-monogram">MH</div>
+  <div class="hero-monogram">YN</div>
   <div class="hero-eyebrow">Portfolio — 2026</div>
   <div class="hero-name" id="heroName">Your<br>Name</div>
   <div class="hero-bottom">
     <div class="hero-tagline">
-     Adapting to an accelerating world, one vibecoded project at a time
+      A short, honest line about what you build and why it matters.
+      Let the work do the talking.
     </div>
     <div class="hero-meta">
-      <span><strong>Based in</strong> Denver</span>
-      <span><strong>Focus</strong> AI · Healthcare · Automation · Design </span>
+      <span><strong>Based in</strong> Your City</span>
+      <span><strong>Focus</strong> Engineering · Finance · Design</span>
       <span><strong>Status</strong> Open to collaborations</span>
     </div>
   </div>
@@ -653,18 +654,26 @@ function filterWork(cat, btn) {
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   var t = 0;
-  var mouseXNorm = 0.5; // normalized 0-1 across hero width
+  var mouseXNorm = 0.5;
   var hero = document.querySelector('.hero');
+  var dpr = window.devicePixelRatio || 1;
+  var lastW = 0, lastH = 0;
 
   function resize() {
-    canvas.width  = canvas.offsetWidth  * (window.devicePixelRatio || 1);
-    canvas.height = canvas.offsetHeight * (window.devicePixelRatio || 1);
-    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    var w = canvas.offsetWidth;
+    var h = canvas.offsetHeight;
+    if (w === 0 || h === 0) return; // not laid out yet
+    if (w === lastW && h === lastH) return; // no change
+    lastW = w; lastH = h;
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  resize();
+
+  // defer first resize until after paint
+  requestAnimationFrame(function() { resize(); });
   window.addEventListener('resize', resize);
 
-  // track mouse X for local wave disturbance
   hero.addEventListener('mousemove', function(e) {
     var r = hero.getBoundingClientRect();
     mouseXNorm = (e.clientX - r.left) / r.width;
@@ -672,31 +681,29 @@ function filterWork(cat, btn) {
 
   function getScrollPct() {
     var heroH = hero.offsetHeight;
-    var scrolled = window.scrollY;
-    return Math.min(1, scrolled / (heroH * 0.7));
+    if (!heroH) return 0;
+    return Math.min(1, window.scrollY / (heroH * 0.7));
   }
 
   function draw() {
-    var w = canvas.offsetWidth;
-    var h = canvas.offsetHeight;
+    resize(); // re-check on every frame — catches late layout
+    var w = lastW;
+    var h = lastH;
+    if (w < 1 || h < 1) { requestAnimationFrame(draw); return; }
+
     ctx.clearRect(0, 0, w, h);
-
     var sp  = getScrollPct();
-    // wave rests at the very bottom pixel of canvas = section boundary
     var cy  = h - 1;
-    // amplitude: full → 0 as scroll goes 0 → 1
     var amp = h * 0.52 * (1 - sp);
-    // local disturbance from mouse position
     var mx  = mouseXNorm * w;
-
     t += 0.016;
 
-    // -- ghost wave (offset phase, lower opacity) --
+    // ghost wave
     if (amp > 0.5) {
       ctx.beginPath();
       for (var x = 0; x <= w; x += 2) {
-        var localBump = Math.exp(-Math.pow((x - mx) / (w * 0.22), 2)) * amp * 0.3;
-        var y = cy - (Math.sin(x * 0.014 * 0.65 - t * 0.55 + 1.4) * amp * 0.38 + localBump);
+        var lb = Math.exp(-Math.pow((x - mx) / (w * 0.22), 2)) * amp * 0.3;
+        var y  = cy - (Math.sin(x * 0.0091 - t * 0.55 + 1.4) * amp * 0.38 + lb);
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
       ctx.strokeStyle = 'rgba(96,200,255,' + (0.13 * (1 - sp)) + ')';
@@ -704,30 +711,26 @@ function filterWork(cat, btn) {
       ctx.stroke();
     }
 
-    // -- main wave --
+    // main wave
     ctx.beginPath();
     for (var x = 0; x <= w; x += 2) {
-      var localBump = Math.exp(-Math.pow((x - mx) / (w * 0.28), 2)) * amp * 0.45;
-      var y = cy - (Math.sin(x * 0.014 - t + 0.3) * amp + localBump);
+      var lb = Math.exp(-Math.pow((x - mx) / (w * 0.28), 2)) * amp * 0.45;
+      var y  = cy - (Math.sin(x * 0.0091 - t + 0.3) * amp + lb);
       x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
-    // wave fades from ice-blue toward the line color as it flattens
-    var waveR = Math.round(96  + (30  - 96)  * sp);
-    var waveG = Math.round(200 + (37  - 200) * sp);
-    var waveB = Math.round(255 + (48  - 255) * sp);
-    var waveA = 0.55 - sp * 0.1;
-    ctx.strokeStyle = 'rgba(' + waveR + ',' + waveG + ',' + waveB + ',' + waveA + ')';
+    var wR = Math.round(96  + (30  - 96)  * sp);
+    var wG = Math.round(200 + (37  - 200) * sp);
+    var wB = Math.round(255 + (48  - 255) * sp);
+    ctx.strokeStyle = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + (0.55 - sp * 0.1) + ')';
     ctx.lineWidth = 1.2;
     ctx.stroke();
 
-    // -- flat baseline line: fades IN as wave flattens, exactly at canvas bottom --
-    // this merges visually with the filter-bar's border-top
+    // flat baseline fades in as wave collapses
     if (sp > 0.3) {
-      var lineAlpha = (sp - 0.3) / 0.7;
+      var la = (sp - 0.3) / 0.7;
       ctx.beginPath();
-      ctx.moveTo(0, cy);
-      ctx.lineTo(w, cy);
-      ctx.strokeStyle = 'rgba(30,37,48,' + lineAlpha + ')';
+      ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+      ctx.strokeStyle = 'rgba(30,37,48,' + la + ')';
       ctx.lineWidth = 1;
       ctx.stroke();
     }
