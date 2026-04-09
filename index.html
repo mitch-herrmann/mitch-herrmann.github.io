@@ -69,7 +69,6 @@ nav {
   text-decoration: none;
 }
 
-/* Orb + expanding ring */
 .logo-orb-wrap {
   position: relative;
   display: flex; align-items: center; justify-content: center;
@@ -134,18 +133,21 @@ nav {
   top: 60px; left: 0; right: 0;
   width: 100%;
   height: calc(100vh - 340px);
+  min-height: 300px; /* Stabilizes view on mobile */
   pointer-events: none; z-index: 2;
 }
 
-/* Cursor-tracking glow */
+/* Cursor-tracking glow (Optimized for GPU) */
 .hero-glow {
   position: absolute;
   width: 700px; height: 700px; border-radius: 50%;
   background: radial-gradient(circle, rgba(96,200,255,.055) 0%, transparent 60%);
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: left 1s cubic-bezier(.25,.46,.45,.94), top 1s cubic-bezier(.25,.46,.45,.94);
-  left: 25%; top: 55%;
+  transform: translate(-50%, -50%); 
+  /* Using transform instead of left/top for 60fps movement */
+  transition: transform 0.8s cubic-bezier(.16, 1, .3, 1);
+  left: 0; top: 0; 
+  will-change: transform;
 }
 
 .hero-monogram {
@@ -173,7 +175,6 @@ nav {
   background: var(--dim); opacity: .8;
 }
 
-/* Hero name — chars animated individually by JS */
 .hero-name {
   font-family: var(--display);
   font-size: clamp(60px, 8vw, 120px);
@@ -454,7 +455,7 @@ footer {
   <div class="nav-links">
     <a href="#work">Work</a>
     <a href="#about">About</a>
-    <a href="/cdn-cgi/l/email-protection#8cf5e3f9cce9f4ede1fce0e9a2efe3e1">Contact</a>
+    <a href="mailto:you@example.com">Contact</a>
   </div>
   <div class="nav-status">
     <div class="nav-dot"></div>
@@ -537,21 +538,6 @@ footer {
       </div>
     </a>
 
-    <a href="#" class="work-row" data-cat="engineering">
-      <div class="row-num">04</div>
-      <div class="row-body">
-        <div class="row-title">Project Name</div>
-        <div class="row-tags">
-          <span class="row-tag">Engineering</span>
-          <span class="row-tag">Systems</span>
-        </div>
-      </div>
-      <div class="row-right">
-        <span class="row-year">2024</span>
-        <span class="row-arrow">→</span>
-      </div>
-    </a>
-
   </div>
 </div>
 
@@ -559,8 +545,8 @@ footer {
   <div class="info-left">
     <div class="info-eyebrow">About</div>
     <div class="info-body">
-      Write a few sentences about yourself — your background, what you've built, what problems genuinely interest you. Keep it direct and specific rather than generic.<br><br>
-      Maybe mention what you're currently exploring, what draws you to the intersection of your different fields, or what kind of work you want next.
+      Write a few sentences about yourself — your background, what you've built, and what problems genuinely interest you. Keep it direct and specific.<br><br>
+      Maybe mention what you're currently exploring or what draws you to the intersection of engineering and finance.
     </div>
   </div>
   <div class="info-right">
@@ -587,21 +573,20 @@ footer {
     <span class="skill-chip">Data Analysis</span>
     <span class="skill-chip">Systems Design</span>
     <span class="skill-chip">UI / UX</span>
-    <span class="skill-chip">Add yours</span>
   </div>
 </div>
 
 <footer>
   <span>&copy; 2026 Your Name</span>
   <div class="footer-links">
-    <a href="https://github.com/yourusername">GitHub</a>
-    <a href="https://linkedin.com/in/yourusername">LinkedIn</a>
-    <a href="/cdn-cgi/l/email-protection#50293f25103528313d203c357e333f3d">Email</a>
+    <a href="#">GitHub</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Email</a>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Filter
+<script>
+// Work filtering logic
 function filterWork(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -621,18 +606,16 @@ function filterWork(cat, btn) {
   });
 }
 
-// Hero name: letter-by-letter reveal
+// Letter-by-letter hero reveal
 (function () {
   var el = document.getElementById('heroName');
   if (!el) return;
   var nodes = [];
-  // collect text and <br> nodes
   el.childNodes.forEach(function(n) { nodes.push(n); });
   var out = '';
   var delay = 0.28;
   nodes.forEach(function(n) {
     if (n.nodeType === 3) {
-      // text node — wrap each non-space char
       n.textContent.split('').forEach(function(ch) {
         if (ch === ' ') {
           out += ' ';
@@ -649,7 +632,7 @@ function filterWork(cat, btn) {
   el.innerHTML = out;
 })();
 
-// Waveform — visible in upper hero, flattens on scroll
+// Waveform animation loop
 document.addEventListener('DOMContentLoaded', function () {
   var canvas = document.getElementById('waveCanvas');
   if (!canvas) return;
@@ -677,7 +660,9 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   var cachedScrollY = 0;
-  window.addEventListener('scroll', function () { cachedScrollY = window.scrollY || window.pageYOffset || 0; }, { passive: true });
+  window.addEventListener('scroll', function () { 
+    cachedScrollY = window.scrollY || window.pageYOffset || 0; 
+  }, { passive: true });
 
   function getScrollPct() {
     if (!hero) return 0;
@@ -699,7 +684,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var mx  = mouseXNorm * w;
     t += 0.016;
 
-    // ghost wave
     if (amp > 1) {
       ctx.beginPath();
       for (var x = 0; x <= w; x += 3) {
@@ -712,7 +696,6 @@ document.addEventListener('DOMContentLoaded', function () {
       ctx.stroke();
     }
 
-    // main wave
     ctx.beginPath();
     for (var x = 0; x <= w; x += 2) {
       var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
@@ -726,7 +709,6 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.lineWidth = 1.4;
     ctx.stroke();
 
-    // flat line materialises as wave collapses
     if (sp > 0.2) {
       var la = Math.min(1, (sp - 0.2) / 0.8);
       ctx.beginPath();
@@ -742,18 +724,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
   requestAnimationFrame(draw);
 });
+
+// Cursor tracking (Optimized GPU version)
 (function () {
   var hero = document.querySelector('.hero');
   var glow = document.getElementById('heroGlow');
   if (!hero || !glow) return;
+
+  // Set initial position
+  glow.style.transform = 'translate(25vw, 55vh) translate(-50%, -50%)';
+
   hero.addEventListener('mousemove', function(e) {
     var r = hero.getBoundingClientRect();
-    glow.style.left = (e.clientX - r.left) + 'px';
-    glow.style.top  = (e.clientY - r.top) + 'px';
+    var x = e.clientX - r.left;
+    var y = e.clientY - r.top;
+    
+    // Updates only transform property for maximum performance
+    glow.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
   });
+
   hero.addEventListener('mouseleave', function() {
-    glow.style.left = '25%';
-    glow.style.top  = '55%';
+    glow.style.transform = 'translate(25vw, 55vh) translate(-50%, -50%)';
   });
 })();
 </script>
