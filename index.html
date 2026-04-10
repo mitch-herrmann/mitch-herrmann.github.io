@@ -491,7 +491,7 @@ footer {
     </div>
   </a>
 
-  <a href="/cdn-cgi/l/email-protection#ee97819bae8b968f839e828bc08d8183" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
+  <a href="mailto:you@example.com" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">04</div>
       <div class="section-panel-title">Contact</div>
@@ -509,7 +509,7 @@ footer {
   <div class="footer-links" id="footerLinks"></div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* =====================================================================
    CONTENT LOADER — reads content.json and populates the page
    ===================================================================== */
@@ -1016,4 +1016,16 @@ function initWave(introMode) {
         ctx.lineWidth   = 1 + la;
         if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,' + la * 0.6 + ')'; ctx.shadowBlur = 8 * la; }
         ctx.stroke();
-        ctx.s
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+}
+</script>
+</body>
+</html>
