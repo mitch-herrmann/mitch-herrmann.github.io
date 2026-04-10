@@ -162,7 +162,7 @@ nav.waveform-active {
   height: calc(100vh - 340px);
   min-height: 300px;
   pointer-events: none; 
-  z-index: 2;
+  z-index: 0;
   opacity: 1;
   transition: opacity 0.4s ease;
 }
@@ -178,7 +178,7 @@ nav.waveform-active {
   top: 60px; left: 0; right: 0;
   height: 1px;
   background: var(--line);
-  z-index: 2;
+  z-index: 0;
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -692,7 +692,7 @@ function filterWork(cat, btn) {
   el.innerHTML = out;
 })();
 
-// Waveform animation with variable speed and jitter
+// Waveform animation with randomized variable speed and jitter
 document.addEventListener('DOMContentLoaded', function () {
   var canvas = document.getElementById('waveCanvas');
   var divider = document.getElementById('waveformDivider');
@@ -706,13 +706,22 @@ document.addEventListener('DOMContentLoaded', function () {
   var dpr = window.devicePixelRatio || 1;
   var bufW = 0, bufH = 0;
   
-  // Jitter timing
-  var jitterCycle = 0;
-  var jitterDuration = 0.4; // 400ms of fast jitter
-  var jitterInterval = 8; // Every 8 seconds
-  
-  // Speed multiplier for waveform
+  // Randomized jitter timing
+  var jitterTimer = 0;
+  var nextJitterStart = randomRestTime(); // Time until next jitter burst
+  var jitterDuration = 0; // Current burst duration
+  var isInJitter = false;
   var speedMultiplier = 1;
+
+  function randomRestTime() {
+    // Rest time between bursts: 2-8 seconds (in milliseconds)
+    return Math.random() * 6000 + 2000;
+  }
+
+  function randomJitterDuration() {
+    // Jitter burst duration: 750ms-2s (in milliseconds)
+    return Math.random() * 1250 + 750;
+  }
 
   function syncBuffer() {
     var w = canvas.offsetWidth;
@@ -742,8 +751,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateNavState(sp) {
-    // At 70% scroll, activate waveform-to-divider transition
-    if (sp >= 0.7) {
+    // Smooth transition with hysteresis to prevent jumping
+    if (sp >= 0.65) {
       nav.classList.add('waveform-active');
       divider.classList.add('active');
       canvas.classList.add('hidden');
@@ -754,7 +763,7 @@ document.addEventListener('DOMContentLoaded', function () {
           link.classList.add('illuminated');
         }
       });
-    } else {
+    } else if (sp < 0.6) {
       nav.classList.remove('waveform-active');
       divider.classList.remove('active');
       canvas.classList.remove('hidden');
@@ -773,18 +782,31 @@ document.addEventListener('DOMContentLoaded', function () {
     var sp  = getScrollPct();
     updateNavState(sp);
     
-    var cy  = h * 0.52;
+    // Smooth vertical scroll: waveform moves up as you scroll
+    var easeScrollPct = sp < 0.65 ? sp / 0.65 : 1;
+    var scrollOffset = easeScrollPct * (h - 60); // Scroll from bottom to top
+    
+    var cy  = h * 0.52 - scrollOffset;
     var amp = h * 0.3 * (1 - sp);
     var mx  = mouseXNorm * w;
     
-    // Jitter logic: every jitterInterval seconds, speed up for jitterDuration
-    var cycleMod = (t % jitterInterval);
-    if (cycleMod < jitterDuration) {
-      speedMultiplier = 3.5; // Fast speed during jitter
+    // Randomized jitter logic: variable duration bursts at random intervals
+    jitterTimer += 16; // ~16ms per frame
+    if (!isInJitter) {
+      if (jitterTimer >= nextJitterStart) {
+        isInJitter = true;
+        jitterDuration = randomJitterDuration();
+        jitterTimer = 0;
+      }
     } else {
-      speedMultiplier = 1; // Normal speed
+      if (jitterTimer >= jitterDuration) {
+        isInJitter = false;
+        nextJitterStart = randomRestTime();
+        jitterTimer = 0;
+      }
     }
     
+    speedMultiplier = isInJitter ? 3.2 : 1;
     t += 0.016 * speedMultiplier;
 
     if (amp > 1) {
