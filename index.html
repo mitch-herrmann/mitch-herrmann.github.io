@@ -137,7 +137,7 @@ nav.waveform-active {
   font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
   text-transform: uppercase; color: var(--dim); margin-bottom: 24px;
   display: flex; align-items: center; gap: 12px;
-  animation: fadeUp .6s .1s ease both;
+  opacity: 0; animation: fadeUp .7s 4.2s ease both;
 }
 .hero-eyebrow::before {
   content: ''; display: inline-block; width: 32px; height: 1px;
@@ -167,7 +167,7 @@ nav.waveform-active {
 }
 .hero-bottom {
   display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 40px; animation: fadeUp .6s .5s ease both; position: relative; z-index: 3;
+  gap: 40px; opacity: 0; animation: fadeUp .8s 4.8s ease both; position: relative; z-index: 3;
 }
 .hero-tagline {
   font-family: var(--display); font-size: 11px; font-variant: small-caps;
@@ -307,45 +307,80 @@ nav.waveform-active {
   display: grid; grid-template-columns: 1fr 1fr;
   min-height: 340px; border-bottom: 1px solid var(--line);
   text-decoration: none; color: inherit; position: relative; overflow: hidden;
-  transition: background .4s ease;
+  border-left: 2px solid transparent;
+  transition: background .4s ease, border-left-color .35s ease;
 }
-.section-panel:hover { background: rgba(19,22,28,.6); }
+.section-panel:hover {
+  background: rgba(22,26,34,.8);
+  border-left-color: var(--panel-accent, var(--ice));
+}
+
+/* Radial glow from left edge */
 .section-panel::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 80% at -10% 50%,
-    var(--panel-glow, rgba(96,200,255,.04)) 0%, transparent 65%);
+  background: radial-gradient(ellipse 55% 100% at -5% 50%,
+    var(--panel-glow, rgba(96,200,255,.07)) 0%, transparent 60%);
   opacity: 0; transition: opacity .5s ease; pointer-events: none;
+  z-index: 0;
 }
 .section-panel:hover::before { opacity: 1; }
+
+/* Shimmer sweep on hover */
+.section-panel::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--panel-shimmer, rgba(255,255,255,.03)) 50%,
+    transparent 100%);
+  transition: left .6s cubic-bezier(.25,.46,.45,.94);
+  pointer-events: none; z-index: 0;
+}
+.section-panel:hover::after { left: 160%; }
+
 .section-panel-left {
   padding: 64px 48px; display: flex; flex-direction: column;
   justify-content: space-between; border-right: 1px solid var(--line);
+  position: relative; z-index: 1;
 }
 .section-panel-num {
   font-family: var(--mono); font-size: 9px; color: var(--dim);
   letter-spacing: .12em; margin-bottom: auto;
+  transition: color .3s ease;
 }
+.section-panel:hover .section-panel-num { color: var(--panel-accent, var(--ice)); }
 .section-panel-title {
   font-family: var(--display); font-size: clamp(48px, 6vw, 88px);
   font-weight: 800; letter-spacing: -.04em; line-height: .9;
-  color: var(--text); opacity: .15;
-  transition: opacity .35s ease, transform .4s cubic-bezier(.25,.46,.45,.94);
+  color: var(--text); opacity: .12;
+  transition: opacity .4s ease, transform .45s cubic-bezier(.25,.46,.45,.94),
+              color .4s ease, text-shadow .4s ease;
   margin-top: 32px;
 }
-.section-panel:hover .section-panel-title { opacity: 1; transform: translateX(8px); }
+.section-panel:hover .section-panel-title {
+  opacity: 1;
+  transform: translateX(8px);
+  color: #ffffff;
+  text-shadow: 0 0 60px var(--panel-glow, rgba(96,200,255,.25));
+}
 .section-panel-right {
-  padding: 64px 48px; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 64px 48px; display: flex; flex-direction: column;
+  justify-content: flex-end; position: relative; z-index: 1;
 }
 .section-panel-desc {
   font-family: var(--body); font-size: 11px; color: var(--muted);
   line-height: 1.75; max-width: 360px; margin-bottom: 32px;
+  transition: color .3s ease;
 }
+.section-panel:hover .section-panel-desc { color: var(--text); }
 .section-panel-arrow {
   font-family: var(--mono); font-size: 10px; color: var(--dim);
   letter-spacing: .12em; display: flex; align-items: center; gap: 10px;
-  transition: color .25s, gap .3s ease;
+  transition: color .25s, gap .35s ease;
 }
-.section-panel:hover .section-panel-arrow { color: var(--ice); gap: 18px; }
+.section-panel:hover .section-panel-arrow {
+  color: var(--panel-accent, var(--ice));
+  gap: 20px;
+}
 
 /* FOOTER */
 footer {
@@ -421,7 +456,7 @@ footer {
 
 <div class="section-panels">
 
-  <a href="resume.html" class="section-panel" style="--panel-glow: rgba(96,200,255,.05)">
+  <a href="resume.html" class="section-panel" style="--panel-glow:rgba(96,200,255,.08);--panel-accent:rgba(96,200,255,.9);--panel-shimmer:rgba(144,220,255,.05)">
     <div class="section-panel-left">
       <div class="section-panel-num">01</div>
       <div class="section-panel-title">Resume</div>
@@ -432,7 +467,7 @@ footer {
     </div>
   </a>
 
-  <a href="photography.html" class="section-panel" style="--panel-glow: rgba(255,140,80,.05)">
+  <a href="photography.html" class="section-panel" style="--panel-glow:rgba(255,140,80,.08);--panel-accent:rgba(255,160,100,.9);--panel-shimmer:rgba(255,180,120,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">02</div>
       <div class="section-panel-title">Photography</div>
@@ -443,7 +478,7 @@ footer {
     </div>
   </a>
 
-  <a href="projects.html" class="section-panel" style="--panel-glow: rgba(160,100,255,.05)">
+  <a href="projects.html" class="section-panel" style="--panel-glow:rgba(160,100,255,.08);--panel-accent:rgba(180,120,255,.9);--panel-shimmer:rgba(180,120,255,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">03</div>
       <div class="section-panel-title">Projects</div>
@@ -454,7 +489,7 @@ footer {
     </div>
   </a>
 
-  <a href="mailto:you@example.com" class="section-panel" id="contactPanel" style="--panel-glow: rgba(60,220,180,.05)">
+  <a href="mailto:you@example.com" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">04</div>
       <div class="section-panel-title">Contact</div>
@@ -472,7 +507,7 @@ footer {
   <div class="footer-links" id="footerLinks"></div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* =====================================================================
    CONTENT LOADER — reads content.json and populates the page
    ===================================================================== */
@@ -893,7 +928,7 @@ function initWave(introMode) {
       // Steady waves fade in
       if (amp > 0.5) {
         var ghostAmpMod = 0.65 + 0.35 * Math.sin(ghostDriftT);
-        var ghostFreq   = 0.014 + 0.006 * Math.sin(freqDriftT * 0.8);
+        var ghostFreq   = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
@@ -910,7 +945,7 @@ function initWave(introMode) {
         ctx.stroke();
 
         var mainAmpMod = 0.72 + 0.28 * Math.sin(mainDriftT);
-        var mainFreq   = 0.016 + 0.007 * Math.sin(freqDriftT * 1.3 + 1.1);
+        var mainFreq   = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1);
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
@@ -943,7 +978,7 @@ function initWave(introMode) {
       if (amp > 0.5) {
         // Ghost wave — amplitude drifts, frequency drifts independently
         var ghostAmpMod  = 0.65 + 0.35 * Math.sin(ghostDriftT);
-        var ghostFreq    = 0.014 + 0.006 * Math.sin(freqDriftT * 0.8);  // 0.008–0.020
+        var ghostFreq    = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);  // 0.008–0.020
         var ghostAlpha   = 0.18 * (1 - sp);
 
         ctx.beginPath();
@@ -964,7 +999,7 @@ function initWave(introMode) {
 
         // Main wave — different freq drift range and speed
         var mainAmpMod  = 0.72 + 0.28 * Math.sin(mainDriftT);
-        var mainFreq    = 0.016 + 0.007 * Math.sin(freqDriftT * 1.3 + 1.1); // 0.009–0.023
+        var mainFreq    = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1); // 0.009–0.023
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
@@ -1001,16 +1036,4 @@ function initWave(introMode) {
         ctx.lineWidth   = 1 + la;
         if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,' + la * 0.6 + ')'; ctx.shadowBlur = 8 * la; }
         ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-    }
-
-    ctx.restore();
-    requestAnimationFrame(draw);
-  }
-
-  requestAnimationFrame(draw);
-}
-</script>
-</body>
-</html>
+        ctx.s
