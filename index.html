@@ -627,11 +627,15 @@ function initWave(introMode) {
   function remap(v, a, b) { return Math.min(1, Math.max(0, (v - a) / (b - a))); }
 
   var lastTimestamp = null;
+  var smoothDt = 0.016;
+  var amberFadeAlpha = 0; // carries ghost sub-wave alpha from intro into xfade
 
   function draw(timestamp) {
     if (!syncBuffer()) { requestAnimationFrame(draw); return; }
     var dt = lastTimestamp ? Math.min((timestamp - lastTimestamp) / 1000, 0.05) : 0.016;
     lastTimestamp = timestamp;
+    // Smooth dt with a light EMA to reduce micro-jerk from frame timing variance
+    dt = smoothDt = smoothDt * 0.85 + dt * 0.15;
 
     var w = bufW, h = bufH;
     ctx.save();
@@ -654,6 +658,8 @@ function initWave(introMode) {
           var _fo = 1 - remap(1.0, 0.35, 0.85); // at introT=1
           nonKeeperAlphas.push(Math.max(0, _fo * 0.55));
         }
+        // Capture amber ghost alpha for smooth fadeout in xfade
+        amberFadeAlpha = remap(1.0, 0.4, 1) * 0.18;
         introActive  = false;
         xfadeActive  = true;
         xfadeT       = 0;
@@ -750,10 +756,9 @@ function initWave(introMode) {
 
       /* ── OPTION B: STORM ─────────────────────────────────────────── */
       } else if (introMode === 'storm') {
-        var numWaves  = 10; // more lines for a richer burst
+        var numWaves  = 10;
         var settleQ   = easeOutCubic(introT);
 
-        // Colour palette: ice, violet, rose, teal, amber, mint, coral, lavender
         var palette = [
           [96,200,255],   // 0 ice       — keeper main
           [160,100,255],  // 1 violet
@@ -781,50 +786,60 @@ function initWave(introMode) {
           var finalFreq = 0.007;
           var curFreq   = initFreq + (finalFreq - initFreq) * settleQ;
 
-          var wAlpha, wLineW, wGlow;
+          // Each line has its own independent slow amplitude oscillation
+          var wAmpMod = 0.55 + 0.45 * Math.sin(clock * (0.4 + wi * 0.17) + wi * 1.3);
+
+          var wAlpha, wLineW, wGlowAmt;
           if (isKeeper) {
-            wAlpha  = 0.08 + settleQ * 0.67;
-            wLineW  = 0.8 + settleQ * 0.8;
-            wGlow   = settleQ;
+            wAlpha    = 0.08 + settleQ * 0.67;
+            wLineW    = 0.8 + settleQ * 0.8;
+            wGlowAmt  = 14 * settleQ;
+            wAmpMod   = 1; // keepers use full amp so they land at correct steady position
           } else {
-            // non-keepers: bright at start, fade out in second half
-            var fadeIn  = remap(introT, 0, 0.2);           // quick pop in
-            var fadeOut = 1 - remap(introT, 0.55, 0.98);   // slow fade out
-            wAlpha  = fadeIn * fadeOut * 0.55;
-            wLineW  = 0.8 + fadeIn * 0.4;
-            wGlow   = fadeIn * fadeOut;
+            var fadeIn  = remap(introT, 0, 0.18);
+            var fadeOut = 1 - remap(introT, 0.55, 0.98);
+            wAlpha      = fadeIn * fadeOut * 0.7;
+            wLineW      = 0.9 + fadeIn * 0.5;
+            // Glow bursts bright right after fade-in then settles — staggered per wave
+            var burstPeak = remap(introT, wi * 0.02, wi * 0.02 + 0.15);
+            var burstDecay = Math.max(0, 1 - remap(introT, wi * 0.02 + 0.1, 0.75));
+            wGlowAmt  = (burstPeak * burstDecay) * 32 + fadeIn * fadeOut * 10;
           }
           if (wAlpha < 0.005) continue;
 
+          var col = palette[wi % palette.length];
           ctx.beginPath();
-          for (var x = 0; x <= w; x += 2) {
+          for (var x = 0; x <= w; x += (isKeeper ? 2 : 3)) {
             var lb = isKeeper
               ? Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42 * settleQ
               : 0;
-            var y = cy + Math.sin(x * curFreq - t + curPhase) * amp + lb;
+            var y = cy + Math.sin(x * curFreq - t + curPhase) * amp * wAmpMod + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          var col = palette[wi % palette.length];
           ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + wAlpha + ')';
           ctx.lineWidth   = wLineW;
-          ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (wGlow * 0.8) + ')';
-          ctx.shadowBlur  = 14 * wGlow;
+          if (wGlowAmt > 0.5) {
+            ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + Math.min(1, wAlpha * 1.4) + ')';
+            ctx.shadowBlur  = wGlowAmt;
+          }
           ctx.stroke();
           ctx.shadowBlur  = 0;
         }
 
-        // Ghost sub-wave appears in second half — amber
+        // Ghost sub-wave — amber, track current alpha for xfade handoff
+        var curAmberAlpha = 0;
         if (introT > 0.4) {
-          var ga2 = remap(introT, 0.4, 1) * 0.18;
+          curAmberAlpha = remap(introT, 0.4, 1) * 0.18;
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28 * easeOutCubic(remap(introT,0.4,1));
             var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = 'rgba(184,118,26,' + ga2 + ')';
+          ctx.strokeStyle = 'rgba(184,118,26,' + curAmberAlpha + ')';
           ctx.lineWidth   = 0.8;
           ctx.stroke();
+          amberFadeAlpha  = curAmberAlpha; // keep updated each frame
         }
       }
 
@@ -840,33 +855,46 @@ function initWave(introMode) {
         [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26],
       ];
       var numWX = 10;
-      var settleX = 1.0; // fully settled geometry during xfade
 
       for (var wi = 0; wi < numWX; wi++) {
-        var wFracX   = wi / (numWX - 1);
+        var wFracX    = wi / (numWX - 1);
         var isKeeperX = (wi === 0 || wi === numWX - 1);
+        if (isKeeperX) continue;
 
-        if (isKeeperX) continue; // keepers handled below in steady block
-
-        // Continue from where the intro left off — fade the remaining alpha to 0
         var startAlpha = (nonKeeperAlphas[wi] !== undefined) ? nonKeeperAlphas[wi] : 0.1;
         var wAlphaX = startAlpha * xFade;
-        if (wAlphaX < 0.005) continue;
+        if (wAlphaX < 0.004) continue;
 
         var phaseX = wFracX * Math.PI * 2;
         var col = paletteX[wi % paletteX.length];
+        // Each line keeps its own amplitude oscillation during fadeout
+        var wAmpModX = 0.55 + 0.45 * Math.sin(clock * (0.4 + wi * 0.17) + wi * 1.3);
 
         ctx.beginPath();
-        for (var x = 0; x <= w; x += 2) {
-          var y = cy + Math.sin(x * 0.007 - t + phaseX) * amp;
+        for (var x = 0; x <= w; x += 3) {
+          var y = cy + Math.sin(x * 0.007 - t + phaseX) * amp * wAmpModX;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + wAlphaX + ')';
         ctx.lineWidth   = 0.8;
-        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (wAlphaX * 0.6) + ')';
-        ctx.shadowBlur  = 10 * xFade;
+        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (wAlphaX * 0.7) + ')';
+        ctx.shadowBlur  = 8 * xFade;
         ctx.stroke();
         ctx.shadowBlur  = 0;
+      }
+
+      // Amber ghost — fade out from captured alpha to zero
+      if (amberFadeAlpha > 0.002) {
+        var curAmberA = amberFadeAlpha * xFade;
+        ctx.beginPath();
+        for (var x = 0; x <= w; x += 3) {
+          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
+          var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(184,118,26,' + curAmberA + ')';
+        ctx.lineWidth   = 0.8;
+        ctx.stroke();
       }
 
       // Keeper waves (steady state with xfade blend-in)
