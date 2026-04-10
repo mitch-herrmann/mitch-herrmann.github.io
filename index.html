@@ -547,12 +547,18 @@ function initWave(introMode) {
 
   /* ---- intro state ---- */
   var INTRO_DUR  = 3.2;  // seconds for intro to complete
+  var XFADE_DUR  = 0.8;  // crossfade window after intro ends
   var introT     = 0;    // 0→1 over INTRO_DUR real-seconds
+  var xfadeT     = 0;    // 0→1 over XFADE_DUR after intro ends
+  var xfadeActive = false;
   var introActive = (introMode !== 'none');
   var clock      = 0;    // real elapsed seconds
 
   /* ---- steady-state wave clock ---- */
   var t = 0;
+
+  /* ---- ghost amplitude drift ---- */
+  var ghostDriftT = 0; // slow independent clock for ghost amp variation
 
   /* ---- jitter ---- */
   var jitterActive = false, jitterEnd = 0, speedMul = 1;
@@ -635,8 +641,17 @@ function initWave(introMode) {
     clock += dt;
     if (introActive) {
       introT = Math.min(1, clock / INTRO_DUR);
-      if (introT >= 1) introActive = false;
+      if (introT >= 1) {
+        introActive  = false;
+        xfadeActive  = true;
+        xfadeT       = 0;
+      }
     }
+    if (xfadeActive) {
+      xfadeT = Math.min(1, xfadeT + dt / XFADE_DUR);
+      if (xfadeT >= 1) xfadeActive = false;
+    }
+    ghostDriftT += dt * 0.18; // very slow drift clock
 
     /* jitter (only after intro) */
     if (!introActive) {
@@ -745,7 +760,8 @@ function initWave(introMode) {
           // Amplitude of non-keepers fades out over the second half
           var wAlpha, wLineW;
           if (isKeeper) {
-            wAlpha  = 0.08 + settleQ * 0.42;   // fades up to steady brightness
+            // Ramp alpha all the way to 0.75 so it matches steady state exactly at introT=1
+            wAlpha  = 0.08 + settleQ * 0.67;
             wLineW  = 0.6 + settleQ * 0.8;
           } else {
             var fadeOut = 1 - remap(introT, 0.35, 0.85);
@@ -762,42 +778,55 @@ function initWave(introMode) {
             var y = cy + Math.sin(x * curFreq - t + curPhase) * amp + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = wi === 0
-            ? 'rgba(96,200,255,' + wAlpha + ')'
-            : 'rgba(144,220,255,' + wAlpha + ')';
-          ctx.lineWidth   = wLineW;
+          // keeper wi===0 is the main ice line; wi===last is the ghost → amber
+          // non-keepers fade out in amber too for consistency
+          if (isKeeper && wi === 0) {
+            ctx.strokeStyle  = 'rgba(96,200,255,' + wAlpha + ')';
+            ctx.shadowColor  = 'rgba(96,200,255,' + (wAlpha * 0.6 * settleQ) + ')';
+            ctx.shadowBlur   = 10 * settleQ;
+          } else {
+            ctx.strokeStyle  = 'rgba(184,118,26,' + wAlpha + ')';
+            ctx.shadowBlur   = 0;
+          }
+          ctx.lineWidth = wLineW;
           ctx.stroke();
+          ctx.shadowBlur = 0;
         }
 
-        // Ghost sub-wave appears in second half
+        // Ghost sub-wave appears in second half — amber tone
         if (introT > 0.5) {
-          var ga2 = remap(introT, 0.5, 1) * 0.1;
+          var ga2 = remap(introT, 0.5, 1) * 0.18;
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28 * easeOutCubic(remap(introT,0.5,1));
             var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = 'rgba(96,200,255,' + ga2 + ')';
+          ctx.strokeStyle = 'rgba(184,118,26,' + ga2 + ')';
           ctx.lineWidth   = 0.8;
           ctx.stroke();
         }
       }
 
     /* ================================================================
-       STEADY STATE (post-intro)
+       CROSSFADE + STEADY STATE
        ================================================================ */
     } else {
+      // xfadeT: 0 at intro end → 1 fully settled. Used to blend alpha in smoothly.
+      var xBlend = xfadeActive ? easeOutCubic(xfadeT) : 1;
+
       if (amp > 0.5) {
-        // Ghost wave
+        // Ghost wave — amplitude drifts slowly between 0.3× and 1× via a slow sine
+        var ghostAmpMod = 0.65 + 0.35 * Math.sin(ghostDriftT);
+        var ghostAlpha  = 0.18 * (1 - sp) * xBlend;
+
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        // Ghost: warm bone/amber tone from the dashboard palette
-        ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp)) + ')';
+        ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
         ctx.lineWidth   = 0.8;
         ctx.stroke();
 
@@ -805,25 +834,23 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          // Pulse wiggle: bell-curve envelope over time, ripple in space
           var wiggleBump = 0;
           if (wiggleActive) {
-            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur)); // 0→1→0
+            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
             wiggleBump = wEnv * wiggleAmpScale * amp * 0.5
               * Math.sin(x * wiggleFreq - t * 6 + 0.4);
           }
           var y = cy + Math.sin(x * 0.007 - t + 0.4) * amp + lb + wiggleBump;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        // Main: bright ice with a persistent soft glow, fades toward line colour as it collapses
         var wR = Math.round(96  + (30  - 96)  * sp);
         var wG = Math.round(200 + (37  - 200) * sp);
         var wB = Math.round(255 + (48  - 255) * sp);
-        var wA = 0.75 - sp * 0.25;
+        var wA = (0.75 - sp * 0.25) * xBlend;
         ctx.strokeStyle  = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + wA + ')';
         ctx.lineWidth    = 1.4;
-        ctx.shadowColor  = 'rgba(96,200,255,' + (0.45 * (1 - sp)) + ')';
-        ctx.shadowBlur   = 10 * (1 - sp);
+        ctx.shadowColor  = 'rgba(96,200,255,' + (0.45 * (1 - sp) * xBlend) + ')';
+        ctx.shadowBlur   = 10 * (1 - sp) * xBlend;
         ctx.stroke();
         ctx.shadowBlur   = 0;
       }
