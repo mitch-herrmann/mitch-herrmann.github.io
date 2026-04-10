@@ -513,7 +513,7 @@ footer {
   <div class="nav-links">
     <a href="#work">Work</a>
     <a href="#about">About</a>
-    <a href="mailto:you@example.com">Contact</a>
+    <a href="/cdn-cgi/l/email-protection#2c5543596c49544d415c4049024f4341">Contact</a>
   </div>
   <div class="nav-status">
     <div class="nav-dot"></div>
@@ -645,7 +645,7 @@ footer {
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Work filtering logic
 function filterWork(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -752,7 +752,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateNavState(sp) {
     // Smooth transition with hysteresis to prevent jumping
-    if (sp >= 0.65) {
+    if (sp >= 0.5) {
       nav.classList.add('waveform-active');
       divider.classList.add('active');
       canvas.classList.add('hidden');
@@ -763,7 +763,7 @@ document.addEventListener('DOMContentLoaded', function () {
           link.classList.add('illuminated');
         }
       });
-    } else if (sp < 0.6) {
+    } else if (sp < 0.45) {
       nav.classList.remove('waveform-active');
       divider.classList.remove('active');
       canvas.classList.remove('hidden');
@@ -783,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateNavState(sp);
     
     // Smooth vertical scroll: waveform moves up as you scroll
-    var easeScrollPct = sp < 0.65 ? sp / 0.65 : 1;
+    var easeScrollPct = sp < 0.5 ? sp / 0.5 : 1;
     var scrollOffset = easeScrollPct * (h - 60); // Scroll from bottom to top
     
     var cy  = h * 0.52 - scrollOffset;
@@ -840,15 +840,3 @@ document.addEventListener('DOMContentLoaded', function () {
       ctx.moveTo(0, cy); ctx.lineTo(w, cy);
       ctx.strokeStyle = 'rgba(30,37,48,' + la + ')';
       ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-
-    ctx.restore();
-    requestAnimationFrame(draw);
-  }
-
-  requestAnimationFrame(draw);
-});
-</script>
-</body>
-</html>
