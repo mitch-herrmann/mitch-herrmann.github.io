@@ -629,7 +629,7 @@ footer {
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Work filtering
 function filterWork(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -676,12 +676,12 @@ function filterWork(cat, btn) {
 })();
 
 // Waveform
-document.addEventListener('DOMContentLoaded', function () {
-  var canvas  = document.getElementById('waveCanvas');
-  var nav     = document.getElementById('mainNav');
+(function initWave() {
+  var canvas   = document.getElementById('waveCanvas');
+  var nav      = document.getElementById('mainNav');
   var navLinks = document.querySelectorAll('.nav-links a');
-  var hero    = document.querySelector('.hero');
-  if (!canvas || !hero) return;
+  var hero     = document.querySelector('.hero');
+  if (!canvas || !nav || !hero) return;
 
   var ctx = canvas.getContext('2d');
   var dpr = window.devicePixelRatio || 1;
@@ -690,24 +690,21 @@ document.addEventListener('DOMContentLoaded', function () {
   var mouseXNorm = 0.5;
   var cachedScrollY = 0;
 
-  // Jitter state — randomized
+  // Jitter — randomized bursts
   var jitterActive = false;
-  var jitterEnd = 0;       // t value when current burst ends
-  var nextJitter = 0;      // t value when next burst starts
-  var speedMul = 1;
+  var jitterEnd    = 0;
+  var nextJitter   = 3 + Math.random() * 5; // first burst 3–8s in
+  var speedMul     = 1;
 
   function scheduleNextJitter() {
-    // Rest between bursts: random 2–8 seconds
-    var restSecs = 2 + Math.random() * 6;
-    nextJitter = t + restSecs;
+    nextJitter = t + 2 + Math.random() * 6; // rest 2–8s
   }
-  // Start first jitter after a short delay (not t=0)
-  nextJitter = 3 + Math.random() * 5;
 
   function syncBuffer() {
     var w = window.innerWidth;
-    // Full canvas height = from nav bottom to viewport bottom
     var h = window.innerHeight - 60;
+    if (h < 50) h = window.innerHeight;
+    if (w < 1 || h < 1) return false;
     if (w === bufW && h === bufH) return true;
     bufW = w; bufH = h;
     canvas.style.width  = w + 'px';
@@ -725,11 +722,9 @@ document.addEventListener('DOMContentLoaded', function () {
     cachedScrollY = window.scrollY || window.pageYOffset || 0;
   }, { passive: true });
 
-  // scrollPct: 0 = top, 1 = waveform fully collapsed
-  // We collapse over the first ~55% of hero height
   function getScrollPct() {
-    var scrollY = cachedScrollY;
-    return Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * 0.55)));
+    if (!hero.offsetHeight) return 0;
+    return Math.min(1, Math.max(0, cachedScrollY / (hero.offsetHeight * 0.55)));
   }
 
   function updateNav(sp) {
@@ -743,35 +738,29 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function draw() {
-    syncBuffer();
+    if (!syncBuffer()) { requestAnimationFrame(draw); return; }
 
     var w = bufW, h = bufH;
-    if (!w || !h) { requestAnimationFrame(draw); return; }
-
     ctx.save();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
 
-    var sp = getScrollPct();
+    var sp  = getScrollPct();
     updateNav(sp);
 
-    // Amplitude: full height when sp=0, exactly zero when sp=1
     var maxAmp = h * 0.22;
     var amp    = maxAmp * (1 - sp);
+    var cy     = h * 0.45 * (1 - sp);
 
-    // Centre Y: at rest sits at 45% of canvas; slides to 0 as sp→1
-    var cy = h * 0.45 * (1 - sp);
-
-    // Jitter logic: random bursts with random speed and duration
+    // Jitter logic
     if (!jitterActive && t >= nextJitter) {
       jitterActive = true;
-      var burstDur = 0.75 + Math.random() * 1.25; // 750ms–2s
-      jitterEnd = t + burstDur;
-      speedMul = 2.5 + Math.random() * 2; // speed 2.5x–4.5x
+      jitterEnd    = t + 0.75 + Math.random() * 1.25; // burst 750ms–2s
+      speedMul     = 2.5 + Math.random() * 2;          // speed 2.5×–4.5×
     }
     if (jitterActive && t >= jitterEnd) {
       jitterActive = false;
-      speedMul = 1;
+      speedMul     = 1;
       scheduleNextJitter();
     }
     t += 0.016 * speedMul;
@@ -779,7 +768,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var mx = mouseXNorm * w;
 
     if (amp > 0.5) {
-      // Ghost wave (behind)
+      // Ghost wave
       ctx.beginPath();
       for (var x = 0; x <= w; x += 3) {
         var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
@@ -787,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function () {
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
       ctx.strokeStyle = 'rgba(96,200,255,' + (0.10 * (1 - sp)) + ')';
-      ctx.lineWidth = 0.8;
+      ctx.lineWidth   = 0.8;
       ctx.stroke();
 
       // Main wave
@@ -797,34 +786,35 @@ document.addEventListener('DOMContentLoaded', function () {
         var y  = cy + Math.sin(x * 0.007 - t + 0.4) * amp + lb;
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
-
-      // Colour interpolates ice→line as it collapses
       var wR = Math.round(96  + (30  - 96)  * sp);
       var wG = Math.round(200 + (37  - 200) * sp);
       var wB = Math.round(255 + (48  - 255) * sp);
-      var wA = 0.5 - sp * 0.1;
-      ctx.strokeStyle = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + wA + ')';
-      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + (0.5 - sp * 0.1) + ')';
+      ctx.lineWidth   = 1.4;
       ctx.stroke();
     }
 
-    // Flat line — fully opaque only when amp is near zero,
-    // then the nav border takes over seamlessly
+    // Collapsing flat line → hands off to glowing nav border
     if (sp > 0.6) {
-      var lineAlpha = Math.min(1, (sp - 0.6) / 0.4);
-      // Draw the flat line right at cy (which is now near 0 = nav bottom)
+      var la = Math.min(1, (sp - 0.6) / 0.4);
       ctx.beginPath();
       ctx.moveTo(0, cy); ctx.lineTo(w, cy);
-
-      // Glow intensity rises as it approaches the nav
-      var glowR = Math.round(30  + (96  - 30)  * lineAlpha);
-      var glowG = Math.round(37  + (200 - 37)  * lineAlpha);
-      var glowB = Math.round(48  + (255 - 48)  * lineAlpha);
-      ctx.strokeStyle = 'rgba(' + glowR + ',' + glowG + ',' + glowB + ',' + lineAlpha + ')';
-      ctx.lineWidth = 1 + lineAlpha;
-
-      if (lineAlpha > 0.3) {
-        ctx.shadowColor = 'rgba(96,200,255,' + lineAlpha * 0.6 + ')';
-        ctx.shadowBlur  = 8 * lineAlpha;
-      }
+      var gR = Math.round(30  + (96  - 30)  * la);
+      var gG = Math.round(37  + (200 - 37)  * la);
+      var gB = Math.round(48  + (255 - 48)  * la);
+      ctx.strokeStyle = 'rgba(' + gR + ',' + gG + ',' + gB + ',' + la + ')';
+      ctx.lineWidth   = 1 + la;
+      if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,' + la * 0.6 + ')'; ctx.shadowBlur = 8 * la; }
       ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
