@@ -833,9 +833,9 @@ function initWave(introMode) {
 
         // Ghost sub-wave — amber, fades out well before intro ends so no xfade snap
         var curAmberAlpha = 0;
-        if (introT > 0.4 && introT < 0.78) {
-          var amberIn  = remap(introT, 0.4, 0.52);
-          var amberOut = 1 - remap(introT, 0.55, 0.78); // fully gone by 78%
+        if (introT > 0.3 && introT < 0.62) {
+          var amberIn  = remap(introT, 0.3, 0.42);
+          var amberOut = 1 - remap(introT, 0.44, 0.62); // fully gone by 62%
           curAmberAlpha = amberIn * amberOut * 0.18;
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
@@ -913,7 +913,13 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
+          var ghostWiggle = 0;
+          if (wiggleActive) {
+            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
+            ghostWiggle = wEnv * wiggleAmpScale * amp * 0.3
+              * Math.sin(x * wiggleFreq - t * 6 + 1.8);
+          }
+          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostWiggle;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
@@ -955,7 +961,13 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
+          var ghostWiggle = 0;
+          if (wiggleActive) {
+            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
+            ghostWiggle = wEnv * wiggleAmpScale * amp * 0.3
+              * Math.sin(x * wiggleFreq - t * 6 + 1.8);
+          }
+          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostWiggle;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
