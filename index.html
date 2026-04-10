@@ -186,7 +186,7 @@ nav.waveform-active {
   display: flex; align-items: center; padding: 0 48px;
   border-bottom: 1px solid var(--line);
   background: rgba(13,15,20,.97); backdrop-filter: blur(16px);
-  overflow-x: auto; overflow: visible; position: relative;
+  overflow-x: auto;
 }
 .filter-btn {
   padding: 18px 0; margin-right: 32px; font-family: var(--display);
@@ -212,29 +212,20 @@ nav.waveform-active {
   border-top: 1px solid var(--line); border-left: 2px solid transparent;
   cursor: pointer; text-decoration: none; color: inherit;
   position: relative; overflow: hidden;
-  transition: border-left-color .3s ease, background .3s ease;
+  transition: border-left-color .25s ease, background .25s ease;
 }
-/* Bottom glow line — colour set by JS via --row-color */
 .work-row::after {
   content: ''; position: absolute; bottom: 0; left: 0;
   width: 100%; height: 2px;
-  background: linear-gradient(90deg, var(--row-color, var(--ice)), rgba(0,0,0,0));
-  opacity: 0; transition: opacity .3s ease; pointer-events: none;
+  background: linear-gradient(90deg, var(--ice), rgba(96,200,255,0));
+  opacity: 0; transition: opacity .25s ease; pointer-events: none;
 }
-/* Radial backglow from left edge */
-.work-row::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 55% 120% at -5% 50%,
-    var(--row-color-dim, rgba(96,200,255,.06)) 0%, transparent 70%);
-  opacity: 0; transition: opacity .4s ease; pointer-events: none;
-}
-.work-row:hover { border-left-color: var(--row-color, var(--ice)); background: rgba(19,22,28,.7); }
-.work-row:hover::after  { opacity: 1; }
-.work-row:hover::before { opacity: 1; }
+.work-row:hover { border-left-color: var(--ice); background: rgba(19,22,28,.8); }
+.work-row:hover::after { opacity: 1; }
 .work-row:hover .row-num   { color: var(--muted); }
 .work-row:hover .row-title { opacity: 1; transform: translateX(6px); }
 .work-row:hover .row-tags  { transform: translateX(6px); }
-.work-row:hover .row-arrow { opacity: 1; transform: translateX(0); color: var(--row-color, var(--ice)); }
+.work-row:hover .row-arrow { opacity: 1; transform: translateX(0); color: var(--ice); }
 .row-num {
   padding: 32px 0 32px 48px; font-family: var(--mono); font-size: 10px;
   color: var(--dim); letter-spacing: .06em; transition: color .25s;
@@ -252,11 +243,6 @@ nav.waveform-active {
   font-family: var(--display); font-size: 7px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; padding: 3px 10px;
   border-radius: 99px; border: 1px solid var(--line); color: var(--dim);
-  transition: border-color .3s, color .3s;
-}
-.work-row:hover .row-tag {
-  border-color: var(--row-color-dim2, var(--dim));
-  color: var(--muted);
 }
 .row-right {
   padding: 32px 48px 32px 32px; display: flex; align-items: center;
@@ -290,35 +276,16 @@ nav.waveform-active {
 .stat-value { font-family: var(--display); font-size: 38px; font-weight: 800; letter-spacing: -.03em; color: var(--text); line-height: 1; }
 .stat-sub { font-family: var(--body); font-size: 9px; color: var(--dim); font-style: italic; margin-top: 2px; }
 
-/* FILTER SWEEP CANVAS */
-#filterSweepCanvas {
-  position: absolute; bottom: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none; z-index: 0;
-}
-
 /* SKILLS */
 .skills-section { position: relative; z-index: 1; padding: 48px; border-bottom: 1px solid var(--line); }
 .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-
-/* SKILL CHIP CANVAS */
 .skill-chip {
   padding: 8px 18px; border: 1px solid var(--line); border-radius: 99px;
   font-family: var(--display); font-size: 8.5px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
-  cursor: default; position: relative; overflow: hidden;
-  transition: border-color .25s, color .25s, box-shadow .25s;
+  cursor: default; transition: border-color .2s, color .2s;
 }
-.skill-chip canvas {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  pointer-events: none; border-radius: 99px;
-}
-.skill-chip:hover {
-  border-color: var(--chip-color, var(--muted));
-  color: var(--text);
-  box-shadow: 0 0 12px var(--chip-glow, rgba(96,200,255,.2)),
-              inset 0 0 8px var(--chip-glow, rgba(96,200,255,.06));
-}
+.skill-chip:hover { border-color: var(--muted); color: var(--text); }
 
 /* FOOTER */
 footer {
@@ -396,7 +363,6 @@ footer {
   <button class="filter-btn" onclick="filterWork('engineering',this)">Engineering</button>
   <button class="filter-btn" onclick="filterWork('finance',this)">Finance</button>
   <button class="filter-btn" onclick="filterWork('design',this)">Design</button>
-  <canvas id="filterSweepCanvas"></canvas>
 </div>
 
 <div class="work-section">
@@ -429,7 +395,6 @@ fetch('content.json')
   .then(function(r) { return r.json(); })
   .then(function(d) {
     populatePage(d);
-    assignPaletteColors();
     initWave(d.site.intro_animation || 'storm');
   })
   .catch(function(e) {
@@ -453,7 +418,6 @@ fetch('content.json')
       footer: { github:'#', linkedin:'#', email:'you@example.com' }
     };
     populatePage(fallback);
-    assignPaletteColors();
     initWave(fallback.site.intro_animation);
   });
 
@@ -548,40 +512,10 @@ function animateName(el) {
   el.innerHTML = out;
 }
 
-/* Palette colour assignment — mirrors the wave intro palette */
-var PALETTE_CSS = [
-  { color: 'rgba(96,200,255,0.85)',  dim: 'rgba(96,200,255,0.08)',  dim2: 'rgba(96,200,255,0.3)',  glow: 'rgba(96,200,255,0.25)'  },
-  { color: 'rgba(160,100,255,0.85)', dim: 'rgba(160,100,255,0.08)', dim2: 'rgba(160,100,255,0.3)', glow: 'rgba(160,100,255,0.22)' },
-  { color: 'rgba(255,100,160,0.85)', dim: 'rgba(255,100,160,0.08)', dim2: 'rgba(255,100,160,0.3)', glow: 'rgba(255,100,160,0.22)' },
-  { color: 'rgba(60,220,180,0.85)',  dim: 'rgba(60,220,180,0.08)',  dim2: 'rgba(60,220,180,0.3)',  glow: 'rgba(60,220,180,0.22)'  },
-  { color: 'rgba(255,200,60,0.85)',  dim: 'rgba(255,200,60,0.08)',  dim2: 'rgba(255,200,60,0.3)',  glow: 'rgba(255,200,60,0.22)'  },
-  { color: 'rgba(100,255,200,0.85)', dim: 'rgba(100,255,200,0.08)', dim2: 'rgba(100,255,200,0.3)', glow: 'rgba(100,255,200,0.22)' },
-  { color: 'rgba(255,140,80,0.85)',  dim: 'rgba(255,140,80,0.08)',  dim2: 'rgba(255,140,80,0.3)',  glow: 'rgba(255,140,80,0.22)'  },
-  { color: 'rgba(180,140,255,0.85)', dim: 'rgba(180,140,255,0.08)', dim2: 'rgba(180,140,255,0.3)', glow: 'rgba(180,140,255,0.22)' },
-];
-
-function assignPaletteColors() {
-  // Work rows — each gets a colour cycling through the palette
-  document.querySelectorAll('.work-row').forEach(function(row, i) {
-    var p = PALETTE_CSS[i % PALETTE_CSS.length];
-    row.style.setProperty('--row-color',     p.color);
-    row.style.setProperty('--row-color-dim',  p.dim);
-    row.style.setProperty('--row-color-dim2', p.dim2);
-  });
-
-  // Skill chips — staggered through the palette
-  document.querySelectorAll('.skill-chip').forEach(function(chip, i) {
-    var p = PALETTE_CSS[(i * 3) % PALETTE_CSS.length]; // *3 to spread colours more
-    chip.style.setProperty('--chip-color', p.color);
-    chip.style.setProperty('--chip-glow',  p.glow);
-  });
-}
-
 /* Work filtering */
 function filterWork(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
-  if (window.fireSweep) window.fireSweep();
   var visIdx = 0;
   document.querySelectorAll('.work-row').forEach(function(row) {
     var match = cat === 'all' || row.dataset.cat === cat;
@@ -1077,219 +1011,6 @@ function initWave(introMode) {
 
   requestAnimationFrame(draw);
 }
-
-/* =====================================================================
-   FILTER BAR SWEEP — coloured wave races across the bottom border
-   Fires on: first scroll into view + each filter button click
-   ===================================================================== */
-(function() {
-  var canvas = document.getElementById('filterSweepCanvas');
-  if (!canvas) return;
-  var ctx    = canvas.getContext('2d');
-  var dpr    = window.devicePixelRatio || 1;
-  var sweeping = false;
-  var sweepT   = 0;      // 0→1
-  var sweepDur = 1.4;    // seconds for one sweep
-  var lastTs   = null;
-  var hasSwept = false;
-
-  // Palette — same as wave intro
-  var PAL = [
-    [96,200,255],[160,100,255],[255,100,160],[60,220,180],
-    [255,200,60],[100,255,200],[255,140,80],[180,140,255],
-  ];
-  var palIdx = 0;
-
-  function sync() {
-    var w = canvas.parentElement.offsetWidth;
-    var h = canvas.parentElement.offsetHeight;
-    canvas.style.width  = w + 'px';
-    canvas.style.height = h + 'px';
-    canvas.width  = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-  }
-
-  function fireSweep() {
-    palIdx = (palIdx + 1) % PAL.length;
-    sweepT   = 0;
-    sweeping = true;
-    lastTs   = null;
-    requestAnimationFrame(drawSweep);
-  }
-
-  // Expose so filterWork can call it
-  window.fireSweep = fireSweep;
-
-  function drawSweep(ts) {
-    if (!sweeping) return;
-    var dt = lastTs ? Math.min((ts - lastTs) / 1000, 0.05) : 0.016;
-    lastTs = ts;
-    sweepT = Math.min(1, sweepT + dt / sweepDur);
-
-    sync();
-    var W = canvas.width / dpr;
-    var H = canvas.height / dpr;
-    ctx.save();
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-
-    var col = PAL[palIdx];
-
-    // The wave sweeps L→R: head position
-    var head = sweepT * (W + 120) - 60;
-    // Fade envelope: bright at head, trails off behind
-    var trailLen = W * 0.55;
-
-    // Draw a mini squiggle that rides the bottom edge, sweeping across
-    ctx.beginPath();
-    var waveH   = H * 0.7;    // vertical range of squiggle
-    var baseY   = H - 1;      // sits on the bottom border
-    var freq    = 0.045;      // spatial frequency of squiggle
-    var started = false;
-
-    for (var x = 0; x <= W; x += 1.5) {
-      // Distance behind the head determines alpha and amplitude
-      var behind = head - x;
-      if (behind < 0 || behind > trailLen) continue;
-
-      var tFrac   = 1 - (behind / trailLen);           // 1 at head, 0 at tail
-      var alpha   = tFrac * tFrac * 0.9;               // quadratic falloff
-      var waveMag = Math.sin(Math.PI * tFrac) * waveH; // bell-curve height
-
-      var y = baseY - Math.abs(Math.sin(x * freq - sweepT * 18)) * waveMag;
-
-      if (!started) { ctx.moveTo(x, y); started = true; }
-      else          { ctx.lineTo(x, y); }
-    }
-
-    // Gradient stroke: bright at head, fades to transparent
-    if (started) {
-      var grad = ctx.createLinearGradient(Math.max(0, head - trailLen), 0, Math.min(W, head), 0);
-      grad.addColorStop(0,   'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0)');
-      grad.addColorStop(0.6, 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.5)');
-      grad.addColorStop(1,   'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.95)');
-      ctx.strokeStyle = grad;
-      ctx.lineWidth   = 1.5;
-      ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.7)';
-      ctx.shadowBlur  = 6;
-      ctx.stroke();
-      ctx.shadowBlur  = 0;
-    }
-
-    ctx.restore();
-
-    if (sweepT < 1) {
-      requestAnimationFrame(drawSweep);
-    } else {
-      sweeping = false;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  }
-
-  // Fire once when filter bar scrolls into view
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting && !hasSwept) {
-        hasSwept = true;
-        setTimeout(fireSweep, 200);
-      }
-    });
-  }, { threshold: 0.5 });
-  obs.observe(document.getElementById('work'));
-})();
-
-/* =====================================================================
-   SKILL CHIP PULSE — mini wave sweeps through each chip on hover
-   ===================================================================== */
-(function() {
-  var PAL = [
-    [96,200,255],[160,100,255],[255,100,160],[60,220,180],
-    [255,200,60],[100,255,200],[255,140,80],[180,140,255],
-  ];
-  var dpr = window.devicePixelRatio || 1;
-
-  function initChip(chip, colIdx) {
-    var col    = PAL[colIdx % PAL.length];
-    var cv     = document.createElement('canvas');
-    chip.appendChild(cv);
-    var ctx    = cv.getContext('2d');
-    var active = false;
-    var pT     = 0;
-    var dur    = 0.7;
-    var lastTs = null;
-    var raf    = null;
-
-    function sync() {
-      var w = chip.offsetWidth, h = chip.offsetHeight;
-      cv.style.width  = w + 'px'; cv.style.height = h + 'px';
-      cv.width  = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    }
-
-    function draw(ts) {
-      var dt = lastTs ? Math.min((ts - lastTs) / 1000, 0.05) : 0.016;
-      lastTs = ts;
-      pT = Math.min(1, pT + dt / dur);
-
-      sync();
-      var W = cv.width / dpr, H = cv.height / dpr;
-      ctx.save();
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, W, H);
-
-      // Pulse head sweeps L→R
-      var head  = pT * (W + 40) - 20;
-      var trail = W * 0.7;
-
-      ctx.beginPath();
-      var started = false;
-      for (var x = 0; x <= W; x += 1) {
-        var behind = head - x;
-        if (behind < 0 || behind > trail) continue;
-        var tFrac = 1 - behind / trail;
-        var waveMag = Math.sin(Math.PI * tFrac) * (H * 0.38);
-        var y = H / 2 + Math.sin(x * 0.28 - pT * 14) * waveMag;
-        if (!started) { ctx.moveTo(x, y); started = true; }
-        else          { ctx.lineTo(x, y); }
-      }
-      if (started) {
-        var grad = ctx.createLinearGradient(Math.max(0, head - trail), 0, Math.min(W, head), 0);
-        grad.addColorStop(0,   'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0)');
-        grad.addColorStop(0.5, 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.45)');
-        grad.addColorStop(1,   'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.9)');
-        ctx.strokeStyle = grad;
-        ctx.lineWidth   = 1.2;
-        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.6)';
-        ctx.shadowBlur  = 4;
-        ctx.stroke();
-        ctx.shadowBlur  = 0;
-      }
-
-      ctx.restore();
-      if (pT < 1) { raf = requestAnimationFrame(draw); }
-      else { ctx.clearRect(0, 0, cv.width, cv.height); active = false; }
-    }
-
-    chip.addEventListener('mouseenter', function() {
-      if (active) return;
-      active = true; pT = 0; lastTs = null;
-      raf = requestAnimationFrame(draw);
-    });
-  }
-
-  // Init after DOM populates
-  function attachChips() {
-    document.querySelectorAll('.skill-chip').forEach(function(chip, i) {
-      initChip(chip, i * 3);
-    });
-  }
-
-  // Wait for populatePage to inject chips
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { setTimeout(attachChips, 300); });
-  } else {
-    setTimeout(attachChips, 300);
-  }
-})();
 </script>
 </body>
 </html>
