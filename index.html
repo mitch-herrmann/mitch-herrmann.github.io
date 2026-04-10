@@ -724,7 +724,7 @@ function initWave(introMode) {
           for (var x = 0; x <= w; x += 2) {
             var noiseBump = chaos * amp * 0.6 * Math.sin(x * 0.04 + t * 4 + phase);
             var y = cy
-              + Math.sin(x * 0.007 * freqMul - t * freqMul + phase) * amp * ampMul
+              + Math.sin(x * 0.016 * freqMul - t * freqMul + phase) * amp * ampMul
               + noiseBump;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
@@ -746,7 +746,7 @@ function initWave(introMode) {
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-            var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * 0.45 + lb;
+            var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba(96,200,255,' + ga + ')';
@@ -782,8 +782,8 @@ function initWave(introMode) {
             ? initPhase + (finalPhase - initPhase) * settleQ
             : initPhase;
 
-          var initFreq  = 0.007 * (0.5 + wFrac * 2.2);
-          var finalFreq = 0.007;
+          var initFreq  = 0.016 * (0.5 + wFrac * 2.2);
+          var finalFreq = 0.016;
           var curFreq   = initFreq + (finalFreq - initFreq) * settleQ;
 
           // Each line has its own independent slow amplitude oscillation
@@ -828,14 +828,14 @@ function initWave(introMode) {
 
         // Ghost sub-wave — amber, fades out well before intro ends so no xfade snap
         var curAmberAlpha = 0;
-        if (introT > 0.4 && introT < 0.92) {
-          var amberIn  = remap(introT, 0.4, 0.55);
-          var amberOut = 1 - remap(introT, 0.65, 0.92); // fully gone by 92%
+        if (introT > 0.4 && introT < 0.78) {
+          var amberIn  = remap(introT, 0.4, 0.52);
+          var amberOut = 1 - remap(introT, 0.55, 0.78); // fully gone by 78%
           curAmberAlpha = amberIn * amberOut * 0.18;
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28 * easeOutCubic(remap(introT,0.4,1));
-            var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * 0.45 + lb;
+            var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba(184,118,26,' + curAmberAlpha + ')';
@@ -876,7 +876,7 @@ function initWave(introMode) {
 
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
-          var y = cy + Math.sin(x * 0.007 - t + phaseX) * amp * wAmpModX;
+          var y = cy + Math.sin(x * 0.016 - t + phaseX) * amp * wAmpModX;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + wAlphaX + ')';
@@ -893,7 +893,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + curAmberA + ')';
@@ -907,7 +907,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
@@ -918,7 +918,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y  = cy + Math.sin(x * 0.007 - t + 0.4) * amp * mainAmpMod + lb;
+          var y  = cy + Math.sin(x * 0.016 - t + 0.4) * amp * mainAmpMod + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
@@ -947,7 +947,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
@@ -965,7 +965,7 @@ function initWave(introMode) {
             wiggleBump = wEnv * wiggleAmpScale * amp * 0.5
               * Math.sin(x * wiggleFreq - t * 6 + 0.4);
           }
-          var y = cy + Math.sin(x * 0.007 - t + 0.4) * amp * mainAmpMod + lb + wiggleBump;
+          var y = cy + Math.sin(x * 0.016 - t + 0.4) * amp * mainAmpMod + lb + wiggleBump;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
