@@ -1,0 +1,69 @@
+{
+  "site": {
+    "title": "Mitchell Herrmann",
+    "intro_animation": "storm"
+  },
+  "nav": {
+    "email": "mitchell@example.com"
+  },
+  "hero": {
+    "eyebrow": "Portfolio — 2026",
+    "name_line1": "Mitchell",
+    "name_line2": "Herrmann",
+    "monogram": "MH",
+    "tagline": "A short, honest line about what you build and why it matters. Let the work do the talking.",
+    "location": "Denver, CO",
+    "focus": "Engineering · Finance · Design",
+    "status": "Open to collaborations"
+  },
+  "projects": [
+    {
+      "num": "01",
+      "title": "Project Name",
+      "tags": ["Engineering", "Python"],
+      "year": "2025",
+      "cat": "engineering",
+      "url": "#"
+    },
+    {
+      "num": "02",
+      "title": "Project Name",
+      "tags": ["Finance", "Data"],
+      "year": "2025",
+      "cat": "finance",
+      "url": "#"
+    },
+    {
+      "num": "03",
+      "title": "Project Name",
+      "tags": ["Design", "UI"],
+      "year": "2024",
+      "cat": "design",
+      "url": "#"
+    }
+  ],
+  "about": {
+    "body": "Write a few sentences about yourself — your background, what you've built, and what problems genuinely interest you. Keep it direct and specific.\n\nMaybe mention what you're currently exploring or what draws you to the intersection of engineering and finance.",
+    "stats": [
+      {
+        "label": "Current Focus",
+        "value": "Building",
+        "sub": "what's on your bench right now"
+      },
+      {
+        "label": "Based in",
+        "value": "Denver",
+        "sub": "open to remote / collaborations"
+      }
+    ]
+  },
+  "skills": [
+    "Python", "JavaScript", "React",
+    "Finance", "Data Analysis", "Systems Design", "UI / UX"
+  ],
+  "footer": {
+    "github": "https://github.com/mitchellherrmann",
+    "linkedin": "https://linkedin.com/in/mitchellherrmann",
+    "email": "mitchell@example.com"
+  }
+}
