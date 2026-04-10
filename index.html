@@ -491,7 +491,7 @@ footer {
     </div>
   </a>
 
-  <a href="mailto:you@example.com" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
+  <a href="/cdn-cgi/l/email-protection#ee97819bae8b968f839e828bc08d8183" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">04</div>
       <div class="section-panel-title">Contact</div>
@@ -509,7 +509,7 @@ footer {
   <div class="footer-links" id="footerLinks"></div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* =====================================================================
    CONTENT LOADER — reads content.json and populates the page
    ===================================================================== */
@@ -619,27 +619,8 @@ function initWave(introMode) {
   /* ---- store non-keeper wave state so xfade can continue fading them out ---- */
   var nonKeeperAlphas = []; // per-wave alpha at moment intro ended, for xfade fadeout
 
-  /* ---- jitter ---- */
-  var jitterActive = false, jitterEnd = 0, speedMul = 1;
-  var nextJitter   = INTRO_DUR + 3 + Math.random() * 5;
-
-  function scheduleNextJitter() { nextJitter = t + 2 + Math.random() * 6; }
-
-  /* ---- pulse wiggle ---- */
-  // Independent of jitter — adds a high-freq ripple that rises and decays
-  var wiggleActive   = false;
-  var wiggleT        = 0;    // local time within current wiggle event (0→wiggleDur)
-  var wiggleDur      = 1.8;  // seconds for one wiggle event
-  var wiggleFreq     = 0;    // spatial frequency of the ripple
-  var wiggleAmpScale = 0;    // peak amplitude multiplier (randomised per event)
-  var nextWiggle     = INTRO_DUR + 1.5 + Math.random() * 4;
-
-  function scheduleNextWiggle() {
-    nextWiggle     = t + 3 + Math.random() * 9;   // next event in 3–12s
-    wiggleDur      = 1.2 + Math.random() * 1.6;   // event lasts 1.2–2.8s
-    wiggleFreq     = 0.018 + Math.random() * 0.028; // tight-to-loose ripple
-    wiggleAmpScale = 0.35 + Math.random() * 0.55;  // subtle-to-strong
-  }
+  /* ---- continuous flow clock (replaces discrete jitter + wiggle) ---- */
+  var flowT = 0;
 
   function syncBuffer() {
     var w = window.innerWidth;
@@ -730,29 +711,38 @@ function initWave(introMode) {
     mainDriftT  += dt * 0.04;  // was 0.11 — different speed, never in sync
     freqDriftT  += dt * 0.025; // was 0.07 — very slow freq drift
 
-    /* jitter (only after intro) */
+    /* ── Continuous breathing — replaces discrete jitter + wiggle events ──
+       Sum several incommensurable sines so the result never repeats or flatlines.
+       flowT advances at a steady rate; each sine has a prime-ish period offset.  */
     if (!introActive) {
-      if (!jitterActive && t >= nextJitter) {
-        jitterActive = true;
-        jitterEnd    = t + 0.75 + Math.random() * 1.25;
-        speedMul     = 2.5 + Math.random() * 2;
-      }
-      if (jitterActive && t >= jitterEnd) {
-        jitterActive = false; speedMul = 1; scheduleNextJitter();
-      }
-
-      // wiggle pulse
-      if (!wiggleActive && t >= nextWiggle) {
-        wiggleActive = true;
-        wiggleT      = 0;
-        scheduleNextWiggle();
-      }
-      if (wiggleActive) {
-        wiggleT += dt;
-        if (wiggleT >= wiggleDur) wiggleActive = false;
-      }
+      flowT += dt; // steady clock, no speed multiplier — smoothness over drama
     }
+    // Speed multiplier: softly oscillates between 0.7× and 1.4× — never hard stops
+    var speedMul = 1.0
+      + 0.18 * Math.sin(flowT * 0.31)
+      + 0.12 * Math.sin(flowT * 0.17 + 1.1)
+      + 0.07 * Math.sin(flowT * 0.53 + 2.4);
+
     t += dt * (introActive ? 1.4 : speedMul);
+
+    // Amplitude modulation: two waves at different rates for main and ghost
+    // Result wanders continuously — no plateau, no abrupt jump
+    var mainAmpMod = 0.78
+      + 0.12 * Math.sin(mainDriftT * 1.0)
+      + 0.08 * Math.sin(mainDriftT * 1.618 + 0.9)   // golden ratio ≈ incommensurable
+      + 0.04 * Math.sin(mainDriftT * 2.718 + 2.1);   // e ≈ incommensurable
+
+    var ghostAmpMod = 0.72
+      + 0.14 * Math.sin(ghostDriftT * 1.0)
+      + 0.09 * Math.sin(ghostDriftT * 1.414 + 1.7)   // √2
+      + 0.05 * Math.sin(ghostDriftT * 2.236 + 0.4);  // √5
+
+    // Continuous spatial ripple — replaces the discrete wiggle pulse
+    // Amplitude of the ripple itself wanders so it never feels like a pattern
+    var rippleAmp = 0.08
+      + 0.06 * Math.sin(flowT * 0.23 + 0.7)
+      + 0.04 * Math.sin(flowT * 0.41 + 2.0);
+    var rippleFreq = 0.028 + 0.008 * Math.sin(flowT * 0.19 + 1.2);
 
     /* steady-state geometry — positioned higher, larger amp */
     var maxAmp = h * 0.30;              // was 0.22 — bigger waves
@@ -943,34 +933,22 @@ function initWave(introMode) {
 
       // Steady waves fade in
       if (amp > 0.5) {
-        var ghostAmpMod = 0.65 + 0.35 * Math.sin(ghostDriftT);
         var ghostFreq   = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var ghostWiggle = 0;
-          if (wiggleActive) {
-            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
-            ghostWiggle = wEnv * wiggleAmpScale * amp * 0.3 * Math.sin(x * wiggleFreq - t * 6 + 1.8);
-          }
-          var y = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostWiggle;
+          var y = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostRipple;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
         ctx.lineWidth   = 0.8;
         ctx.stroke();
 
-        var mainAmpMod = 0.72 + 0.28 * Math.sin(mainDriftT);
         var mainFreq   = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1);
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var wiggleBump = 0;
-          if (wiggleActive) {
-            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
-            wiggleBump = wEnv * wiggleAmpScale * amp * 0.5 * Math.sin(x * wiggleFreq - t * 6 + 0.4);
-          }
-          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + wiggleBump;
+          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + mainRipple;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
@@ -993,20 +971,13 @@ function initWave(introMode) {
 
       if (amp > 0.5) {
         // Ghost wave — amplitude drifts, frequency drifts independently
-        var ghostAmpMod  = 0.65 + 0.35 * Math.sin(ghostDriftT);
         var ghostFreq    = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);  // 0.008–0.020
         var ghostAlpha   = 0.18 * (1 - sp);
 
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var ghostWiggle = 0;
-          if (wiggleActive) {
-            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
-            ghostWiggle = wEnv * wiggleAmpScale * amp * 0.3
-              * Math.sin(x * wiggleFreq - t * 6 + 1.8);
-          }
-          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostWiggle;
+          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostRipple;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
@@ -1014,18 +985,11 @@ function initWave(introMode) {
         ctx.stroke();
 
         // Main wave — different freq drift range and speed
-        var mainAmpMod  = 0.72 + 0.28 * Math.sin(mainDriftT);
         var mainFreq    = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1); // 0.009–0.023
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var wiggleBump = 0;
-          if (wiggleActive) {
-            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
-            wiggleBump = wEnv * wiggleAmpScale * amp * 0.5
-              * Math.sin(x * wiggleFreq - t * 6 + 0.4);
-          }
-          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + wiggleBump;
+          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + mainRipple;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
@@ -1052,16 +1016,4 @@ function initWave(introMode) {
         ctx.lineWidth   = 1 + la;
         if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,' + la * 0.6 + ')'; ctx.shadowBlur = 8 * la; }
         ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-    }
-
-    ctx.restore();
-    requestAnimationFrame(draw);
-  }
-
-  requestAnimationFrame(draw);
-}
-</script>
-</body>
-</html>
+        ctx.s
