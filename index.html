@@ -937,7 +937,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostRipple;
+          var y = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
@@ -948,7 +948,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + mainRipple;
+          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
@@ -977,7 +977,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostRipple;
+          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
@@ -989,7 +989,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + mainRipple;
+          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
