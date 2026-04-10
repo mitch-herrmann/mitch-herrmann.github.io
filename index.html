@@ -560,6 +560,22 @@ function initWave(introMode) {
 
   function scheduleNextJitter() { nextJitter = t + 2 + Math.random() * 6; }
 
+  /* ---- pulse wiggle ---- */
+  // Independent of jitter — adds a high-freq ripple that rises and decays
+  var wiggleActive   = false;
+  var wiggleT        = 0;    // local time within current wiggle event (0→wiggleDur)
+  var wiggleDur      = 1.8;  // seconds for one wiggle event
+  var wiggleFreq     = 0;    // spatial frequency of the ripple
+  var wiggleAmpScale = 0;    // peak amplitude multiplier (randomised per event)
+  var nextWiggle     = INTRO_DUR + 1.5 + Math.random() * 4;
+
+  function scheduleNextWiggle() {
+    nextWiggle     = t + 3 + Math.random() * 9;   // next event in 3–12s
+    wiggleDur      = 1.2 + Math.random() * 1.6;   // event lasts 1.2–2.8s
+    wiggleFreq     = 0.018 + Math.random() * 0.028; // tight-to-loose ripple
+    wiggleAmpScale = 0.35 + Math.random() * 0.55;  // subtle-to-strong
+  }
+
   function syncBuffer() {
     var w = window.innerWidth;
     var h = window.innerHeight - 60;
@@ -631,6 +647,17 @@ function initWave(introMode) {
       }
       if (jitterActive && t >= jitterEnd) {
         jitterActive = false; speedMul = 1; scheduleNextJitter();
+      }
+
+      // wiggle pulse
+      if (!wiggleActive && t >= nextWiggle) {
+        wiggleActive = true;
+        wiggleT      = 0;
+        scheduleNextWiggle();
+      }
+      if (wiggleActive) {
+        wiggleT += dt;
+        if (wiggleT >= wiggleDur) wiggleActive = false;
       }
     }
     t += dt * (introActive ? 1.4 : speedMul);
@@ -777,7 +804,14 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y  = cy + Math.sin(x * 0.007 - t + 0.4) * amp + lb;
+          // Pulse wiggle: bell-curve envelope over time, ripple in space
+          var wiggleBump = 0;
+          if (wiggleActive) {
+            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur)); // 0→1→0
+            wiggleBump = wEnv * wiggleAmpScale * amp * 0.5
+              * Math.sin(x * wiggleFreq - t * 6 + 0.4);
+          }
+          var y = cy + Math.sin(x * 0.007 - t + 0.4) * amp + lb + wiggleBump;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
