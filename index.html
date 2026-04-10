@@ -90,14 +90,16 @@ nav.waveform-active {
 .nav-links a {
   padding: 5px 14px; border-radius: 99px; border: 1px solid var(--line);
   color: var(--dim); text-decoration: none; white-space: nowrap;
-  transition: color .25s, border-color .25s, background .25s, box-shadow .25s;
+  transition: color .25s, border-color .25s, background .25s, box-shadow .25s, opacity .25s;
 }
-.nav-links a:hover { color: var(--muted); border-color: var(--dim); }
+.nav-links:hover a { opacity: 0.35; }
+.nav-links a:hover { opacity: 1 !important; color: var(--muted); border-color: var(--dim); }
 .nav-links a.illuminated {
   background: linear-gradient(135deg, #1e2d3d, #162230);
   color: var(--ice2); border-color: rgba(96,200,255,.35);
   box-shadow: 0 0 12px rgba(96,200,255,.18), inset 0 1px 0 rgba(96,200,255,.08);
 }
+.nav-links a.illuminated:hover { opacity: 1 !important; }
 .nav-status {
   display: flex; align-items: center; gap: 7px;
   font-family: var(--mono); font-size: 9px; color: var(--dim);
@@ -145,12 +147,24 @@ nav.waveform-active {
   font-family: var(--display); font-size: clamp(60px, 8vw, 120px);
   font-weight: 800; line-height: .88; letter-spacing: -.04em;
   color: var(--text); margin-bottom: 40px; position: relative; z-index: 3;
+  opacity: 0;
+}
+.hero-name.glitch-active { animation: glitchReveal 1.8s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes glitchReveal {
+  0%   { opacity: 0; }
+  5%   { opacity: 1; color: rgba(232,237,245,.15); filter: blur(2px); transform: skewX(-3deg) translateX(4px); }
+  10%  { opacity: 1; color: rgba(96,200,255,.6);   filter: blur(0px); transform: skewX(2deg) translateX(-3px); }
+  15%  { opacity: 1; color: rgba(232,237,245,.2);  filter: blur(3px); transform: skewX(-1deg) translateX(2px); }
+  20%  { opacity: 1; color: var(--ice2);            filter: blur(0px); transform: skewX(0.5deg) translateX(-1px); }
+  28%  { opacity: 1; color: rgba(232,237,245,.5);  filter: blur(1px); transform: skewX(-2deg); }
+  36%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0.3deg); }
+  45%  { opacity: 1; color: rgba(232,237,245,.7);  filter: blur(0.5px); transform: skewX(-0.5deg); }
+  60%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg); }
+  100% { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg) translateX(0); }
 }
 .hero-name .char {
-  display: inline-block; opacity: 0; transform: translateY(22px);
-  animation: charIn .55s cubic-bezier(.22,1,.36,1) forwards;
+  display: inline-block;
 }
-@keyframes charIn { to { opacity: 1; transform: translateY(0); } }
 .hero-bottom {
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 40px; animation: fadeUp .6s .5s ease both; position: relative; z-index: 3;
@@ -287,6 +301,52 @@ nav.waveform-active {
 }
 .skill-chip:hover { border-color: var(--muted); color: var(--text); }
 
+/* SECTION PANELS */
+.section-panels { position: relative; z-index: 1; }
+.section-panel {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 340px; border-bottom: 1px solid var(--line);
+  text-decoration: none; color: inherit; position: relative; overflow: hidden;
+  transition: background .4s ease;
+}
+.section-panel:hover { background: rgba(19,22,28,.6); }
+.section-panel::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at -10% 50%,
+    var(--panel-glow, rgba(96,200,255,.04)) 0%, transparent 65%);
+  opacity: 0; transition: opacity .5s ease; pointer-events: none;
+}
+.section-panel:hover::before { opacity: 1; }
+.section-panel-left {
+  padding: 64px 48px; display: flex; flex-direction: column;
+  justify-content: space-between; border-right: 1px solid var(--line);
+}
+.section-panel-num {
+  font-family: var(--mono); font-size: 9px; color: var(--dim);
+  letter-spacing: .12em; margin-bottom: auto;
+}
+.section-panel-title {
+  font-family: var(--display); font-size: clamp(48px, 6vw, 88px);
+  font-weight: 800; letter-spacing: -.04em; line-height: .9;
+  color: var(--text); opacity: .15;
+  transition: opacity .35s ease, transform .4s cubic-bezier(.25,.46,.45,.94);
+  margin-top: 32px;
+}
+.section-panel:hover .section-panel-title { opacity: 1; transform: translateX(8px); }
+.section-panel-right {
+  padding: 64px 48px; display: flex; flex-direction: column; justify-content: flex-end;
+}
+.section-panel-desc {
+  font-family: var(--body); font-size: 11px; color: var(--muted);
+  line-height: 1.75; max-width: 360px; margin-bottom: 32px;
+}
+.section-panel-arrow {
+  font-family: var(--mono); font-size: 10px; color: var(--dim);
+  letter-spacing: .12em; display: flex; align-items: center; gap: 10px;
+  transition: color .25s, gap .3s ease;
+}
+.section-panel:hover .section-panel-arrow { color: var(--ice); gap: 18px; }
+
 /* FOOTER */
 footer {
   position: relative; z-index: 1; display: flex; align-items: center;
@@ -334,8 +394,9 @@ footer {
     <span id="navName">…</span>
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="#work">Work</a>
-    <a href="#about">About</a>
+    <a href="resume.html">Resume</a>
+    <a href="photography.html">Photography</a>
+    <a href="projects.html">Projects</a>
     <a id="navContact" href="#">Contact</a>
   </div>
   <div class="nav-status">
@@ -358,28 +419,52 @@ footer {
   <div class="scroll-hint">Scroll</div>
 </div>
 
-<div class="filter-bar" id="work">
-  <button class="filter-btn active" onclick="filterWork('all',this)">All</button>
-  <button class="filter-btn" onclick="filterWork('engineering',this)">Engineering</button>
-  <button class="filter-btn" onclick="filterWork('finance',this)">Finance</button>
-  <button class="filter-btn" onclick="filterWork('design',this)">Design</button>
-</div>
+<div class="section-panels">
 
-<div class="work-section">
-  <div class="work-index" id="workIndex"></div>
-</div>
+  <a href="resume.html" class="section-panel" style="--panel-glow: rgba(96,200,255,.05)">
+    <div class="section-panel-left">
+      <div class="section-panel-num">01</div>
+      <div class="section-panel-title">Resume</div>
+    </div>
+    <div class="section-panel-right">
+      <div class="section-panel-desc">Experience, education, and the thread connecting everything I've built — from trading systems to product design.</div>
+      <div class="section-panel-arrow">View Resume →</div>
+    </div>
+  </a>
 
-<div class="info-strip" id="about">
-  <div class="info-left">
-    <div class="info-eyebrow">About</div>
-    <div class="info-body" id="aboutBody"></div>
-  </div>
-  <div class="info-right" id="aboutStats"></div>
-</div>
+  <a href="photography.html" class="section-panel" style="--panel-glow: rgba(255,140,80,.05)">
+    <div class="section-panel-left">
+      <div class="section-panel-num">02</div>
+      <div class="section-panel-title">Photography</div>
+    </div>
+    <div class="section-panel-right">
+      <div class="section-panel-desc">A visual record of places, light, and moments worth keeping. Shot on film and digital.</div>
+      <div class="section-panel-arrow">View Gallery →</div>
+    </div>
+  </a>
 
-<div class="skills-section">
-  <div class="info-eyebrow">Skills &amp; Tools</div>
-  <div class="skills-grid" id="skillsGrid"></div>
+  <a href="projects.html" class="section-panel" style="--panel-glow: rgba(160,100,255,.05)">
+    <div class="section-panel-left">
+      <div class="section-panel-num">03</div>
+      <div class="section-panel-title">Projects</div>
+    </div>
+    <div class="section-panel-right">
+      <div class="section-panel-desc">Engineering, finance, and design work. Tools built for real problems, shipped and in use.</div>
+      <div class="section-panel-arrow">View Projects →</div>
+    </div>
+  </a>
+
+  <a href="mailto:you@example.com" class="section-panel" id="contactPanel" style="--panel-glow: rgba(60,220,180,.05)">
+    <div class="section-panel-left">
+      <div class="section-panel-num">04</div>
+      <div class="section-panel-title">Contact</div>
+    </div>
+    <div class="section-panel-right">
+      <div class="section-panel-desc">Open to collaborations, interesting problems, and good conversations. Reach out any time.</div>
+      <div class="section-panel-arrow">Get in Touch →</div>
+    </div>
+  </a>
+
 </div>
 
 <footer>
@@ -428,6 +513,10 @@ function populatePage(d) {
   document.getElementById('navContact').href = 'mailto:' + d.nav.email;
   document.getElementById('navStatus').textContent = d.hero.status;
 
+  // Contact panel href
+  var cp = document.getElementById('contactPanel');
+  if (cp) cp.href = 'mailto:' + d.nav.email;
+
   // Hero
   document.getElementById('heroMonogram').textContent = d.hero.monogram;
   document.getElementById('heroEyebrow').textContent  = d.hero.eyebrow;
@@ -440,49 +529,9 @@ function populatePage(d) {
     '<span><strong>Focus</strong> '    + d.hero.focus    + '</span>' +
     '<span><strong>Status</strong> '   + d.hero.status   + '</span>';
 
-  // Hero name — split to two lines then animate letter-by-letter
+  // Hero name — set text only; glitch animation triggered by wave engine at right moment
   var nameEl = document.getElementById('heroName');
   nameEl.innerHTML = d.hero.name_line1 + '<br>' + d.hero.name_line2;
-  animateName(nameEl);
-
-  // Projects
-  var idx = document.getElementById('workIndex');
-  idx.innerHTML = '';
-  d.projects.forEach(function(p) {
-    var tags = p.tags.map(function(t) { return '<span class="row-tag">' + t + '</span>'; }).join('');
-    var row = document.createElement('a');
-    row.href       = p.url;
-    row.className  = 'work-row';
-    row.dataset.cat = p.cat;
-    row.innerHTML  =
-      '<div class="row-num">' + p.num + '</div>' +
-      '<div class="row-body"><div class="row-title">' + p.title + '</div>' +
-      '<div class="row-tags">' + tags + '</div></div>' +
-      '<div class="row-right"><span class="row-year">' + p.year + '</span>' +
-      '<span class="row-arrow">→</span></div>';
-    idx.appendChild(row);
-  });
-
-  // About body (supports \n\n as paragraph break)
-  var aboutEl = document.getElementById('aboutBody');
-  aboutEl.innerHTML = d.about.body.split('\n\n').map(function(p) {
-    return '<p>' + p + '</p>';
-  }).join('');
-
-  // About stats
-  var statsEl = document.getElementById('aboutStats');
-  statsEl.innerHTML = d.about.stats.map(function(s) {
-    return '<div class="stat-block">' +
-      '<div class="stat-label">'  + s.label + '</div>' +
-      '<div class="stat-value">'  + s.value + '</div>' +
-      '<div class="stat-sub">'    + s.sub   + '</div>' +
-      '</div>';
-  }).join('');
-
-  // Skills
-  document.getElementById('skillsGrid').innerHTML = d.skills.map(function(s) {
-    return '<span class="skill-chip">' + s + '</span>';
-  }).join('');
 
   // Footer
   var year = new Date().getFullYear();
@@ -491,41 +540,6 @@ function populatePage(d) {
     '<a href="' + d.footer.github   + '">GitHub</a>' +
     '<a href="' + d.footer.linkedin + '">LinkedIn</a>' +
     '<a href="mailto:' + d.footer.email + '">Email</a>';
-}
-
-function animateName(el) {
-  var nodes = Array.from(el.childNodes);
-  var out = '', delay = 0.28;
-  nodes.forEach(function(n) {
-    if (n.nodeType === 3) {
-      n.textContent.split('').forEach(function(ch) {
-        if (ch === ' ') { out += ' '; }
-        else {
-          out += '<span class="char" style="animation-delay:' + delay.toFixed(2) + 's">' + ch + '</span>';
-          delay += 0.048;
-        }
-      });
-    } else if (n.nodeName === 'BR') {
-      out += '<br>'; delay += 0.06;
-    }
-  });
-  el.innerHTML = out;
-}
-
-/* Work filtering */
-function filterWork(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-  var visIdx = 0;
-  document.querySelectorAll('.work-row').forEach(function(row) {
-    var match = cat === 'all' || row.dataset.cat === cat;
-    if (match) {
-      row.style.display = 'grid'; row.style.opacity = '0';
-      row.style.animation = 'none'; void row.offsetHeight;
-      row.style.animation = 'fadeUp .4s ' + (visIdx * 0.07) + 's ease forwards';
-      visIdx++;
-    } else { row.style.display = 'none'; }
-  });
 }
 
 /* =====================================================================
@@ -633,6 +647,7 @@ function initWave(introMode) {
   var lastTimestamp = null;
   var smoothDt = 0.016;
   var amberFadeAlpha = 0; // carries ghost sub-wave alpha from intro into xfade
+  var nameGlitchFired = false; // triggers hero name glitch at 60% through intro
 
   function draw(timestamp) {
     if (!syncBuffer()) { requestAnimationFrame(draw); return; }
@@ -654,16 +669,15 @@ function initWave(introMode) {
     if (introActive) {
       introT = Math.min(1, clock / INTRO_DUR);
       if (introT >= 1) {
-        // Capture each non-keeper's current alpha so xfade can continue fading them
+        // Capture all line alphas for xfade fadeout
         var numW = 10;
         nonKeeperAlphas = [];
         for (var _wi = 0; _wi < numW; _wi++) {
-          if (_wi === 0 || _wi === numW - 1) { nonKeeperAlphas.push(0); continue; }
-          var _fo = 1 - remap(1.0, 0.35, 0.85); // at introT=1
-          nonKeeperAlphas.push(Math.max(0, _fo * 0.55));
+          var _fadeIn  = remap(1.0, _wi * 0.015, _wi * 0.015 + 0.18);
+          var _fadeOut = 1 - remap(1.0, 0.45 + _wi * 0.02, 0.92 + _wi * 0.005);
+          nonKeeperAlphas.push(Math.max(0, _fadeIn * _fadeOut * 0.7));
         }
-        // Capture amber ghost alpha for smooth fadeout in xfade
-        amberFadeAlpha = remap(1.0, 0.4, 1) * 0.18;
+        amberFadeAlpha = 0; // amber is already gone well before introT=1
         introActive  = false;
         xfadeActive  = true;
         xfadeT       = 0;
@@ -673,9 +687,9 @@ function initWave(introMode) {
       xfadeT = Math.min(1, xfadeT + dt / XFADE_DUR);
       if (xfadeT >= 1) xfadeActive = false;
     }
-    ghostDriftT += dt * 0.18; // very slow drift clock
-    mainDriftT  += dt * 0.11; // slightly different speed — never in sync with ghost
-    freqDriftT  += dt * 0.07; // very slow frequency drift — full cycle ~90s
+    ghostDriftT += dt * 0.06;  // was 0.18 — much slower breath
+    mainDriftT  += dt * 0.04;  // was 0.11 — different speed, never in sync
+    freqDriftT  += dt * 0.025; // was 0.07 — very slow freq drift
 
     /* jitter (only after intro) */
     if (!introActive) {
@@ -701,10 +715,10 @@ function initWave(introMode) {
     }
     t += dt * (introActive ? 1.4 : speedMul);
 
-    /* steady-state geometry */
-    var maxAmp = h * 0.22;
+    /* steady-state geometry — positioned higher, larger amp */
+    var maxAmp = h * 0.30;              // was 0.22 — bigger waves
     var amp    = maxAmp * (1 - sp);
-    var cy     = h * 0.45 * (1 - sp);
+    var cy     = h * 0.35 * (1 - sp);  // was 0.45 — sits higher on screen
     var mx     = mouseXNorm * w;
 
     /* ================================================================
@@ -761,11 +775,20 @@ function initWave(introMode) {
 
       /* ── OPTION B: STORM ─────────────────────────────────────────── */
       } else if (introMode === 'storm') {
-        var numWaves  = 10;
-        var settleQ   = easeOutCubic(introT);
+        var numWaves = 10;
+
+        // Trigger name glitch at 60% through intro, once
+        if (!nameGlitchFired && introT >= 0.6) {
+          nameGlitchFired = true;
+          var nameEl = document.getElementById('heroName');
+          if (nameEl) {
+            nameEl.style.opacity = '';
+            nameEl.classList.add('glitch-active');
+          }
+        }
 
         var palette = [
-          [96,200,255],   // 0 ice       — keeper main
+          [96,200,255],   // 0 ice
           [160,100,255],  // 1 violet
           [255,100,160],  // 2 rose
           [60,220,180],   // 3 teal
@@ -774,51 +797,33 @@ function initWave(introMode) {
           [255,140,80],   // 6 coral
           [180,140,255],  // 7 lavender
           [80,220,255],   // 8 sky
-          [184,118,26],   // 9 amber     — keeper ghost
+          [184,118,26],   // 9 amber
         ];
 
         for (var wi = 0; wi < numWaves; wi++) {
-          var wFrac    = wi / (numWaves - 1);
-          var isKeeper = (wi === 0 || wi === numWaves - 1);
-
-          var initPhase  = wFrac * Math.PI * 2;
-          var finalPhase = wi === 0 ? 0.4 : 1.8;
-          var curPhase   = isKeeper
-            ? initPhase + (finalPhase - initPhase) * settleQ
-            : initPhase;
-
-          var initFreq  = 0.016 * (0.5 + wFrac * 2.2);
-          var finalFreq = 0.016;
-          var curFreq   = initFreq + (finalFreq - initFreq) * settleQ;
-
+          var wFrac   = wi / (numWaves - 1);
+          var phase   = wFrac * Math.PI * 2;
+          var initFreq = 0.016 * (0.5 + wFrac * 2.2);
           // Each line has its own independent slow amplitude oscillation
           var wAmpMod = 0.55 + 0.45 * Math.sin(clock * (0.4 + wi * 0.17) + wi * 1.3);
 
-          var wAlpha, wLineW, wGlowAmt;
-          if (isKeeper) {
-            wAlpha    = 0.08 + settleQ * 0.67;
-            wLineW    = 0.8 + settleQ * 0.8;
-            wGlowAmt  = 14 * settleQ;
-            wAmpMod   = 1; // keepers use full amp so they land at correct steady position
-          } else {
-            var fadeIn  = remap(introT, 0, 0.18);
-            var fadeOut = 1 - remap(introT, 0.55, 0.98);
-            wAlpha      = fadeIn * fadeOut * 0.7;
-            wLineW      = 0.9 + fadeIn * 0.5;
-            // Glow bursts bright right after fade-in then settles — staggered per wave
-            var burstPeak = remap(introT, wi * 0.02, wi * 0.02 + 0.15);
-            var burstDecay = Math.max(0, 1 - remap(introT, wi * 0.02 + 0.1, 0.75));
-            wGlowAmt  = (burstPeak * burstDecay) * 32 + fadeIn * fadeOut * 10;
-          }
+          // All lines: quick fade in, then slow fade out — staggered per line
+          var fadeIn  = remap(introT, wi * 0.015, wi * 0.015 + 0.18);
+          var fadeOut = 1 - remap(introT, 0.45 + wi * 0.02, 0.92 + wi * 0.005);
+          var wAlpha  = fadeIn * fadeOut * 0.7;
+          var wLineW  = 0.9 + fadeIn * 0.5;
+
+          // Glow burst staggered per wave
+          var burstPeak  = remap(introT, wi * 0.02, wi * 0.02 + 0.15);
+          var burstDecay = Math.max(0, 1 - remap(introT, wi * 0.02 + 0.1, 0.75));
+          var wGlowAmt   = (burstPeak * burstDecay) * 32 + fadeIn * fadeOut * 10;
+
           if (wAlpha < 0.005) continue;
 
           var col = palette[wi % palette.length];
           ctx.beginPath();
-          for (var x = 0; x <= w; x += (isKeeper ? 2 : 3)) {
-            var lb = isKeeper
-              ? Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42 * settleQ
-              : 0;
-            var y = cy + Math.sin(x * curFreq - t + curPhase) * amp * wAmpMod + lb;
+          for (var x = 0; x <= w; x += 3) {
+            var y = cy + Math.sin(x * initFreq - t + phase) * amp * wAmpMod;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + wAlpha + ')';
@@ -828,60 +833,53 @@ function initWave(introMode) {
             ctx.shadowBlur  = wGlowAmt;
           }
           ctx.stroke();
-          ctx.shadowBlur  = 0;
+          ctx.shadowBlur = 0;
         }
 
-        // Ghost sub-wave — amber, fades out well before intro ends so no xfade snap
-        var curAmberAlpha = 0;
+        // Amber ghost — early appearance, fades before intro ends
         if (introT > 0.3 && introT < 0.62) {
           var amberIn  = remap(introT, 0.3, 0.42);
-          var amberOut = 1 - remap(introT, 0.44, 0.62); // fully gone by 62%
-          curAmberAlpha = amberIn * amberOut * 0.18;
+          var amberOut = 1 - remap(introT, 0.44, 0.62);
+          var curAmberAlpha = amberIn * amberOut * 0.18;
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
-            var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28 * easeOutCubic(remap(introT,0.4,1));
+            var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
             var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba(184,118,26,' + curAmberAlpha + ')';
           ctx.lineWidth   = 0.8;
           ctx.stroke();
-          amberFadeAlpha  = curAmberAlpha;
+          amberFadeAlpha = curAmberAlpha;
         } else {
-          amberFadeAlpha = 0; // already gone, nothing to carry into xfade
+          amberFadeAlpha = 0;
         }
       }
 
     /* ================================================================
-       XFADE — continue fading non-keeper lines after intro ends
+       XFADE — all intro lines fade out, steady waves fade in fresh
        ================================================================ */
     } else if (xfadeActive) {
       var xBlend = easeOutCubic(xfadeT);
-      var xFade  = 1 - xBlend; // non-keepers go 1→0 as xBlend goes 0→1
+      var xFade  = 1 - xBlend;
 
       var paletteX = [
         [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
         [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26],
       ];
-      var numWX = 10;
 
-      for (var wi = 0; wi < numWX; wi++) {
-        var wFracX    = wi / (numWX - 1);
-        var isKeeperX = (wi === 0 || wi === numWX - 1);
-        if (isKeeperX) continue;
-
-        var startAlpha = (nonKeeperAlphas[wi] !== undefined) ? nonKeeperAlphas[wi] : 0.1;
-        var wAlphaX = startAlpha * xFade;
+      for (var wi = 0; wi < 10; wi++) {
+        var wFracX   = wi / 9;
+        var startAlpha = (nonKeeperAlphas[wi] !== undefined) ? nonKeeperAlphas[wi] : 0;
+        var wAlphaX  = startAlpha * xFade;
         if (wAlphaX < 0.004) continue;
-
-        var phaseX = wFracX * Math.PI * 2;
+        var phaseX    = wFracX * Math.PI * 2;
+        var initFreqX = 0.016 * (0.5 + wFracX * 2.2);
+        var wAmpModX  = 0.55 + 0.45 * Math.sin(clock * (0.4 + wi * 0.17) + wi * 1.3);
         var col = paletteX[wi % paletteX.length];
-        // Each line keeps its own amplitude oscillation during fadeout
-        var wAmpModX = 0.55 + 0.45 * Math.sin(clock * (0.4 + wi * 0.17) + wi * 1.3);
-
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
-          var y = cy + Math.sin(x * 0.016 - t + phaseX) * amp * wAmpModX;
+          var y = cy + Math.sin(x * initFreqX - t + phaseX) * amp * wAmpModX;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + wAlphaX + ')';
@@ -892,21 +890,7 @@ function initWave(introMode) {
         ctx.shadowBlur  = 0;
       }
 
-      // Amber ghost — fade out from captured alpha to zero
-      if (amberFadeAlpha > 0.002) {
-        var curAmberA = amberFadeAlpha * xFade;
-        ctx.beginPath();
-        for (var x = 0; x <= w; x += 3) {
-          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = 'rgba(184,118,26,' + curAmberA + ')';
-        ctx.lineWidth   = 0.8;
-        ctx.stroke();
-      }
-
-      // Keeper waves (steady state with xfade blend-in)
+      // Steady waves fade in
       if (amp > 0.5) {
         var ghostAmpMod = 0.65 + 0.35 * Math.sin(ghostDriftT);
         var ghostFreq   = 0.014 + 0.006 * Math.sin(freqDriftT * 0.8);
@@ -916,10 +900,9 @@ function initWave(introMode) {
           var ghostWiggle = 0;
           if (wiggleActive) {
             var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
-            ghostWiggle = wEnv * wiggleAmpScale * amp * 0.3
-              * Math.sin(x * wiggleFreq - t * 6 + 1.8);
+            ghostWiggle = wEnv * wiggleAmpScale * amp * 0.3 * Math.sin(x * wiggleFreq - t * 6 + 1.8);
           }
-          var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostWiggle;
+          var y = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + ghostWiggle;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
@@ -931,7 +914,12 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y  = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb;
+          var wiggleBump = 0;
+          if (wiggleActive) {
+            var wEnv = Math.sin(Math.PI * (wiggleT / wiggleDur));
+            wiggleBump = wEnv * wiggleAmpScale * amp * 0.5 * Math.sin(x * wiggleFreq - t * 6 + 0.4);
+          }
+          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + wiggleBump;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
