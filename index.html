@@ -110,7 +110,7 @@ nav.waveform-active {
 
 /* HERO */
 .hero {
-  position: relative; z-index: 1; min-height: 100vh;
+  position: relative; z-index: 3; min-height: 100vh;
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: 0 48px 80px; border-bottom: 1px solid var(--line);
 }
@@ -796,7 +796,8 @@ function initWave(introMode) {
           var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = 'rgba(96,200,255,' + (0.10 * (1 - sp)) + ')';
+        // Ghost: warm bone/amber tone from the dashboard palette
+        ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp)) + ')';
         ctx.lineWidth   = 0.8;
         ctx.stroke();
 
@@ -814,12 +815,17 @@ function initWave(introMode) {
           var y = cy + Math.sin(x * 0.007 - t + 0.4) * amp + lb + wiggleBump;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
+        // Main: bright ice with a persistent soft glow, fades toward line colour as it collapses
         var wR = Math.round(96  + (30  - 96)  * sp);
         var wG = Math.round(200 + (37  - 200) * sp);
         var wB = Math.round(255 + (48  - 255) * sp);
-        ctx.strokeStyle = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + (0.5 - sp * 0.1) + ')';
-        ctx.lineWidth   = 1.4;
+        var wA = 0.75 - sp * 0.25;
+        ctx.strokeStyle  = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + wA + ')';
+        ctx.lineWidth    = 1.4;
+        ctx.shadowColor  = 'rgba(96,200,255,' + (0.45 * (1 - sp)) + ')';
+        ctx.shadowBlur   = 10 * (1 - sp);
         ctx.stroke();
+        ctx.shadowBlur   = 0;
       }
 
       // Flat line collapse → nav border handoff
