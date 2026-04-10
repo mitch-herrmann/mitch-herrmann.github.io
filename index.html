@@ -826,10 +826,12 @@ function initWave(introMode) {
           ctx.shadowBlur  = 0;
         }
 
-        // Ghost sub-wave — amber, track current alpha for xfade handoff
+        // Ghost sub-wave — amber, fades out well before intro ends so no xfade snap
         var curAmberAlpha = 0;
-        if (introT > 0.4) {
-          curAmberAlpha = remap(introT, 0.4, 1) * 0.18;
+        if (introT > 0.4 && introT < 0.92) {
+          var amberIn  = remap(introT, 0.4, 0.55);
+          var amberOut = 1 - remap(introT, 0.65, 0.92); // fully gone by 92%
+          curAmberAlpha = amberIn * amberOut * 0.18;
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28 * easeOutCubic(remap(introT,0.4,1));
@@ -839,7 +841,9 @@ function initWave(introMode) {
           ctx.strokeStyle = 'rgba(184,118,26,' + curAmberAlpha + ')';
           ctx.lineWidth   = 0.8;
           ctx.stroke();
-          amberFadeAlpha  = curAmberAlpha; // keep updated each frame
+          amberFadeAlpha  = curAmberAlpha;
+        } else {
+          amberFadeAlpha = 0; // already gone, nothing to carry into xfade
         }
       }
 
