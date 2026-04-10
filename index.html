@@ -746,7 +746,7 @@ function initWave(introMode) {
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-            var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
+            var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba(96,200,255,' + ga + ')';
@@ -835,7 +835,7 @@ function initWave(introMode) {
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28 * easeOutCubic(remap(introT,0.4,1));
-            var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
+            var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba(184,118,26,' + curAmberAlpha + ')';
@@ -893,7 +893,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + curAmberA + ')';
@@ -907,7 +907,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
@@ -947,7 +947,7 @@ function initWave(introMode) {
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy + Math.sin(x * 0.007 - t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
+          var y  = cy + Math.sin(x * 0.007 + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
