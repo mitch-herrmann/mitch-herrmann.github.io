@@ -491,7 +491,7 @@ footer {
     </div>
   </a>
 
-  <a href="mailto:you@example.com" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
+  <a href="/cdn-cgi/l/email-protection#c4bdabb184a1bca5a9b4a8a1eaa7aba9" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">04</div>
       <div class="section-panel-title">Contact</div>
@@ -600,13 +600,26 @@ function initWave(introMode) {
   var cachedScrollY = 0;
 
   /* ---- intro state ---- */
-  var INTRO_DUR  = 5.0;  // seconds for intro to complete
-  var XFADE_DUR  = 2.0;  // crossfade window after intro ends
-  var introT     = 0;    // 0→1 over INTRO_DUR real-seconds
-  var xfadeT     = 0;    // 0→1 over XFADE_DUR after intro ends
-  var xfadeActive = false;
+  var INTRO_DUR  = 5.0;  // burst phase duration
+  var SAG_DUR    = 5.5;  // sag phase duration per string
+  var SAG_DELAY  = 0.16; // stagger between strings
+  var WAVE_START = INTRO_DUR + SAG_DUR + SAG_DELAY * 9 + 0.4; // when steady waves appear
   var introActive = (introMode !== 'none');
-  var clock      = 0;    // real elapsed seconds
+  var sagActive   = false;
+  var sagClock    = 0;   // clock within sag phase
+  var introT      = 0;   // 0→1 over INTRO_DUR
+  var clock       = 0;   // real elapsed seconds
+
+  /* Per-wave sag speed seeds — each trough droops at a different rate */
+  var sagSpeeds = [];
+  for (var _s = 0; _s < 10; _s++) {
+    // each wave gets 4 trough speed multipliers (enough for visible peaks at our freq)
+    var speeds = [];
+    for (var _p = 0; _p < 6; _p++) {
+      speeds.push(0.55 + Math.random() * 0.9); // 0.55×–1.45× per trough
+    }
+    sagSpeeds.push(speeds);
+  }
 
   /* ---- steady-state wave clock ---- */
   var t = 0;
@@ -688,42 +701,21 @@ function initWave(introMode) {
     clock += dt;
     if (introActive) {
       introT = Math.min(1, clock / INTRO_DUR);
-      if (introT >= 1) {
-        // Capture all line alphas for xfade fadeout
-        var numW = 10;
-        nonKeeperAlphas = [];
-        for (var _wi = 0; _wi < numW; _wi++) {
-          var _fadeIn  = remap(1.0, _wi * 0.015, _wi * 0.015 + 0.18);
-          var _fadeOut = 1 - remap(1.0, 0.45 + _wi * 0.02, 0.92 + _wi * 0.005);
-          nonKeeperAlphas.push(Math.max(0, _fadeIn * _fadeOut * 0.7));
-        }
-        amberFadeAlpha = 0; // amber is already gone well before introT=1
-        introActive  = false;
-        xfadeActive  = true;
-        xfadeT       = 0;
-      }
+      if (introT >= 1) { introActive = false; sagActive = true; sagClock = 0; }
     }
-    if (xfadeActive) {
-      xfadeT = Math.min(1, xfadeT + dt / XFADE_DUR);
-      if (xfadeT >= 1) xfadeActive = false;
-    }
-    ghostDriftT += dt * 0.06;  // was 0.18 — much slower breath
-    mainDriftT  += dt * 0.04;  // was 0.11 — different speed, never in sync
-    freqDriftT  += dt * 0.025; // was 0.07 — very slow freq drift
+    if (sagActive) { sagClock += dt; }
+    var inSteady = !introActive && !sagActive && clock >= WAVE_START;
+    ghostDriftT += dt * 0.06;
+    mainDriftT  += dt * 0.04;
+    freqDriftT  += dt * 0.025;
 
-    /* ── Continuous breathing — replaces discrete jitter + wiggle events ──
-       Sum several incommensurable sines so the result never repeats or flatlines.
-       flowT advances at a steady rate; each sine has a prime-ish period offset.  */
-    if (!introActive) {
-      flowT += dt; // steady clock, no speed multiplier — smoothness over drama
-    }
-    // Speed multiplier: softly oscillates between 0.7× and 1.4× — never hard stops
+    if (inSteady) { flowT += dt; }
     var speedMul = 1.0
       + 0.18 * Math.sin(flowT * 0.31)
       + 0.12 * Math.sin(flowT * 0.17 + 1.1)
       + 0.07 * Math.sin(flowT * 0.53 + 2.4);
 
-    t += dt * (introActive ? 1.4 : speedMul);
+    t += dt * (introActive ? 1.4 : (inSteady ? speedMul : 1.0));
 
     // Amplitude modulation: two waves at different rates for main and ghost
     // Result wanders continuously — no plateau, no abrupt jump
@@ -898,108 +890,106 @@ function initWave(introMode) {
       }
 
     /* ================================================================
-       XFADE — all intro lines fade out, steady waves fade in fresh
+       SAG PHASE — colour strings droop individually off-screen
        ================================================================ */
-    } else if (xfadeActive) {
-      var xBlend = easeOutCubic(xfadeT);
-      var xFade  = 1 - xBlend;
-
-      var paletteX = [
+    } else if (sagActive) {
+      var palette = [
         [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
-        [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26],
+        [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
       ];
-
+      var allDone = true;
       for (var wi = 0; wi < 10; wi++) {
-        var wFracX   = wi / 9;
-        var startAlpha = (nonKeeperAlphas[wi] !== undefined) ? nonKeeperAlphas[wi] : 0;
-        var wAlphaX  = startAlpha * xFade;
-        if (wAlphaX < 0.004) continue;
-        var phaseX    = wFracX * Math.PI * 2;
-        var initFreqX = 0.016 * (0.5 + wFracX * 2.2);
-        var wAmpModX  = 0.55 + 0.45 * Math.sin(clock * (0.4 + wi * 0.17) + wi * 1.3);
-        var col = paletteX[wi % paletteX.length];
+        var wFrac   = wi / 9;
+        var phase   = wFrac * Math.PI * 2;
+        var initFreq = 0.016 * (0.5 + wFrac * 2.2);
+        var wAmpMod  = 0.55 + 0.45 * Math.sin(wi * 1.3);
+        var col      = palette[wi];
+        var speeds   = sagSpeeds[wi];
+
+        // staggered start per string
+        var localT   = Math.max(0, sagClock - wi * SAG_DELAY);
+        var rawPct   = Math.min(1, localT / SAG_DUR);
+
+        // easeRamp: quartic ease-in → strong acceleration → ease-out
+        var easedPct;
+        if (rawPct < 0.38) {
+          var n = rawPct / 0.38;
+          easedPct = 0.38 * (n * n * n * n);
+        } else {
+          var n = (rawPct - 0.38) / 0.62;
+          easedPct = 0.38 + 0.62 * (1 - Math.pow(1 - n, 2.2));
+        }
+
+        if (rawPct < 1) allDone = false;
+
+        // alpha: full through the fast surge, fades only as string exits bottom
+        var alpha = Math.max(0, 1 - remap(rawPct, 0.78, 1.0)) * 0.75;
+        if (alpha < 0.005) continue;
+
+        // wave slows as it droops (going limp)
+        var tLocal = t * (1 - easedPct * 0.65);
+
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
-          var y = cy + Math.sin(x * initFreqX - t + phaseX) * amp * wAmpModX;
+          var waveVal  = Math.sin(x * initFreq - tLocal + phase);
+          var baseCY   = cy;
+          // Base downward drift — whole string moves down
+          var baseDrift = easedPct * easedPct * h * 1.1;
+          // Per-trough pull — each trough has its own speed seed
+          // Identify which trough cycle this x falls in, look up its speed
+          var troughVal  = Math.max(0, -waveVal); // 0 at peaks, 1 at troughs
+          // trough index: which cycle of the wave are we in?
+          var cycleIdx   = Math.floor((x * initFreq - tLocal + phase + Math.PI) / (Math.PI * 2));
+          var speedSeed  = speeds[Math.abs(cycleIdx) % speeds.length];
+          // pull depth: fast troughs fall much deeper than slow ones
+          var troughDepth = troughVal * troughVal * easedPct * easedPct * h * 2.8 * speedSeed;
+          var y = baseCY + waveVal * amp * wAmpMod + baseDrift + troughDepth;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + wAlphaX + ')';
-        ctx.lineWidth   = 0.8;
-        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (wAlphaX * 0.7) + ')';
-        ctx.shadowBlur  = 8 * xFade;
+
+        ctx.strokeStyle = 'rgba('+col[0]+','+col[1]+','+col[2]+','+alpha+')';
+        ctx.lineWidth   = 1.0;
+        ctx.shadowColor = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(alpha*0.7)+')';
+        ctx.shadowBlur  = 8;
         ctx.stroke();
         ctx.shadowBlur  = 0;
       }
-
-      // Steady waves fade in
-      if (amp > 0.5) {
-        var ghostFreq   = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);
-        ctx.beginPath();
-        for (var x = 0; x <= w; x += 3) {
-          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
-        ctx.lineWidth   = 0.8;
-        ctx.stroke();
-
-        var mainFreq   = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1);
-        ctx.beginPath();
-        for (var x = 0; x <= w; x += 2) {
-          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        var wR = Math.round(96  + (30  - 96)  * sp);
-        var wG = Math.round(200 + (37  - 200) * sp);
-        var wB = Math.round(255 + (48  - 255) * sp);
-        var wA = (0.75 - sp * 0.25) * xBlend;
-        ctx.strokeStyle  = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + wA + ')';
-        ctx.lineWidth    = 1.4;
-        ctx.shadowColor  = 'rgba(96,200,255,' + (0.45 * (1 - sp) * xBlend) + ')';
-        ctx.shadowBlur   = 10 * (1 - sp) * xBlend;
-        ctx.stroke();
-        ctx.shadowBlur   = 0;
-      }
+      if (allDone) sagActive = false;
 
     /* ================================================================
-       STEADY STATE (fully settled, post-xfade)
+       STEADY STATE — blue + amber waves, continuous breathing
        ================================================================ */
     } else {
-      var xBlend = 1;
+      var waveIn = Math.min(1, (clock - WAVE_START) / 2.0);
+      var xBlend = easeOutCubic(waveIn);
 
       if (amp > 0.5) {
-        // Ghost wave — amplitude drifts, frequency drifts independently
-        var ghostFreq    = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);  // 0.008–0.020
-        var ghostAlpha   = 0.18 * (1 - sp);
-
+        var ghostFreq = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
           var y  = cy + Math.sin(x * ghostFreq + t * 0.5 + 1.8) * amp * ghostAmpMod * 0.45 + lb + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = 'rgba(184,118,26,' + ghostAlpha + ')';
+        ctx.strokeStyle = 'rgba(184,118,26,' + (0.18 * (1 - sp) * xBlend) + ')';
         ctx.lineWidth   = 0.8;
         ctx.stroke();
 
-        // Main wave — different freq drift range and speed
-        var mainFreq    = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1); // 0.009–0.023
+        var mainFreq = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1);
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
           var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
+          var y  = cy + Math.sin(x * mainFreq - t + 0.4) * amp * mainAmpMod + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         var wR = Math.round(96  + (30  - 96)  * sp);
         var wG = Math.round(200 + (37  - 200) * sp);
         var wB = Math.round(255 + (48  - 255) * sp);
-        var wA = 0.75 - sp * 0.25;
-        ctx.strokeStyle  = 'rgba(' + wR + ',' + wG + ',' + wB + ',' + wA + ')';
+        var wA = (0.75 - sp * 0.25) * xBlend;
+        ctx.strokeStyle  = 'rgba('+wR+','+wG+','+wB+','+wA+')';
         ctx.lineWidth    = 1.4;
-        ctx.shadowColor  = 'rgba(96,200,255,' + (0.45 * (1 - sp)) + ')';
-        ctx.shadowBlur   = 10 * (1 - sp);
+        ctx.shadowColor  = 'rgba(96,200,255,'+(0.45*(1-sp)*xBlend)+')';
+        ctx.shadowBlur   = 10*(1-sp)*xBlend;
         ctx.stroke();
         ctx.shadowBlur   = 0;
       }
@@ -1012,9 +1002,9 @@ function initWave(introMode) {
         var gR = Math.round(30  + (96  - 30)  * la);
         var gG = Math.round(37  + (200 - 37)  * la);
         var gB = Math.round(48  + (255 - 48)  * la);
-        ctx.strokeStyle = 'rgba(' + gR + ',' + gG + ',' + gB + ',' + la + ')';
+        ctx.strokeStyle = 'rgba('+gR+','+gG+','+gB+','+la+')';
         ctx.lineWidth   = 1 + la;
-        if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,' + la * 0.6 + ')'; ctx.shadowBlur = 8 * la; }
+        if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,'+la*0.6+')'; ctx.shadowBlur = 8*la; }
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
