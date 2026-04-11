@@ -1039,287 +1039,193 @@ function initWave(introMode) {
   }
 
   /* ================================================================
-     RESTING STRINGS — strings that settled at the bottom of the screen
-     Built once when intro ends; drawn every frame with subtle breathing
+     NEON SPILL — animated canvas at true page bottom
+     Strings are flat sinusoids compressed into a glowing mat.
+     Each string breathes, pulses, and shimmers independently.
      ================================================================ */
 
-  /* ================================================================
-     SVG SPAGHETTI HEAP — physics-dropped strings at true page bottom
-     Built once after intro ends; injected as absolute-positioned SVG
-     ================================================================ */
-
-  function buildRestingStrings() {
-    return true; // signals built; actual work done in injectSpaghettiSVG
-  }
-
-  function drawRestingStrings(ctx, w, h, opacity, clock) {
-    // no-op: resting strings are SVG, not canvas
-  }
+  function buildRestingStrings() { return true; }
+  function drawRestingStrings()   {} // no-op — handled by spill canvas
 
   function injectSpaghettiSVG() {
-    // Remove any existing heap
-    var old = document.getElementById('spaghettiHeap');
+    var old = document.getElementById('neonSpill');
     if (old) old.remove();
 
     var palette = [
-      [96,200,255],   // ice
-      [160,100,255],  // violet
-      [255,100,160],  // rose
-      [60,220,180],   // teal
-      [255,200,60],   // gold
-      [100,255,200],  // mint
-      [255,140,80],   // coral
-      [180,140,255],  // lavender
-      [80,220,255],   // sky
-      [184,118,26],   // amber
+      [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
+      [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
     ];
 
-    var pageW  = Math.max(document.body.scrollWidth, window.innerWidth);
-    var svgH   = 340; // height of the heap SVG zone
-    var svgTop = document.body.scrollHeight - svgH + 20; // sits at very bottom
-
-    // Find card panel positions for draping
-    var cardPanels = document.querySelectorAll('.section-panel');
-    var cardRects  = [];
-    cardPanels.forEach(function(el) {
-      var r = el.getBoundingClientRect();
-      var scrollY = window.scrollY || 0;
-      cardRects.push({
-        left:   r.left,
-        right:  r.right,
-        top:    r.top + scrollY,
-        bottom: r.bottom + scrollY,
-        width:  r.width
-      });
-    });
-
-    // ── Seeded pseudo-random (consistent per session but random each page load) ──
+    // ── Seeded PRNG ──────────────────────────────────────────────────────────
     var _seed = Date.now() % 99991;
     function rand() {
       _seed = (_seed * 1664525 + 1013904223) & 0xffffffff;
       return ((_seed >>> 0) / 0xffffffff);
     }
 
-    // ── Physics drop simulation ────────────────────────────────────────────────
-    // Simulate each string as a chain of segments falling under gravity + lateral drift
-    // Returns an array of {x,y} points representing the settled path
-    function dropString(startX, stringIdx) {
-      var pts = [];
-      var x = startX, y = -20; // starts above SVG (falling in from above)
-      var vx = (rand() - 0.5) * 18;  // initial lateral velocity
-      var vy = 2 + rand() * 4;        // initial downward velocity
-      var gravity = 0.38 + rand() * 0.22;
-      var drag    = 0.88 + rand() * 0.06;
-      var segLen  = 12 + rand() * 10;
-      var maxSegs = 180;
-      var floorY  = svgH - 15 - rand() * 30; // where this string settles (varied floor)
+    // ── Layout ───────────────────────────────────────────────────────────────
+    var spillH   = 90;   // height of the canvas zone — tight mat
+    var pageW    = Math.max(document.body.scrollWidth, window.innerWidth);
+    var spillTop = document.body.scrollHeight - spillH;
 
-      // Check if this string will pass near a card edge
-      var nearCard = null;
-      for (var ci = 0; ci < cardRects.length; ci++) {
-        var cr = cardRects[ci];
-        // Only cards whose top is near the heap zone matter
-        if (Math.abs(cr.top - svgTop) < svgH * 1.5) {
-          if (startX > cr.left - 60 && startX < cr.right + 60) {
-            nearCard = cr;
-            break;
-          }
-        }
-      }
+    // ── Build per-string descriptors ─────────────────────────────────────────
+    // 16 strings — more = denser mat
+    var NUM = 16;
+    var strings = [];
+    for (var i = 0; i < NUM; i++) {
+      var col = palette[i % palette.length];
 
-      pts.push({x: x, y: y});
+      // Base Y within the canvas: pack them into the lower 70% of spillH
+      // Earlier strings (lower indices) sit deeper in the pile
+      var baseY = spillH * (0.30 + 0.55 * (i / (NUM - 1))) + (rand() - 0.5) * 6;
 
-      for (var s = 0; s < maxSegs; s++) {
-        vy += gravity;
-        vx *= drag;
-        vy *= drag;
+      // Frequency: mix of longer wavelengths (low) and tighter wiggles
+      var freq  = 0.006 + rand() * 0.016;
 
-        // Add sinuous lateral wobble as string falls
-        vx += Math.sin(s * 0.18 + stringIdx * 1.3) * 1.2;
+      // Amplitude: very shallow — just enough to not look perfectly flat
+      var amp   = 3.5 + rand() * 6.5;
 
-        // Card drape: if string crosses card top edge, fold over it
-        if (nearCard && y + vy > nearCard.top - svgTop && y < nearCard.top - svgTop + 8) {
-          // At card edge — drape: string hangs down the card face then pools below
-          var hangDepth = 35 + rand() * 55;
-          // Add points going down the card face
-          for (var hi = 0; hi < 12; hi++) {
-            pts.push({x: x + (rand()-0.5)*4, y: nearCard.top - svgTop + hi * (hangDepth/12)});
-          }
-          y = nearCard.top - svgTop + hangDepth;
-          vy = 1.5;
-          vx = (rand() - 0.5) * 6;
-          nearCard = null; // only drape once
-        }
+      // Phase offset so strings don't all peak/trough at x=0
+      var phase = rand() * Math.PI * 2;
 
-        x += vx;
-        y += vy;
+      // Breathing: each string has its own slow oscillation clock
+      var breathRate  = 0.08 + rand() * 0.18;   // cycles/sec
+      var breathDepth = 0.12 + rand() * 0.22;   // amplitude ±fraction
 
-        // Bounce off floor — each string has its own floor height
-        if (y >= floorY) {
-          y = floorY;
-          vy *= -(0.08 + rand() * 0.12); // very low restitution — strings don't bounce much
-          vx += (rand() - 0.5) * 5;      // pile up laterally
-          // Kinked segments: chance of adding a loop/kink
-          if (Math.abs(vy) < 1.5 && rand() < 0.35) {
-            // Add a small loop
-            var loopR = 8 + rand() * 18;
-            for (var li = 0; li < 10; li++) {
-              var angle = (li / 10) * Math.PI * 2;
-              pts.push({x: x + Math.cos(angle) * loopR, y: floorY - Math.abs(Math.sin(angle)) * loopR * 0.6});
-            }
-          }
-        }
+      // Pulse: independent fast glow spike rate (incommensurable so they don't sync)
+      var pulseRate   = 0.4 + rand() * 1.2;
+      var pulseDepth  = 0.15 + rand() * 0.35;
 
-        // Wall bounce
-        if (x < 0)     { x = 0;     vx =  Math.abs(vx) * 0.4; }
-        if (x > pageW) { x = pageW; vx = -Math.abs(vx) * 0.4; }
+      // Shimmer: slow left-to-right brightness wave along the string
+      var shimmerRate = 0.05 + rand() * 0.12;
+      var shimmerAmt  = 0.08 + rand() * 0.18;
 
-        pts.push({x: x, y: y});
-        if (Math.abs(vy) < 0.15 && Math.abs(vx) < 0.3) break; // settled
-      }
-      return pts;
-    }
+      // Drift: very slow lateral creep of the whole wave
+      var driftRate   = 0.004 + rand() * 0.008;
 
-    // ── Generate string paths ─────────────────────────────────────────────────
-    var numStrings = 14; // more strings = richer heap
-    var stringPaths = [];
-    for (var si = 0; si < numStrings; si++) {
-      var startX = rand() * pageW;
-      stringPaths.push({
-        pts:     dropString(startX, si),
-        col:     palette[si % palette.length],
-        alpha:   0.55 + rand() * 0.35,
-        lineW:   1.2 + rand() * 1.6,
-        glowIdx: si
+      // Base alpha and line weight
+      var baseAlpha   = 0.38 + rand() * 0.38;
+      var lineW       = 0.8 + rand() * 1.2;
+
+      // Phase offsets so animations start decorrelated
+      var breathOff   = rand() * Math.PI * 2;
+      var pulseOff    = rand() * Math.PI * 2;
+      var shimmerOff  = rand() * Math.PI * 2;
+
+      strings.push({
+        col, baseY, freq, amp, phase,
+        breathRate, breathDepth, breathOff,
+        pulseRate,  pulseDepth,  pulseOff,
+        shimmerRate, shimmerAmt, shimmerOff,
+        driftRate,
+        baseAlpha, lineW
       });
     }
 
-    // ── Build SVG ─────────────────────────────────────────────────────────────
-    var svgNS = 'http://www.w3.org/2000/svg';
-    var svg   = document.createElementNS(svgNS, 'svg');
-    svg.id    = 'spaghettiHeap';
-    svg.setAttribute('width',  pageW);
-    svg.setAttribute('height', svgH);
-    svg.style.cssText = [
+    // ── Build canvas ─────────────────────────────────────────────────────────
+    var cv  = document.createElement('canvas');
+    cv.id   = 'neonSpill';
+    var dpr = window.devicePixelRatio || 1;
+    cv.width  = Math.round(pageW * dpr);
+    cv.height = Math.round(spillH * dpr);
+    cv.style.cssText = [
       'position:absolute',
       'left:0',
-      'top:' + svgTop + 'px',
+      'top:' + spillTop + 'px',
+      'width:' + pageW + 'px',
+      'height:' + spillH + 'px',
       'pointer-events:none',
-      'z-index:0',
-      'overflow:visible'
+      'z-index:1',
+      'opacity:0',
+      'transition:opacity 2s ease'
     ].join(';');
 
-    // Defs: glow filters per color
-    var defs = document.createElementNS(svgNS, 'defs');
+    document.body.appendChild(cv);
 
-    // One composite glow filter (used for all strings via color-matched feFlood)
-    var filter = document.createElementNS(svgNS, 'filter');
-    filter.id  = 'stringGlow';
-    filter.setAttribute('x', '-40%');
-    filter.setAttribute('y', '-40%');
-    filter.setAttribute('width',  '180%');
-    filter.setAttribute('height', '180%');
-
-    // Inner tight glow
-    var blur1 = document.createElementNS(svgNS, 'feGaussianBlur');
-    blur1.setAttribute('in',     'SourceGraphic');
-    blur1.setAttribute('stdDeviation', '2');
-    blur1.setAttribute('result', 'blur1');
-
-    // Outer soft bloom
-    var blur2 = document.createElementNS(svgNS, 'feGaussianBlur');
-    blur2.setAttribute('in',     'SourceGraphic');
-    blur2.setAttribute('stdDeviation', '6');
-    blur2.setAttribute('result', 'blur2');
-
-    var merge = document.createElementNS(svgNS, 'feMerge');
-    var mn1   = document.createElementNS(svgNS, 'feMergeNode'); mn1.setAttribute('in', 'blur2');
-    var mn2   = document.createElementNS(svgNS, 'feMergeNode'); mn2.setAttribute('in', 'blur1');
-    var mn3   = document.createElementNS(svgNS, 'feMergeNode'); mn3.setAttribute('in', 'SourceGraphic');
-    merge.appendChild(mn1); merge.appendChild(mn2); merge.appendChild(mn3);
-
-    filter.appendChild(blur1);
-    filter.appendChild(blur2);
-    filter.appendChild(merge);
-    defs.appendChild(filter);
-
-    // Stronger bloom filter for accent strings
-    var filterBig = document.createElementNS(svgNS, 'filter');
-    filterBig.id  = 'stringGlowBig';
-    filterBig.setAttribute('x', '-60%'); filterBig.setAttribute('y', '-60%');
-    filterBig.setAttribute('width', '220%'); filterBig.setAttribute('height', '220%');
-    var bb1 = document.createElementNS(svgNS, 'feGaussianBlur');
-    bb1.setAttribute('in', 'SourceGraphic'); bb1.setAttribute('stdDeviation', '4'); bb1.setAttribute('result', 'b1');
-    var bb2 = document.createElementNS(svgNS, 'feGaussianBlur');
-    bb2.setAttribute('in', 'SourceGraphic'); bb2.setAttribute('stdDeviation', '10'); bb2.setAttribute('result', 'b2');
-    var bb3 = document.createElementNS(svgNS, 'feGaussianBlur');
-    bb3.setAttribute('in', 'SourceGraphic'); bb3.setAttribute('stdDeviation', '20'); bb3.setAttribute('result', 'b3');
-    var bmerge = document.createElementNS(svgNS, 'feMerge');
-    ['b3','b2','b1','SourceGraphic'].forEach(function(src) {
-      var mn = document.createElementNS(svgNS, 'feMergeNode'); mn.setAttribute('in', src); bmerge.appendChild(mn);
-    });
-    filterBig.appendChild(bb1); filterBig.appendChild(bb2); filterBig.appendChild(bb3); filterBig.appendChild(bmerge);
-    defs.appendChild(filterBig);
-
-    svg.appendChild(defs);
-
-    // ── Draw strings: glow layer first (blurred copy), then sharp on top ──────
-    // Sort by alpha so dimmer strings are behind
-    stringPaths.sort(function(a,b) { return a.alpha - b.alpha; });
-
-    stringPaths.forEach(function(sp, idx) {
-      if (sp.pts.length < 2) return;
-      var d = 'M' + sp.pts.map(function(p) { return p.x.toFixed(1)+','+p.y.toFixed(1); }).join(' L');
-      var col  = sp.col;
-      var rgba = 'rgba('+col[0]+','+col[1]+','+col[2]+',';
-      var isBright = idx >= stringPaths.length - 5; // top-layer strings get bigger glow
-
-      // Bloom layer (wide, transparent)
-      var bloom = document.createElementNS(svgNS, 'path');
-      bloom.setAttribute('d', d);
-      bloom.setAttribute('fill', 'none');
-      bloom.setAttribute('stroke', 'rgb('+col[0]+','+col[1]+','+col[2]+')');
-      bloom.setAttribute('stroke-width', sp.lineW * (isBright ? 3.5 : 2.2));
-      bloom.setAttribute('stroke-opacity', (sp.alpha * (isBright ? 0.28 : 0.18)).toFixed(3));
-      bloom.setAttribute('stroke-linecap', 'round');
-      bloom.setAttribute('stroke-linejoin', 'round');
-      bloom.setAttribute('filter', 'url(#' + (isBright ? 'stringGlowBig' : 'stringGlow') + ')');
-      svg.appendChild(bloom);
-
-      // Core sharp line
-      var line = document.createElementNS(svgNS, 'path');
-      line.setAttribute('d', d);
-      line.setAttribute('fill', 'none');
-      line.setAttribute('stroke', 'rgb('+col[0]+','+col[1]+','+col[2]+')');
-      line.setAttribute('stroke-width', sp.lineW.toFixed(2));
-      line.setAttribute('stroke-opacity', sp.alpha.toFixed(3));
-      line.setAttribute('stroke-linecap', 'round');
-      line.setAttribute('stroke-linejoin', 'round');
-      svg.appendChild(line);
-
-      // Bright hot-spot core (very thin, nearly white, full alpha) — makes string look lit from inside
-      if (isBright) {
-        var hotcore = document.createElementNS(svgNS, 'path');
-        hotcore.setAttribute('d', d);
-        hotcore.setAttribute('fill', 'none');
-        hotcore.setAttribute('stroke', 'rgb('+Math.min(255,col[0]+80)+','+Math.min(255,col[1]+80)+','+Math.min(255,col[2]+80)+')');
-        hotcore.setAttribute('stroke-width', (sp.lineW * 0.35).toFixed(2));
-        hotcore.setAttribute('stroke-opacity', (sp.alpha * 0.7).toFixed(3));
-        hotcore.setAttribute('stroke-linecap', 'round');
-        svg.appendChild(hotcore);
-      }
-    });
-
-    // Fade-in animation via CSS
-    svg.style.opacity = '0';
-    svg.style.transition = 'opacity 1.8s ease';
-    document.body.appendChild(svg);
-    // Trigger fade-in after a frame
+    // Fade in
     requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        svg.style.opacity = '1';
-      });
+      requestAnimationFrame(function() { cv.style.opacity = '1'; });
     });
+
+    var cx   = cv.getContext('2d');
+    var spillClock = 0;
+    var spillLast  = null;
+    var fadeIn     = 0; // 0→1 over first ~2s
+
+    function spillDraw(ts) {
+      var dt = spillLast ? Math.min((ts - spillLast) / 1000, 0.05) : 0.016;
+      spillLast   = ts;
+      spillClock += dt;
+      fadeIn = Math.min(1, spillClock / 2.0);
+
+      cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cx.clearRect(0, 0, pageW, spillH);
+
+      for (var i = 0; i < NUM; i++) {
+        var s = strings[i];
+        var c = s.col;
+
+        // ── Per-string time-varying modifiers ──────────────────────────────
+        // Breathing: slow amplitude oscillation
+        var breath  = 1 + s.breathDepth * Math.sin(spillClock * s.breathRate * Math.PI * 2 + s.breathOff);
+        // Pulse: sharper glow spikes (rectified sine → only positive spikes)
+        var rawPulse = Math.sin(spillClock * s.pulseRate * Math.PI * 2 + s.pulseOff);
+        var pulse    = s.pulseDepth * Math.max(0, rawPulse) * Math.max(0, rawPulse); // squared → sharper peaks
+        // Overall alpha for this frame
+        var alpha    = s.baseAlpha * (breath + pulse) * fadeIn;
+        alpha = Math.min(0.92, alpha);
+
+        // Effective amplitude this frame
+        var effAmp = s.amp * breath;
+
+        // Phase drift — string slowly slides horizontally
+        var drift = spillClock * s.driftRate;
+
+        // ── Draw glow pass (wide, low alpha shadowBlur) ───────────────────
+        cx.beginPath();
+        for (var x = 0; x <= pageW; x += 3) {
+          // Shimmer: local brightness varies along the string length
+          var shimmer = 1 + s.shimmerAmt * Math.sin(x * 0.004 + spillClock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+          var y = s.baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * shimmer;
+          x === 0 ? cx.moveTo(x, y) : cx.lineTo(x, y);
+        }
+        cx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.55)+')';
+        cx.lineWidth   = s.lineW + 1.5 + pulse * 3;
+        cx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.7)+')';
+        cx.shadowBlur  = 10 + pulse * 14;
+        cx.stroke();
+        cx.shadowBlur  = 0;
+
+        // ── Draw core pass (sharp, full alpha) ────────────────────────────
+        cx.beginPath();
+        for (var x = 0; x <= pageW; x += 2) {
+          var shimmer = 1 + s.shimmerAmt * Math.sin(x * 0.004 + spillClock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+          var y = s.baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * shimmer;
+          x === 0 ? cx.moveTo(x, y) : cx.lineTo(x, y);
+        }
+        cx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';
+        cx.lineWidth   = s.lineW;
+        cx.stroke();
+
+        // ── Bright hot-core (top strings only, when pulsing) ──────────────
+        if (i >= NUM - 6 && pulse > 0.05) {
+          cx.beginPath();
+          for (var x = 0; x <= pageW; x += 3) {
+            var shimmer = 1 + s.shimmerAmt * Math.sin(x * 0.004 + spillClock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+            var y = s.baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * shimmer;
+            x === 0 ? cx.moveTo(x, y) : cx.lineTo(x, y);
+          }
+          var hc = [Math.min(255,c[0]+90), Math.min(255,c[1]+90), Math.min(255,c[2]+90)];
+          cx.strokeStyle = 'rgba('+hc[0]+','+hc[1]+','+hc[2]+','+(pulse * 0.7)+')';
+          cx.lineWidth   = s.lineW * 0.3;
+          cx.stroke();
+        }
+      }
+
+      requestAnimationFrame(spillDraw);
+    }
+
+    requestAnimationFrame(spillDraw);
   }
 
   requestAnimationFrame(draw);
