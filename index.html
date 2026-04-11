@@ -149,19 +149,20 @@ nav.waveform-active {
   font-weight: 800; line-height: .88; letter-spacing: -.04em;
   color: var(--text); margin-bottom: 40px; position: relative; z-index: 3;
   opacity: 0;
+  text-shadow: 0 0 80px rgba(96,200,255,.12), 0 2px 40px rgba(0,0,0,.5);
 }
 .hero-name.glitch-active { animation: glitchReveal 1.8s cubic-bezier(.16,1,.3,1) forwards; }
 @keyframes glitchReveal {
-  0%   { opacity: 0; }
-  5%   { opacity: 1; color: rgba(232,237,245,.15); filter: blur(2px); transform: skewX(-3deg) translateX(4px); }
-  10%  { opacity: 1; color: rgba(96,200,255,.6);   filter: blur(0px); transform: skewX(2deg) translateX(-3px); }
-  15%  { opacity: 1; color: rgba(232,237,245,.2);  filter: blur(3px); transform: skewX(-1deg) translateX(2px); }
-  20%  { opacity: 1; color: var(--ice2);            filter: blur(0px); transform: skewX(0.5deg) translateX(-1px); }
-  28%  { opacity: 1; color: rgba(232,237,245,.5);  filter: blur(1px); transform: skewX(-2deg); }
-  36%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0.3deg); }
-  45%  { opacity: 1; color: rgba(232,237,245,.7);  filter: blur(0.5px); transform: skewX(-0.5deg); }
-  60%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg); }
-  100% { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg) translateX(0); }
+  0%   { opacity: 0; text-shadow: none; }
+  5%   { opacity: 1; color: rgba(232,237,245,.15); filter: blur(2px); transform: skewX(-3deg) translateX(4px); text-shadow: 0 0 20px rgba(96,200,255,.3); }
+  10%  { opacity: 1; color: rgba(96,200,255,.6);   filter: blur(0px); transform: skewX(2deg) translateX(-3px); text-shadow: 0 0 60px rgba(96,200,255,.8), 0 0 120px rgba(96,200,255,.3); }
+  15%  { opacity: 1; color: rgba(232,237,245,.2);  filter: blur(3px); transform: skewX(-1deg) translateX(2px); text-shadow: 0 0 30px rgba(96,200,255,.4); }
+  20%  { opacity: 1; color: var(--ice2);            filter: blur(0px); transform: skewX(0.5deg) translateX(-1px); text-shadow: 0 0 80px rgba(96,200,255,.6), 0 0 160px rgba(96,200,255,.2); }
+  28%  { opacity: 1; color: rgba(232,237,245,.5);  filter: blur(1px); transform: skewX(-2deg); text-shadow: 0 0 40px rgba(96,200,255,.3); }
+  36%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0.3deg); text-shadow: 0 0 60px rgba(96,200,255,.2); }
+  45%  { opacity: 1; color: rgba(232,237,245,.7);  filter: blur(0.5px); transform: skewX(-0.5deg); text-shadow: 0 0 50px rgba(96,200,255,.15); }
+  60%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg); text-shadow: 0 0 80px rgba(96,200,255,.12), 0 2px 40px rgba(0,0,0,.5); }
+  100% { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg) translateX(0); text-shadow: 0 0 80px rgba(96,200,255,.12), 0 2px 40px rgba(0,0,0,.5); }
 }
 .hero-name .char {
   display: inline-block;
@@ -311,6 +312,9 @@ nav.waveform-active {
   border-left: 2px solid transparent;
   transition: background .4s ease, border-left-color .35s ease;
 }
+.section-panel:last-child {
+  padding-bottom: 100px; /* clear the neon spill */
+}
 .section-panel:hover {
   background: rgba(22,26,34,.8);
   border-left-color: var(--panel-accent, var(--ice));
@@ -352,7 +356,7 @@ nav.waveform-active {
 .section-panel-title {
   font-family: var(--display); font-size: clamp(48px, 6vw, 88px);
   font-weight: 800; letter-spacing: -.04em; line-height: .9;
-  color: var(--text); opacity: .12;
+  color: var(--text); opacity: .18;
   transition: opacity .4s ease, transform .45s cubic-bezier(.25,.46,.45,.94),
               color .4s ease, text-shadow .4s ease;
   margin-top: 32px;
@@ -368,13 +372,13 @@ nav.waveform-active {
   justify-content: flex-end; position: relative; z-index: 1;
 }
 .section-panel-desc {
-  font-family: var(--body); font-size: 11px; color: var(--muted);
-  line-height: 1.75; max-width: 360px; margin-bottom: 32px;
+  font-family: var(--body); font-size: 13px; color: var(--muted);
+  line-height: 1.85; max-width: 380px; margin-bottom: 32px;
   transition: color .3s ease;
 }
 .section-panel:hover .section-panel-desc { color: var(--text); }
 .section-panel-arrow {
-  font-family: var(--mono); font-size: 10px; color: var(--dim);
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
   letter-spacing: .12em; display: flex; align-items: center; gap: 10px;
   transition: color .25s, gap .35s ease;
 }
