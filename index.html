@@ -505,10 +505,7 @@ footer {
 
 </div>
 
-<footer>
-  <span id="footerCopy"></span>
-  <div class="footer-links" id="footerLinks"></div>
-</footer>
+<footer style="border-top:none;padding:0;min-height:0;"></footer>
 
 <script>
 /* =====================================================================
@@ -571,13 +568,7 @@ function populatePage(d) {
   var nameEl = document.getElementById('heroName');
   nameEl.innerHTML = d.hero.name_line1 + '<br>' + d.hero.name_line2;
 
-  // Footer
-  var year = new Date().getFullYear();
-  document.getElementById('footerCopy').textContent = '© ' + year + ' ' + d.site.title;
-  document.getElementById('footerLinks').innerHTML =
-    '<a href="' + d.footer.github   + '">GitHub</a>' +
-    '<a href="' + d.footer.linkedin + '">LinkedIn</a>' +
-    '<a href="mailto:' + d.footer.email + '">Email</a>';
+  // footer intentionally left empty
 }
 
 /* =====================================================================
@@ -986,115 +977,137 @@ function initWave(introMode) {
     }
 
     /* ================================================================
-       STEADY STATE — blue + amber waves with full per-wave life treatment
+       STEADY STATE — blue + amber waves with warm-up ignition + per-wave life
        ================================================================ */
     if (!introActive) {
-      var waveIn  = Math.min(1, (clock - WAVE_START) / 2.0);
-      var xBlend  = easeOutCubic(waveIn);
+      // ── Warm-up timeline (relative to when steady state began) ──────────
+      // Phase 0  0.0 – 0.6s  : sparse stuttery sparks — wave barely visible, random bright flashes
+      // Phase 1  0.4 – 1.8s  : shape resolves — wave form emerges, still flickering hard
+      // Phase 2  1.4 – 3.0s  : overdriven — wave is too bright, oversaturated, then eases down
+      // Phase 3  2.6s+       : settled into normal breathing life
+      var wt = Math.max(0, clock - WAVE_START); // seconds since waves started
 
-      // Flicker-in on first appearance (decays after ~2s)
-      var flickerT     = Math.min(1, (clock - WAVE_START) / 2.2);
-      var flickerDecay = 1 - flickerT;
+      // Spark phase: scattered high-frequency brightness spikes, amplitude near zero
+      var sparkAmt  = Math.max(0, 1 - wt / 0.7);
+      var sparkNoise = sparkAmt * sparkAmt * (
+        0.7  * Math.max(0, Math.sin(clock * 41.3 + 0.3))
+      + 0.5  * Math.max(0, Math.sin(clock * 67.7 + 1.8))
+      + 0.35 * Math.max(0, Math.sin(clock * 103.1 + 0.9))
+      + 0.25 * Math.max(0, Math.sin(clock * 29.3  + 2.1))
+      );
+
+      // Shape resolve: amplitude ramps from 0 → full
+      var resolveT  = Math.min(1, Math.max(0, (wt - 0.3) / 1.4));
+      var xBlend    = easeOutCubic(resolveT);
+
+      // Overdrive: brief brightness surge as shape locks in, then decays
+      var overdriveT   = Math.min(1, Math.max(0, (wt - 1.2) / 0.6));  // 0→1 ramp in
+      var overdriveOut = Math.max(0, 1 - Math.max(0, (wt - 1.6) / 1.0)); // fades out over 1s
+      var overdrive    = easeOutCubic(overdriveT) * overdriveOut * 1.4;
+
+      // Flicker: fast irregular noise that decays as overdrive fades
+      var flickerDecay = Math.max(0, 1 - wt / 2.8);
       var flickerPulse = flickerDecay * flickerDecay * (
         0.5  * Math.max(0, Math.sin(clock * 23.1 + 0.3))
       + 0.35 * Math.max(0, Math.sin(clock * 37.7 + 1.8))
       + 0.25 * Math.max(0, Math.sin(clock * 61.3 + 0.9))
       );
 
+      // Combined entry brightness modifier — all phases layered together
+      var entryMod = xBlend + sparkNoise * 0.9 + overdrive + flickerPulse * 0.6;
+
       if (amp > 0.5) {
 
         // ── AMBER GHOST ────────────────────────────────────────────────────
         var wl0 = waveLife[0];
-        var breath0  = 1 + wl0.breathDepth * Math.sin(clock * wl0.breathRate * Math.PI * 2 + wl0.breathOff);
-        var rawP0    = Math.sin(clock * wl0.pulseRate  * Math.PI * 2 + wl0.pulseOff);
-        var pulse0   = wl0.pulseDepth * Math.max(0, rawP0) * Math.max(0, rawP0);
-        var drift0   = clock * wl0.driftRate;
-        var alphaMod0 = Math.min(0.9, 0.18 * (1 - sp) * xBlend * (breath0 + pulse0 + flickerPulse * 0.6));
+        var breath0 = 1 + wl0.breathDepth * Math.sin(clock * wl0.breathRate * Math.PI * 2 + wl0.breathOff);
+        var rawP0   = Math.sin(clock * wl0.pulseRate * Math.PI * 2 + wl0.pulseOff);
+        var pulse0  = wl0.pulseDepth * Math.max(0, rawP0) * Math.max(0, rawP0);
+        var drift0  = clock * wl0.driftRate;
+        var alpha0  = Math.min(0.95, 0.22 * (1 - sp) * entryMod * (breath0 + pulse0));
 
         var ghostFreq = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);
+
+        // Glow pass
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
-          var shimmer0 = 1 + wl0.shimmerAmt * Math.sin(x * 0.0035 + clock * wl0.shimmerRate * Math.PI * 2 + wl0.shimmerOff);
-          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
-          var y  = cy
-            + Math.sin(x * ghostFreq + t * 0.5 + 1.8 + drift0) * amp * ghostAmpMod * 0.45 * breath0 * shimmer0
-            + lb
-            + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
+          var sh0 = 1 + wl0.shimmerAmt * Math.sin(x * 0.0035 + clock * wl0.shimmerRate * Math.PI * 2 + wl0.shimmerOff);
+          var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.32;
+          var y   = cy
+            + Math.sin(x * ghostFreq + t * 0.5 + 1.8 + drift0) * amp * ghostAmpMod * 0.55 * breath0 * sh0
+            + lb + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        // Glow pass
-        ctx.strokeStyle = 'rgba(184,118,26,' + (alphaMod0 * 0.5) + ')';
-        ctx.lineWidth   = 1.2 + pulse0 * 2;
-        ctx.shadowColor = 'rgba(184,118,26,' + Math.min(0.8, alphaMod0 * (1 + pulse0)) + ')';
-        ctx.shadowBlur  = wl0.glowBase + pulse0 * wl0.glowPulse;
+        ctx.strokeStyle = 'rgba(184,118,26,' + (alpha0 * 0.5) + ')';
+        ctx.lineWidth   = 1.8 + pulse0 * 2.5;
+        ctx.shadowColor = 'rgba(184,118,26,' + Math.min(0.9, alpha0 * (1.2 + pulse0 + overdrive * 0.5)) + ')';
+        ctx.shadowBlur  = wl0.glowBase + pulse0 * wl0.glowPulse + overdrive * 8;
         ctx.stroke();
         ctx.shadowBlur  = 0;
-        // Core pass
-        ctx.strokeStyle = 'rgba(184,118,26,' + alphaMod0 + ')';
-        ctx.lineWidth   = 0.8;
+        // Core
+        ctx.strokeStyle = 'rgba(184,118,26,' + alpha0 + ')';
+        ctx.lineWidth   = 1.1;
         ctx.stroke();
 
         // ── MAIN ICE/BLUE ──────────────────────────────────────────────────
         var wl1 = waveLife[1];
-        var breath1  = 1 + wl1.breathDepth * Math.sin(clock * wl1.breathRate * Math.PI * 2 + wl1.breathOff);
-        var rawP1    = Math.sin(clock * wl1.pulseRate  * Math.PI * 2 + wl1.pulseOff);
-        var pulse1   = wl1.pulseDepth * Math.max(0, rawP1) * Math.max(0, rawP1);
-        var drift1   = clock * wl1.driftRate;
+        var breath1 = 1 + wl1.breathDepth * Math.sin(clock * wl1.breathRate * Math.PI * 2 + wl1.breathOff);
+        var rawP1   = Math.sin(clock * wl1.pulseRate * Math.PI * 2 + wl1.pulseOff);
+        var pulse1  = wl1.pulseDepth * Math.max(0, rawP1) * Math.max(0, rawP1);
+        var drift1  = clock * wl1.driftRate;
 
         var mainFreq = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1);
+        var wR = Math.round(96  + (30  - 96)  * sp);
+        var wG = Math.round(200 + (37  - 200) * sp);
+        var wB = Math.round(255 + (48  - 255) * sp);
+        var baseAlpha1 = (0.88 - sp * 0.3) * xBlend;
+        var wA = Math.min(0.99, baseAlpha1 * (breath1 + pulse1 + sparkNoise * 0.4 + overdrive * 0.7 + flickerPulse * 0.5));
 
         // Glow pass
         ctx.beginPath();
         for (var x = 0; x <= w; x += 3) {
-          var shimmer1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
-          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y  = cy
-            + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * shimmer1
-            + lb
-            + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
+          var sh1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
+          var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.48;
+          var y   = cy
+            + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * sh1
+            + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        var wR = Math.round(96  + (30  - 96)  * sp);
-        var wG = Math.round(200 + (37  - 200) * sp);
-        var wB = Math.round(255 + (48  - 255) * sp);
-        var baseAlpha1 = (0.75 - sp * 0.25) * xBlend;
-        var wA = Math.min(0.98, baseAlpha1 * (breath1 + pulse1 + flickerPulse * 0.8));
-        ctx.strokeStyle = 'rgba('+wR+','+wG+','+wB+','+(wA * 0.45)+')';
-        ctx.lineWidth   = 2.2 + pulse1 * 3 + flickerPulse * 0.6;
-        ctx.shadowColor = 'rgba(96,200,255,' + Math.min(0.95, (0.45 + pulse1 * 0.5 + flickerPulse * 0.4) * (1-sp) * xBlend) + ')';
-        ctx.shadowBlur  = (wl1.glowBase + pulse1 * wl1.glowPulse + flickerPulse * 18) * (1 - sp) * xBlend;
+        ctx.strokeStyle = 'rgba('+wR+','+wG+','+wB+','+(wA * 0.4)+')';
+        ctx.lineWidth   = 3.5 + pulse1 * 3.5 + overdrive * 2.5;
+        ctx.shadowColor = 'rgba(96,200,255,' + Math.min(0.98, (0.55 + pulse1 * 0.5 + overdrive * 0.6 + flickerPulse * 0.4) * (1-sp) * (xBlend + sparkNoise * 0.3)) + ')';
+        ctx.shadowBlur  = (wl1.glowBase + pulse1 * wl1.glowPulse + overdrive * 22 + flickerPulse * 14) * (1 - sp);
         ctx.stroke();
         ctx.shadowBlur  = 0;
 
         // Core pass
         ctx.beginPath();
         for (var x = 0; x <= w; x += 2) {
-          var shimmer1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
-          var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-          var y  = cy
-            + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * shimmer1
-            + lb
-            + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
+          var sh1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
+          var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.48;
+          var y   = cy
+            + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * sh1
+            + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.strokeStyle = 'rgba('+wR+','+wG+','+wB+','+wA+')';
-        ctx.lineWidth   = 1.4;
+        ctx.lineWidth   = 1.8;
         ctx.stroke();
 
-        // Hot-core — very bright thin line that flares on pulse
-        if (pulse1 > 0.06) {
+        // Hot-core — flares on pulse and during overdrive
+        var hotAlpha = (pulse1 * 0.65 + overdrive * 0.5) * (1 - sp) * xBlend;
+        if (hotAlpha > 0.02) {
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
-            var shimmer1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
-            var lb = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.42;
-            var y  = cy
-              + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * shimmer1
-              + lb
-              + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
+            var sh1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
+            var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.48;
+            var y   = cy
+              + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * sh1
+              + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = 'rgba(200,240,255,' + (pulse1 * 0.65 * (1 - sp) * xBlend) + ')';
-          ctx.lineWidth   = 0.5;
+          ctx.strokeStyle = 'rgba(210,245,255,' + Math.min(0.9, hotAlpha) + ')';
+          ctx.lineWidth   = 0.6;
           ctx.stroke();
         }
       }
