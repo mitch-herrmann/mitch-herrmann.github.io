@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photography — Mitchell Herrmann</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #0d0f14;
+  --bg2:   #13161c;
+  --bg3:   #1a1e26;
+  --line:  #1e2530;
+  --ice:   #60c8ff;
+  --ice2:  #90dcff;
+  --text:  #e8edf5;
+  --muted: #7a8a9e;
+  --dim:   #38445a;
+  --display: 'Syne', sans-serif;
+  --mono:    'Syne Mono', monospace;
+  --body:    'Chivo Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); min-height: 100vh; overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Scanlines + noise overlay (matches index) ── */
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(255,255,255,.008) 3px, rgba(255,255,255,.008) 4px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 35% at 0% 100%, rgba(96,200,255,.03) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 25% at 100% 0%,  rgba(96,200,255,.02) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── NAV (identical to index) ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 60px;
+  background: rgba(13,15,20,.94); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-logo {
+  font-family: var(--display); font-size: 13px; font-weight: 800;
+  letter-spacing: -.01em; color: var(--text);
+  display: flex; align-items: center; gap: 10px; text-decoration: none;
+}
+.logo-orb-wrap {
+  position: relative; display: flex; align-items: center;
+  justify-content: center; width: 16px; height: 16px; flex-shrink: 0;
+}
+.logo-orb-wrap::before {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  border-radius: 50%; border: 1px solid rgba(96,200,255,.25);
+  animation: ringpulse 3s ease-in-out infinite;
+}
+@keyframes ringpulse { 0%,100% { transform: scale(1); opacity: .5; } 50% { transform: scale(2); opacity: 0; } }
+.logo-orb {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d0e8ff, #60c8ff 40%, #1a3050 100%);
+  box-shadow: 0 0 10px rgba(96,200,255,.5), inset 0 1px 1px rgba(255,255,255,.4);
+  animation: orbpulse 3s ease-in-out infinite; position: relative; z-index: 1;
+}
+@keyframes orbpulse {
+  0%,100% { box-shadow: 0 0 10px rgba(96,200,255,.5), inset 0 1px 1px rgba(255,255,255,.4); }
+  50%      { box-shadow: 0 0 20px rgba(96,200,255,.75), inset 0 1px 1px rgba(255,255,255,.5); }
+}
+.nav-links {
+  display: flex; gap: 6px;
+  font-family: var(--display); font-size: 8.5px;
+  font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+}
+.nav-links a {
+  padding: 5px 14px; border-radius: 99px; border: 1px solid var(--line);
+  color: var(--dim); text-decoration: none; white-space: nowrap;
+  transition: color .25s, border-color .25s, background .25s, box-shadow .25s, opacity .25s;
+}
+.nav-links:hover a { opacity: 0.35; }
+.nav-links a:hover { opacity: 1 !important; color: var(--muted); border-color: var(--dim); }
+.nav-links a.active {
+  background: linear-gradient(135deg, #1e2d3d, #162230);
+  color: var(--ice2); border-color: rgba(96,200,255,.35);
+  box-shadow: 0 0 12px rgba(96,200,255,.18), inset 0 1px 0 rgba(96,200,255,.08);
+}
+.nav-status {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 9px; color: var(--dim);
+}
+.nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: dotpulse 2.2s ease-in-out infinite; }
+@keyframes dotpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 120px 48px 56px;
+  border-bottom: 1px solid var(--line);
+  position: relative; z-index: 1;
+}
+.page-eyebrow {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.page-eyebrow::before {
+  content: ''; display: inline-block; width: 32px; height: 1px;
+  background: var(--dim); opacity: .8;
+}
+.page-title {
+  font-family: var(--display); font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800; letter-spacing: -.04em; line-height: .9;
+  color: var(--text);
+  text-shadow: 0 0 80px rgba(255,140,80,.1), 0 2px 40px rgba(0,0,0,.5);
+}
+.page-sub {
+  font-family: var(--body); font-size: 12px; color: var(--muted);
+  margin-top: 24px; letter-spacing: .04em;
+}
+
+/* ── MASONRY GRID ── */
+.grid-wrap {
+  padding: 48px 48px 160px;
+  position: relative; z-index: 1;
+}
+.masonry {
+  columns: 3;
+  column-gap: 12px;
+}
+@media (max-width: 1100px) { .masonry { columns: 2; } }
+@media (max-width: 600px)  { .masonry { columns: 1; } }
+
+.photo-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+}
+.photo-item img {
+  display: block; width: 100%; height: auto;
+  transition: transform .5s cubic-bezier(.25,.46,.45,.94), filter .4s ease;
+  filter: brightness(.92) saturate(.9);
+}
+.photo-item:hover img {
+  transform: scale(1.03);
+  filter: brightness(1) saturate(1.05);
+}
+/* placeholder aspect ratios — varied for visual rhythm */
+.photo-item .placeholder {
+  width: 100%;
+  background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.photo-item .placeholder::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 20px,
+    rgba(255,255,255,.015) 20px,
+    rgba(255,255,255,.015) 21px
+  );
+}
+.placeholder-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: .25; pointer-events: none; position: relative; z-index: 1;
+}
+.placeholder-inner svg { width: 28px; height: 28px; }
+.placeholder-inner span {
+  font-family: var(--mono); font-size: 8px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--text);
+}
+
+/* Hover overlay with meta */
+.photo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(13,15,20,.72) 0%, transparent 50%);
+  opacity: 0; transition: opacity .3s ease;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 16px; pointer-events: none;
+}
+.photo-item:hover .photo-overlay { opacity: 1; }
+.photo-meta-date {
+  font-family: var(--mono); font-size: 8px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ice2); margin-bottom: 3px;
+}
+.photo-meta-loc {
+  font-family: var(--display); font-size: 11px; font-weight: 700;
+  letter-spacing: -.01em; color: var(--text);
+}
+
+/* ── LIGHTBOX ── */
+.lightbox-backdrop {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(255,255,255,0);
+  backdrop-filter: blur(0px);
+  transition: background .35s ease, backdrop-filter .35s ease;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.lightbox-backdrop.open {
+  background: rgba(248,248,246,.93);
+  backdrop-filter: blur(8px);
+  pointer-events: all;
+}
+
+.lightbox-frame {
+  position: relative;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.06),
+    0 8px 40px rgba(0,0,0,.18),
+    0 32px 80px rgba(0,0,0,.12);
+  max-width: min(88vw, 1100px);
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  opacity: 0; transform: scale(.96) translateY(10px);
+  transition: opacity .3s ease, transform .35s cubic-bezier(.16,1,.3,1);
+  pointer-events: none;
+}
+.lightbox-backdrop.open .lightbox-frame {
+  opacity: 1; transform: scale(1) translateY(0);
+  pointer-events: all;
+}
+
+.lightbox-img-wrap {
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  flex: 1; min-height: 0;
+  background: #fafafa;
+}
+.lightbox-img-wrap img {
+  display: block;
+  max-width: 100%; max-height: calc(88vh - 64px);
+  width: auto; height: auto;
+  object-fit: contain;
+  user-select: none; -webkit-user-drag: none;
+}
+/* placeholder in lightbox */
+.lightbox-placeholder {
+  width: min(70vw, 900px);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 16px;
+  padding: 80px 40px;
+  background: #f4f4f2;
+}
+.lightbox-placeholder svg { width: 40px; height: 40px; opacity: .2; }
+.lightbox-placeholder span {
+  font-family: 'Syne Mono', monospace; font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: #999;
+}
+
+.lightbox-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-top: 1px solid rgba(0,0,0,.06);
+  flex-shrink: 0; background: #fff;
+  min-height: 54px;
+}
+.lightbox-meta {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.lightbox-meta-date {
+  font-family: 'Syne Mono', monospace; font-size: 9px;
+  letter-spacing: .14em; text-transform: uppercase; color: #aaa;
+}
+.lightbox-meta-loc {
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  letter-spacing: -.01em; color: #1a1a1a;
+}
+.lightbox-counter {
+  font-family: 'Syne Mono', monospace; font-size: 9px;
+  letter-spacing: .1em; color: #bbb; flex-shrink: 0; margin: 0 16px;
+}
+.lightbox-controls {
+  display: flex; align-items: center; gap: 6px;
+}
+.lb-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.1); background: transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: #555; transition: background .2s, border-color .2s, color .2s;
+}
+.lb-btn:hover { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.2); color: #111; }
+.lb-btn svg { width: 14px; height: 14px; }
+.lb-close {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.1); background: transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: #555; transition: background .2s, border-color .2s, color .2s;
+  margin-left: 8px;
+}
+.lb-close:hover { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.2); color: #111; }
+.lb-close svg { width: 13px; height: 13px; }
+
+/* ── FOOTER (matches index — empty, spill goes here) ── */
+footer { border-top: none; padding: 0; min-height: 0; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 0 24px; }
+  .nav-status { display: none; }
+  .page-header { padding: 100px 24px 40px; }
+  .grid-wrap { padding: 32px 24px 140px; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo" id="navLogo">
+    <div class="logo-orb-wrap"><div class="logo-orb"></div></div>
+    <span id="navName">Mitchell Herrmann</span>
+  </a>
+  <div class="nav-links">
+    <a href="resume.html">Resume</a>
+    <a href="photography.html" class="active">Photography</a>
+    <a href="projects.html">Projects</a>
+    <a href="#" id="navContact">Contact</a>
+  </div>
+  <div class="nav-status">
+    <div class="nav-dot"></div>
+    <span id="navStatus">Open to collaborations</span>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-eyebrow">Photography</div>
+  <div class="page-title">Visual record</div>
+  <div class="page-sub" id="photoCount">Loading…</div>
+</div>
+
+<div class="grid-wrap">
+  <div class="masonry" id="masonryGrid">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<footer id="pageFooter"></footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-backdrop" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="lightbox-frame" id="lightboxFrame">
+    <div class="lightbox-img-wrap" id="lightboxImgWrap">
+      <!-- image or placeholder injected here -->
+    </div>
+    <div class="lightbox-bar">
+      <div class="lightbox-meta">
+        <div class="lightbox-meta-date" id="lbDate"></div>
+        <div class="lightbox-meta-loc"  id="lbLoc"></div>
+      </div>
+      <div class="lightbox-counter" id="lbCounter"></div>
+      <div class="lightbox-controls">
+        <button class="lb-btn" id="lbPrev" aria-label="Previous photo">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9,2 4,7 9,12"/>
+          </svg>
+        </button>
+        <button class="lb-btn" id="lbNext" aria-label="Next photo">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="5,2 10,7 5,12"/>
+          </svg>
+        </button>
+        <button class="lb-close" id="lbClose" aria-label="Close viewer">
+          <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <line x1="1" y1="1" x2="12" y2="12"/><line x1="12" y1="1" x2="1" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   CONTENT — reads from content.json → photography array
+   Falls back to built-in placeholders if not found
+   ===================================================================== */
+
+/* Placeholder data — 18 entries with varied aspect ratios for visual rhythm.
+   Replace src with real paths like "photos/film/001.jpg" when you have images.
+   aspect: height/width ratio — drives the placeholder box height.           */
+var PLACEHOLDER_PHOTOS = [
+  { src: null, date: 'March 2025',    location: 'Denver, CO',       aspect: 1.25  },
+  { src: null, date: 'January 2025',  location: 'Rocky Mountains',  aspect: 0.67  },
+  { src: null, date: 'March 2025',    location: 'Denver, CO',       aspect: 1.0   },
+  { src: null, date: 'October 2024',  location: 'New York, NY',     aspect: 1.5   },
+  { src: null, date: 'October 2024',  location: 'New York, NY',     aspect: 0.75  },
+  { src: null, date: 'August 2024',   location: 'Pacific Coast',    aspect: 0.56  },
+  { src: null, date: 'August 2024',   location: 'Pacific Coast',    aspect: 1.33  },
+  { src: null, date: 'June 2024',     location: 'Chicago, IL',      aspect: 1.0   },
+  { src: null, date: 'June 2024',     location: 'Chicago, IL',      aspect: 0.67  },
+  { src: null, date: 'April 2024',    location: 'Denver, CO',       aspect: 1.5   },
+  { src: null, date: 'February 2024', location: 'Rocky Mountains',  aspect: 0.75  },
+  { src: null, date: 'February 2024', location: 'Rocky Mountains',  aspect: 1.25  },
+  { src: null, date: 'December 2023', location: 'Denver, CO',       aspect: 1.0   },
+  { src: null, date: 'November 2023', location: 'Santa Fe, NM',     aspect: 0.56  },
+  { src: null, date: 'November 2023', location: 'Santa Fe, NM',     aspect: 1.33  },
+  { src: null, date: 'September 2023',location: 'Denver, CO',       aspect: 0.67  },
+  { src: null, date: 'July 2023',     location: 'Rocky Mountains',  aspect: 1.0   },
+  { src: null, date: 'May 2023',      location: 'Denver, CO',       aspect: 1.5   },
+];
+
+function buildPage(photos) {
+  var grid = document.getElementById('masonryGrid');
+  var count = document.getElementById('photoCount');
+  count.textContent = photos.length + ' photographs';
+
+  photos.forEach(function(p, i) {
+    var item = document.createElement('div');
+    item.className = 'photo-item';
+    item.dataset.index = i;
+
+    if (p.src) {
+      // Real image
+      item.innerHTML =
+        '<img src="' + p.src + '" alt="' + (p.location || '') + '" loading="lazy">' +
+        '<div class="photo-overlay">' +
+          '<div class="photo-meta-date">' + (p.date || '') + '</div>' +
+          '<div class="photo-meta-loc">'  + (p.location || '') + '</div>' +
+        '</div>';
+    } else {
+      // Placeholder
+      var padPct = (p.aspect * 100).toFixed(1) + '%';
+      item.innerHTML =
+        '<div class="placeholder" style="padding-top:' + padPct + '">' +
+          '<div class="placeholder-inner">' +
+            '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">' +
+              '<rect x="2" y="5" width="24" height="18" rx="2"/>' +
+              '<circle cx="9" cy="12" r="2.5"/>' +
+              '<path d="M2 19l6-5 4 4 4-3 8 5"/>' +
+            '</svg>' +
+            '<span>Photo ' + String(i + 1).padStart(2, '0') + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="photo-overlay">' +
+          '<div class="photo-meta-date">' + (p.date || '') + '</div>' +
+          '<div class="photo-meta-loc">'  + (p.location || '') + '</div>' +
+        '</div>';
+    }
+
+    item.addEventListener('click', function() { openLightbox(i); });
+    grid.appendChild(item);
+  });
+}
+
+/* =====================================================================
+   LIGHTBOX
+   ===================================================================== */
+var photos = [];
+var currentIdx = 0;
+
+function openLightbox(idx) {
+  currentIdx = idx;
+  renderLightboxPhoto();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderLightboxPhoto() {
+  var p   = photos[currentIdx];
+  var wrap = document.getElementById('lightboxImgWrap');
+
+  if (p.src) {
+    wrap.innerHTML = '<img src="' + p.src + '" alt="' + (p.location || '') + '">';
+  } else {
+    wrap.innerHTML =
+      '<div class="lightbox-placeholder">' +
+        '<svg viewBox="0 0 40 40" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round">' +
+          '<rect x="2" y="6" width="36" height="28" rx="3"/>' +
+          '<circle cx="13" cy="17" r="4"/>' +
+          '<path d="M2 28l9-8 6 6 6-5 11 7"/>' +
+        '</svg>' +
+        '<span>Photo ' + String(currentIdx + 1).padStart(2, '0') + ' · placeholder</span>' +
+      '</div>';
+  }
+
+  document.getElementById('lbDate').textContent    = p.date     || '';
+  document.getElementById('lbLoc').textContent     = p.location || '';
+  document.getElementById('lbCounter').textContent =
+    String(currentIdx + 1).padStart(2,'0') + ' / ' + String(photos.length).padStart(2,'0');
+}
+
+function navigate(dir) {
+  currentIdx = (currentIdx + dir + photos.length) % photos.length;
+  renderLightboxPhoto();
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', function() { navigate(-1); });
+document.getElementById('lbNext').addEventListener('click', function() { navigate(1); });
+
+// Close on backdrop click (outside frame)
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLightbox();
+  if (e.key === 'ArrowLeft')   navigate(-1);
+  if (e.key === 'ArrowRight')  navigate(1);
+});
+
+/* =====================================================================
+   BOOTSTRAP — try content.json, fall back to placeholders
+   ===================================================================== */
+fetch('content.json')
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    // Populate nav from content
+    document.getElementById('navName').textContent  = d.site.title;
+    document.getElementById('navContact').href      = 'mailto:' + d.nav.email;
+    document.getElementById('navStatus').textContent = d.hero.status;
+    document.title = 'Photography — ' + d.site.title;
+    // Use photography array from content.json if present, else placeholders
+    photos = (d.photography && d.photography.length) ? d.photography : PLACEHOLDER_PHOTOS;
+    buildPage(photos);
+    injectNeonSpill();
+  })
+  .catch(function() {
+    // No content.json — use placeholders as-is
+    photos = PLACEHOLDER_PHOTOS;
+    buildPage(photos);
+    injectNeonSpill();
+  });
+
+/* =====================================================================
+   NEON SPILL — identical engine to index.html
+   ===================================================================== */
+function injectNeonSpill() {
+  var old = document.getElementById('neonSpill');
+  if (old) old.remove();
+
+  var palette = [
+    [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
+    [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
+  ];
+
+  var _seed = Date.now() % 99991;
+  function rand() {
+    _seed = (_seed * 1664525 + 1013904223) & 0xffffffff;
+    return ((_seed >>> 0) / 0xffffffff);
+  }
+
+  var spillH   = 90;
+  var pageW    = Math.max(document.body.scrollWidth, window.innerWidth);
+  var spillTop = document.body.scrollHeight - spillH;
+
+  var NUM = 16;
+  var strings = [];
+  for (var i = 0; i < NUM; i++) {
+    var col = palette[i % palette.length];
+    strings.push({
+      col,
+      baseY:       spillH * (0.30 + 0.55 * (i / (NUM - 1))) + (rand() - 0.5) * 6,
+      freq:        0.006 + rand() * 0.016,
+      amp:         3.5 + rand() * 6.5,
+      phase:       rand() * Math.PI * 2,
+      breathRate:  0.08 + rand() * 0.18,
+      breathDepth: 0.12 + rand() * 0.22,
+      breathOff:   rand() * Math.PI * 2,
+      pulseRate:   0.4  + rand() * 1.2,
+      pulseDepth:  0.15 + rand() * 0.35,
+      pulseOff:    rand() * Math.PI * 2,
+      shimmerRate: 0.05 + rand() * 0.12,
+      shimmerAmt:  0.08 + rand() * 0.18,
+      shimmerOff:  rand() * Math.PI * 2,
+      driftRate:   0.004 + rand() * 0.008,
+      baseAlpha:   0.38 + rand() * 0.38,
+      lineW:       0.8  + rand() * 1.2
+    });
+  }
+
+  var cv  = document.createElement('canvas');
+  cv.id   = 'neonSpill';
+  var dpr = window.devicePixelRatio || 1;
+  cv.width  = Math.round(pageW * dpr);
+  cv.height = Math.round(spillH * dpr);
+  cv.style.cssText = [
+    'position:absolute', 'left:0', 'top:' + spillTop + 'px',
+    'width:' + pageW + 'px', 'height:' + spillH + 'px',
+    'pointer-events:none', 'z-index:1', 'opacity:0', 'transition:opacity 2s ease'
+  ].join(';');
+  document.body.appendChild(cv);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { cv.style.opacity = '1'; });
+  });
+
+  var cx = cv.getContext('2d');
+  var spillClock = 0, spillLast = null, fadeIn = 0;
+
+  function spillDraw(ts) {
+    var dt = spillLast ? Math.min((ts - spillLast) / 1000, 0.05) : 0.016;
+    spillLast   = ts;
+    spillClock += dt;
+    fadeIn = Math.min(1, spillClock / 2.0);
+
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx.clearRect(0, 0, pageW, spillH);
+
+    for (var i = 0; i < NUM; i++) {
+      var s = strings[i], c = s.col;
+      var breath = 1 + s.breathDepth * Math.sin(spillClock * s.breathRate * Math.PI * 2 + s.breathOff);
+      var rawP   = Math.sin(spillClock * s.pulseRate * Math.PI * 2 + s.pulseOff);
+      var pulse  = s.pulseDepth * Math.max(0, rawP) * Math.max(0, rawP);
+      var alpha  = Math.min(0.92, s.baseAlpha * (breath + pulse) * fadeIn);
+      var effAmp = s.amp * breath;
+      var drift  = spillClock * s.driftRate;
+
+      // Glow pass
+      cx.beginPath();
+      for (var x = 0; x <= pageW; x += 3) {
+        var sh = 1 + s.shimmerAmt * Math.sin(x * 0.004 + spillClock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+        var y  = s.baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * sh;
+        x === 0 ? cx.moveTo(x, y) : cx.lineTo(x, y);
+      }
+      cx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.55)+')';
+      cx.lineWidth   = s.lineW + 1.5 + pulse * 3;
+      cx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.7)+')';
+      cx.shadowBlur  = 10 + pulse * 14;
+      cx.stroke();
+      cx.shadowBlur  = 0;
+
+      // Core pass
+      cx.beginPath();
+      for (var x = 0; x <= pageW; x += 2) {
+        var sh = 1 + s.shimmerAmt * Math.sin(x * 0.004 + spillClock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+        var y  = s.baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * sh;
+        x === 0 ? cx.moveTo(x, y) : cx.lineTo(x, y);
+      }
+      cx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';
+      cx.lineWidth   = s.lineW;
+      cx.stroke();
+
+      // Hot core (top strings)
+      if (i >= NUM - 6 && pulse > 0.05) {
+        cx.beginPath();
+        for (var x = 0; x <= pageW; x += 3) {
+          var sh = 1 + s.shimmerAmt * Math.sin(x * 0.004 + spillClock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+          var y  = s.baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * sh;
+          x === 0 ? cx.moveTo(x, y) : cx.lineTo(x, y);
+        }
+        cx.strokeStyle = 'rgba('+Math.min(255,c[0]+90)+','+Math.min(255,c[1]+90)+','+Math.min(255,c[2]+90)+','+(pulse * 0.7)+')';
+        cx.lineWidth   = s.lineW * 0.3;
+        cx.stroke();
+      }
+    }
+    requestAnimationFrame(spillDraw);
+  }
+  requestAnimationFrame(spillDraw);
+}
+</script>
+</body>
+</html>
