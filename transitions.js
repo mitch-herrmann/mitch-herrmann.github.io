@@ -1,8 +1,6 @@
 /* ==========================================================================
    transitions.js — shared page transition engine
    Include on every page with <script src="transitions.js"></script>
-   Works automatically: intercepts nav link clicks, runs exit animation,
-   navigates, then runs entry animation on the new page.
    ========================================================================== */
 
 (function() {
@@ -12,12 +10,11 @@
     [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
   ];
 
-  var EXIT_DUR  = 900;   // ms — strings rise and fill screen
-  var ENTRY_DUR = 1100;  // ms — strings fall back to bottom, content fades in
-  var CONTENT_FADE_IN = 500; // ms — content fades in during entry
+  var EXIT_DUR         = 1050;
+  var ENTRY_DUR        = 1200;
+  var CONTENT_FADE_IN  = 480;
 
-  /* ── Seeded PRNG so strings look the same on exit and entry ── */
-  var SEED_BASE = 12345;
+  var SEED_BASE = 77391;
   function makeRand(seed) {
     var s = seed;
     return function() {
@@ -26,7 +23,12 @@
     };
   }
 
-  /* ── Build string descriptors (same seed = same strings every time) ── */
+  function easeInCubic(t)   { return t * t * t; }
+  function easeOutCubic(t)  { return 1 - Math.pow(1 - t, 3); }
+  function easeOutQuint(t)  { return 1 - Math.pow(1 - t, 5); }
+  function easeInOutSine(t) { return -(Math.cos(Math.PI * t) - 1) / 2; }
+  function easeInOutQuad(t) { return t < .5 ? 2*t*t : -1+(4-2*t)*t; }
+
   function buildStrings(W, H) {
     var rand = makeRand(SEED_BASE);
     var N = 18;
@@ -34,36 +36,34 @@
     for (var i = 0; i < N; i++) {
       var col = PALETTE[i % PALETTE.length];
       strings.push({
-        col:        col,
-        freq:       0.006 + rand() * 0.016,
-        phase:      rand() * Math.PI * 2,
-        amp:        3 + rand() * 7,
-        baseY:      H * (0.30 + 0.60 * (i / (N - 1))),  // resting Y within spill zone
-        lineW:      0.9 + rand() * 1.3,
-        alpha:      0.45 + rand() * 0.45,
-        delay:      i * 28,                               // stagger ms
-        driftRate:  0.003 + rand() * 0.006
+        col:       col,
+        freq1:     0.010 + rand() * 0.022,
+        phase1:    rand() * Math.PI * 2,
+        amp1:      28 + rand() * 55,
+        freq2:     0.005 + rand() * 0.009,
+        phase2:    rand() * Math.PI * 2,
+        amp2:      14 + rand() * 30,
+        freq3:     0.024 + rand() * 0.018,
+        phase3:    rand() * Math.PI * 2,
+        amp3:      6 + rand() * 12,
+        driftRate: 0.6 + rand() * 1.1,
+        restY:     H * 0.90 + (rand() - 0.5) * 30,
+        spreadY:   H * (0.04 + 0.88 * (i / (N - 1))) + (rand() - 0.5) * 20,
+        lineW:     1.0 + rand() * 1.4,
+        alpha:     0.52 + rand() * 0.38,
+        delay:     i * 32,
+        glowAmt:   8 + rand() * 14
       });
     }
     return strings;
   }
 
-  /* ── Easing functions ── */
-  function easeInCubic(t)  { return t * t * t; }
-  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-  function easeInOutSine(t){ return -(Math.cos(Math.PI * t) - 1) / 2; }
-
-  /* ── Create or reuse the transition canvas ── */
   function getCanvas() {
     var cv = document.getElementById('_transitionCanvas');
     if (!cv) {
       cv = document.createElement('canvas');
       cv.id = '_transitionCanvas';
-      cv.style.cssText = [
-        'position:fixed', 'inset:0', 'width:100%', 'height:100%',
-        'pointer-events:none', 'z-index:99998',
-        'opacity:1'
-      ].join(';');
+      cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99998';
       document.body.appendChild(cv);
     }
     var dpr = window.devicePixelRatio || 1;
@@ -72,228 +72,189 @@
     return cv;
   }
 
-  /* ── Draw one frame of strings at a given riseAmt (0=at bottom, 1=full screen) ── */
-  function drawStrings(ctx, strings, W, H, dpr, riseAmt, clock, pageAlpha) {
+  function drawFrame(ctx, strings, W, H, dpr, riseAmt, clock, darkAlpha, flashAlpha) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
-    // Page dim overlay
-    if (pageAlpha > 0) {
-      ctx.fillStyle = 'rgba(13,15,20,' + pageAlpha + ')';
+    if (darkAlpha > 0) {
+      ctx.fillStyle = 'rgba(13,15,20,' + darkAlpha.toFixed(3) + ')';
       ctx.fillRect(0, 0, W, H);
     }
+
+    var totalDelay = strings[strings.length - 1].delay;
 
     for (var i = 0; i < strings.length; i++) {
       var s = strings[i];
       var c = s.col;
 
-      // Each string has its own rise progress based on delay
       var stringRise = Math.max(0, Math.min(1,
-        (riseAmt * (EXIT_DUR + strings[strings.length-1].delay) - s.delay)
-        / EXIT_DUR
+        (riseAmt - s.delay / (totalDelay + EXIT_DUR))
+        / (EXIT_DUR / (totalDelay + EXIT_DUR))
       ));
-
-      // Y: resting position is near bottom (H - spill zone), rises to distribute across screen
-      var restY  = H - 45 + s.baseY * 0;  // all start at bottom
-      var targetY = s.baseY;               // spread to their natural height
-      // Actually: rest at bottom cluster, rise to fill full height
-      var bottomCluster = H * 0.88 + (i / strings.length - 0.5) * 40;
-      var spreadY = H * (0.05 + 0.88 * (i / (strings.length - 1)));
-      var currentY = bottomCluster + (spreadY - bottomCluster) * easeOutCubic(stringRise);
-
-      var drift = clock * s.driftRate;
-      var alpha = s.alpha * Math.min(1, stringRise * 3); // fade in quickly
+      var easedRise = easeOutCubic(stringRise);
+      var currentY  = s.restY + (s.spreadY - s.restY) * easedRise;
+      var t = clock;
+      var alpha = s.alpha * Math.min(1, stringRise * 4);
+      if (alpha < 0.004) continue;
 
       // Glow pass
       ctx.beginPath();
       for (var x = 0; x <= W; x += 3) {
-        var y = currentY + Math.sin(x * s.freq + s.phase + drift) * s.amp;
+        var y = currentY
+          + Math.sin(x * s.freq1 + s.phase1 + t * s.driftRate)        * s.amp1
+          + Math.sin(x * s.freq2 + s.phase2 + t * s.driftRate * 0.61) * s.amp2
+          + Math.sin(x * s.freq3 + s.phase3 + t * s.driftRate * 1.38) * s.amp3;
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.5)+')';
-      ctx.lineWidth   = s.lineW + 2;
-      ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.65)+')';
-      ctx.shadowBlur  = 10;
+      ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.45)+')';
+      ctx.lineWidth   = s.lineW + 3;
+      ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.6)+')';
+      ctx.shadowBlur  = s.glowAmt;
       ctx.stroke();
       ctx.shadowBlur  = 0;
 
       // Core pass
       ctx.beginPath();
       for (var x = 0; x <= W; x += 2) {
-        var y = currentY + Math.sin(x * s.freq + s.phase + drift) * s.amp;
+        var y = currentY
+          + Math.sin(x * s.freq1 + s.phase1 + t * s.driftRate)        * s.amp1
+          + Math.sin(x * s.freq2 + s.phase2 + t * s.driftRate * 0.61) * s.amp2
+          + Math.sin(x * s.freq3 + s.phase3 + t * s.driftRate * 1.38) * s.amp3;
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
       ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';
       ctx.lineWidth   = s.lineW;
       ctx.stroke();
+
+      // Hot core
+      if (alpha > 0.35 && s.glowAmt > 14) {
+        ctx.beginPath();
+        for (var x = 0; x <= W; x += 4) {
+          var y = currentY
+            + Math.sin(x * s.freq1 + s.phase1 + t * s.driftRate)        * s.amp1
+            + Math.sin(x * s.freq2 + s.phase2 + t * s.driftRate * 0.61) * s.amp2
+            + Math.sin(x * s.freq3 + s.phase3 + t * s.driftRate * 1.38) * s.amp3;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        var hc = [Math.min(255,c[0]+70),Math.min(255,c[1]+70),Math.min(255,c[2]+70)];
+        ctx.strokeStyle = 'rgba('+hc[0]+','+hc[1]+','+hc[2]+','+(alpha*0.5)+')';
+        ctx.lineWidth   = 0.4;
+        ctx.stroke();
+      }
+    }
+
+    // White flash on top
+    if (flashAlpha > 0) {
+      ctx.fillStyle = 'rgba(255,255,255,' + flashAlpha.toFixed(3) + ')';
+      ctx.fillRect(0, 0, W, H);
     }
   }
 
-  /* ================================================================
-     EXIT ANIMATION — strings rise up from bottom, page dims out
-     Called when user clicks an internal nav link.
-     Calls navigate(href) when complete.
-  ================================================================ */
+  /* EXIT */
   function runExit(href) {
-    var W   = window.innerWidth;
-    var H   = window.innerHeight;
+    var W = window.innerWidth, H = window.innerHeight;
     var dpr = window.devicePixelRatio || 1;
-    var cv  = getCanvas();
-    var ctx = cv.getContext('2d');
+    var cv = getCanvas(), ctx = cv.getContext('2d');
     var strings = buildStrings(W, H);
+    var clock = 0, lastTs = null, start = null;
 
-    // Hide the neon spill canvas so it doesn't fight with the transition
     var spill = document.getElementById('neonSpill');
-    if (spill) spill.style.opacity = '0';
-
-    var start = null;
-    var clock = 0;
-    var lastTs = null;
+    if (spill) { spill.style.transition = 'opacity 0.2s'; spill.style.opacity = '0'; }
 
     function step(ts) {
       if (!start) start = ts;
       if (lastTs) clock += (ts - lastTs) / 1000;
       lastTs = ts;
+      var t = Math.min(1, (ts - start) / EXIT_DUR);
 
-      var elapsed = ts - start;
-      var t = Math.min(1, elapsed / EXIT_DUR);
-      var riseAmt = easeInOutSine(t);
-      var pageAlpha = easeInCubic(t) * 0.92; // page goes nearly black
+      var riseAmt  = easeInOutSine(Math.min(1, t / 0.82));
+      var darkAlpha  = easeInCubic(Math.min(1, t / 0.68)) * 0.88;
+      var flashAlpha = t > 0.52 ? easeInOutQuad(Math.min(1, (t - 0.52) / 0.26)) * 0.72 : 0;
 
-      drawStrings(ctx, strings, W, H, dpr, riseAmt, clock, pageAlpha);
+      drawFrame(ctx, strings, W, H, dpr, riseAmt, clock, darkAlpha, flashAlpha);
 
       if (t < 1) {
         requestAnimationFrame(step);
       } else {
-        // Brief hold at full coverage, then navigate
-        setTimeout(function() {
-          sessionStorage.setItem('_txStrings', JSON.stringify({
-            seed: SEED_BASE,
-            ts: Date.now()
-          }));
-          window.location.href = href;
-        }, 80);
+        sessionStorage.setItem('_txStrings', '1');
+        window.location.href = href;
       }
     }
     requestAnimationFrame(step);
   }
 
-  /* ================================================================
-     ENTRY ANIMATION — strings fall back down, content fades in
-     Called automatically on page load if _txStrings is set.
-  ================================================================ */
+  /* ENTRY */
   function runEntry() {
-    var W   = window.innerWidth;
-    var H   = window.innerHeight;
+    var W = window.innerWidth, H = window.innerHeight;
     var dpr = window.devicePixelRatio || 1;
-    var cv  = getCanvas();
-    var ctx = cv.getContext('2d');
+    var cv = getCanvas(), ctx = cv.getContext('2d');
     var strings = buildStrings(W, H);
+    var clock = 0, lastTs = null, start = null;
+    var contentStarted = false;
 
-    // Start with content invisible
-    var contentEl = document.body;
-    contentEl.style.transition = 'none';
-    contentEl.style.opacity = '0';
-
-    // Draw the full-coverage state immediately so there's no flash
-    drawStrings(ctx, strings, W, H, dpr, 1, 0, 0.92);
-
-    // Then on next frame start the fall
-    var start = null;
-    var clock = 0;
-    var lastTs = null;
-
-    // Fade content in partway through
-    var contentFaded = false;
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'none';
+    // Paint white flash immediately to match exit state
+    drawFrame(ctx, strings, W, H, dpr, 1, 0, 0.85, 0.72);
 
     function step(ts) {
-      if (!start) {
-        start = ts;
-        // Begin fading content in after a short delay
-        setTimeout(function() {
-          contentEl.style.transition = 'opacity ' + CONTENT_FADE_IN + 'ms ease';
-          contentEl.style.opacity = '1';
-          contentFaded = true;
-        }, ENTRY_DUR * 0.35);
-      }
+      if (!start) start = ts;
       if (lastTs) clock += (ts - lastTs) / 1000;
       lastTs = ts;
+      var t = Math.min(1, (ts - start) / ENTRY_DUR);
 
-      var elapsed = ts - start;
-      var t = Math.min(1, elapsed / ENTRY_DUR);
+      var flashAlpha = Math.max(0, 1 - easeOutQuint(Math.min(1, t / 0.22))) * 0.72;
+      var fallProgress = Math.max(0, Math.min(1, (t - 0.10) / 0.72));
+      var riseAmt   = 1 - easeOutCubic(fallProgress);
+      var darkAlpha = Math.max(0, 1 - easeOutCubic(Math.min(1, (t - 0.08) / 0.65))) * 0.88;
 
-      // riseAmt goes from 1 → 0 (strings fall back to bottom)
-      var fallAmt = easeOutCubic(t);
-      var riseAmt = 1 - fallAmt;
+      if (!contentStarted && t >= 0.28) {
+        contentStarted = true;
+        document.body.style.transition = 'opacity ' + CONTENT_FADE_IN + 'ms ease';
+        document.body.style.opacity = '1';
+      }
 
-      // Page overlay fades out in sync with strings settling
-      var pageAlpha = (1 - easeOutCubic(Math.min(1, t * 1.4))) * 0.92;
-
-      drawStrings(ctx, strings, W, H, dpr, riseAmt, clock, pageAlpha);
+      drawFrame(ctx, strings, W, H, dpr, riseAmt, clock, darkAlpha, flashAlpha);
 
       if (t < 1) {
         requestAnimationFrame(step);
       } else {
-        // All done — remove canvas
         ctx.clearRect(0, 0, W * dpr, H * dpr);
         cv.remove();
-        // Ensure content is fully visible
-        contentEl.style.transition = '';
-        contentEl.style.opacity = '1';
-        // Re-show neon spill if present
+        document.body.style.transition = '';
+        document.body.style.opacity = '1';
         var spill = document.getElementById('neonSpill');
-        if (spill) spill.style.opacity = '1';
+        if (spill) { spill.style.transition = 'opacity 0.4s'; spill.style.opacity = '1'; }
       }
     }
-
     requestAnimationFrame(step);
   }
 
-  /* ================================================================
-     INTERCEPT NAV CLICKS — only internal same-origin .html links
-  ================================================================ */
-  function isInternalLink(href) {
+  /* BOOT */
+  function isInternal(href) {
     if (!href) return false;
     if (href.startsWith('mailto:') || href.startsWith('http') || href.startsWith('//')) return false;
     if (href === '#' || href.startsWith('#')) return false;
     return true;
   }
 
-  function attachInterceptors() {
+  function boot() {
+    if (sessionStorage.getItem('_txStrings')) {
+      sessionStorage.removeItem('_txStrings');
+      requestAnimationFrame(function() { requestAnimationFrame(runEntry); });
+    }
     document.addEventListener('click', function(e) {
-      // Find closest anchor
       var el = e.target;
       while (el && el.tagName !== 'A') el = el.parentElement;
       if (!el) return;
-
       var href = el.getAttribute('href');
-      if (!isInternalLink(href)) return;
-
-      // Same page — do nothing
-      var currentPage = window.location.pathname.split('/').pop() || 'index.html';
-      var targetPage  = href.split('/').pop().split('?')[0].split('#')[0];
-      if (currentPage === targetPage) return;
-
+      if (!isInternal(href)) return;
+      var cur = window.location.pathname.split('/').pop() || 'index.html';
+      var tgt = href.split('/').pop().split('?')[0].split('#')[0];
+      if (cur === tgt) return;
       e.preventDefault();
       runExit(href);
     }, true);
-  }
-
-  /* ================================================================
-     BOOT — run entry if we just transitioned in, then attach interceptors
-  ================================================================ */
-  function boot() {
-    var tx = sessionStorage.getItem('_txStrings');
-    if (tx) {
-      sessionStorage.removeItem('_txStrings');
-      // Small rAF delay to let the page render its initial state
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          runEntry();
-        });
-      });
-    }
-    attachInterceptors();
   }
 
   if (document.readyState === 'loading') {
