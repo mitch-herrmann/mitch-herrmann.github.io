@@ -61,6 +61,26 @@
     "Python", "JavaScript", "React",
     "Finance", "Data Analysis", "Systems Design", "UI / UX"
   ],
+  "photography": [
+    { "src": null, "date": "March 2025",     "location": "Denver, CO" },
+    { "src": null, "date": "January 2025",   "location": "Rocky Mountains" },
+    { "src": null, "date": "March 2025",     "location": "Denver, CO" },
+    { "src": null, "date": "October 2024",   "location": "New York, NY" },
+    { "src": null, "date": "October 2024",   "location": "New York, NY" },
+    { "src": null, "date": "August 2024",    "location": "Pacific Coast" },
+    { "src": null, "date": "August 2024",    "location": "Pacific Coast" },
+    { "src": null, "date": "June 2024",      "location": "Chicago, IL" },
+    { "src": null, "date": "June 2024",      "location": "Chicago, IL" },
+    { "src": null, "date": "April 2024",     "location": "Denver, CO" },
+    { "src": null, "date": "February 2024",  "location": "Rocky Mountains" },
+    { "src": null, "date": "February 2024",  "location": "Rocky Mountains" },
+    { "src": null, "date": "December 2023",  "location": "Denver, CO" },
+    { "src": null, "date": "November 2023",  "location": "Santa Fe, NM" },
+    { "src": null, "date": "November 2023",  "location": "Santa Fe, NM" },
+    { "src": null, "date": "September 2023", "location": "Denver, CO" },
+    { "src": null, "date": "July 2023",      "location": "Rocky Mountains" },
+    { "src": null, "date": "May 2023",       "location": "Denver, CO" }
+  ],
   "footer": {
     "github": "https://github.com/mitchellherrmann",
     "linkedin": "https://linkedin.com/in/mitchellherrmann",
