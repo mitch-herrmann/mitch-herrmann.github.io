@@ -535,12 +535,13 @@ fetch('content.json')
     document.getElementById('navStatus').textContent = d.hero.status;
     document.title = 'Photography — ' + d.site.title;
     // Use photography array from content.json if present, else placeholders
+    window._txStyle = d.site.transition_style || 'slingshot';
     photos = (d.photography && d.photography.length) ? d.photography : PLACEHOLDER_PHOTOS;
     buildPage(photos);
     injectNeonSpill();
   })
   .catch(function() {
-    // No content.json — use placeholders as-is
+    window._txStyle = 'slingshot';
     photos = PLACEHOLDER_PHOTOS;
     buildPage(photos);
     injectNeonSpill();
