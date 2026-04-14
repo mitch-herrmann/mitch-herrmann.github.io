@@ -53,7 +53,7 @@
     }
   ],
   "about": {
-    "body": "Write a few sentences about yourself — your background, what you've built, and what problems genuinely interest you. Keep it direct and specific.\n\nMaybe mention what you're currently exploring or what draws you to the intersection of engineering and finance.",
+    "body": "Write a few sentences about yourself — your background, what you’ve built, and what problems genuinely interest you. Keep it direct and specific.\n\nMaybe mention what you’re currently exploring or what draws you to the intersection of engineering and finance.",
     "stats": [
       {
         "label": "Current Focus",
@@ -76,187 +76,195 @@
     "Systems Design",
     "UI / UX"
   ],
+  "photography_desc": "I’ve had a lot of fun messing around with my little Fujifilm XT30-II. All photos are unedited/SOOC (‘straight out of camera’) using various film sim recipes.",
   "photography": [
     {
-      "src": "photos/thumbs/DSCF0956.jpg",
-      "full": "photos/full/DSCF0956.jpg",
+      "id": "berlin-february-2026",
+      "title": "Berlin",
       "date": "February 2026",
       "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF0958.jpg",
-      "full": "photos/full/DSCF0958.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF0981.jpg",
-      "full": "photos/full/DSCF0981.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF0988.jpg",
-      "full": "photos/full/DSCF0988.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF0991.jpg",
-      "full": "photos/full/DSCF0991.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 0.67
-    },
-    {
-      "src": "photos/thumbs/DSCF0998.jpg",
-      "full": "photos/full/DSCF0998.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1078.jpg",
-      "full": "photos/full/DSCF1078.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1085.jpg",
-      "full": "photos/full/DSCF1085.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1106.jpg",
-      "full": "photos/full/DSCF1106.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1119.jpg",
-      "full": "photos/full/DSCF1119.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1132.jpg",
-      "full": "photos/full/DSCF1132.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1139.jpg",
-      "full": "photos/full/DSCF1139.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1150.jpg",
-      "full": "photos/full/DSCF1150.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1153.jpg",
-      "full": "photos/full/DSCF1153.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1155.jpg",
-      "full": "photos/full/DSCF1155.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 0.67
-    },
-    {
-      "src": "photos/thumbs/DSCF1206.jpg",
-      "full": "photos/full/DSCF1206.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1213.jpg",
-      "full": "photos/full/DSCF1213.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1254.jpg",
-      "full": "photos/full/DSCF1254.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1280.jpg",
-      "full": "photos/full/DSCF1280.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 0.67
-    },
-    {
-      "src": "photos/thumbs/DSCF1283.jpg",
-      "full": "photos/full/DSCF1283.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1289.jpg",
-      "full": "photos/full/DSCF1289.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1296.jpg",
-      "full": "photos/full/DSCF1296.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 0.67
-    },
-    {
-      "src": "photos/thumbs/DSCF1302.jpg",
-      "full": "photos/full/DSCF1302.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1320.jpg",
-      "full": "photos/full/DSCF1320.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 1.5
-    },
-    {
-      "src": "photos/thumbs/DSCF1336.jpg",
-      "full": "photos/full/DSCF1336.jpg",
-      "date": "February 2026",
-      "location": "Berlin",
-      "aspect": 0.67
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF0956.jpg",
+          "full": "photos/full/DSCF0956.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF0958.jpg",
+          "full": "photos/full/DSCF0958.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF0981.jpg",
+          "full": "photos/full/DSCF0981.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF0988.jpg",
+          "full": "photos/full/DSCF0988.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF0991.jpg",
+          "full": "photos/full/DSCF0991.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF0998.jpg",
+          "full": "photos/full/DSCF0998.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1078.jpg",
+          "full": "photos/full/DSCF1078.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1085.jpg",
+          "full": "photos/full/DSCF1085.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1106.jpg",
+          "full": "photos/full/DSCF1106.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1119.jpg",
+          "full": "photos/full/DSCF1119.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1132.jpg",
+          "full": "photos/full/DSCF1132.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1139.jpg",
+          "full": "photos/full/DSCF1139.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1150.jpg",
+          "full": "photos/full/DSCF1150.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1153.jpg",
+          "full": "photos/full/DSCF1153.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1155.jpg",
+          "full": "photos/full/DSCF1155.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1206.jpg",
+          "full": "photos/full/DSCF1206.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1213.jpg",
+          "full": "photos/full/DSCF1213.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1254.jpg",
+          "full": "photos/full/DSCF1254.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1280.jpg",
+          "full": "photos/full/DSCF1280.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1283.jpg",
+          "full": "photos/full/DSCF1283.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1289.jpg",
+          "full": "photos/full/DSCF1289.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1296.jpg",
+          "full": "photos/full/DSCF1296.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1302.jpg",
+          "full": "photos/full/DSCF1302.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1320.jpg",
+          "full": "photos/full/DSCF1320.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1336.jpg",
+          "full": "photos/full/DSCF1336.jpg",
+          "date": "February 2026",
+          "location": "Berlin",
+          "aspect": 0.67
+        }
+      ]
     }
   ],
   "footer": {
     "github": "https://github.com/mitchellherrmann",
     "linkedin": "https://linkedin.com/in/mitchellherrmann",
     "email": "mitchell@example.com"
-  },
-  "photography_desc": "I've had a lot of fun messing around with my little Fujifilm XT30-II. All photos are unedited/SOOC ('straight out of camera') using various film sim recipes."
+  }
 }

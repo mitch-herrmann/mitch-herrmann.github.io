@@ -102,20 +102,19 @@ nav.waveform-active {
   border-radius: 2px; flex-shrink: 0;
   transition: box-shadow .2s;
 }
-/* Home = ice, Resume = rose, Photography = violet, Projects = teal, Contact = gold */
 .nav-dropdown a:nth-child(1)::before { background: #60c8ff; }
 .nav-dropdown a:nth-child(2)::before { background: #ff64a0; }
 .nav-dropdown a:nth-child(3)::before { background: #a064ff; }
 .nav-dropdown a:nth-child(4)::before { background: #3cdcb4; }
 .nav-dropdown a:nth-child(5)::before { background: #ffc83c; }
-.nav-dropdown a:hover:nth-child(1)::before { box-shadow: 0 0 10px #60c8ff; }
-.nav-dropdown a:hover:nth-child(2)::before { box-shadow: 0 0 10px #ff64a0; }
-.nav-dropdown a:hover:nth-child(3)::before { box-shadow: 0 0 10px #a064ff; }
-.nav-dropdown a:hover:nth-child(4)::before { box-shadow: 0 0 10px #3cdcb4; }
-.nav-dropdown a:hover:nth-child(5)::before { box-shadow: 0 0 10px #ffc83c; }
-/* divider after Home */
+.nav-dropdown a:hover:nth-child(1)::before { box-shadow: 0 0 10px rgba(96,200,255,.8); }
+.nav-dropdown a:hover:nth-child(2)::before { box-shadow: 0 0 10px rgba(255,100,160,.8); }
+.nav-dropdown a:hover:nth-child(3)::before { box-shadow: 0 0 10px rgba(160,100,255,.8); }
+.nav-dropdown a:hover:nth-child(4)::before { box-shadow: 0 0 10px rgba(60,220,180,.8); }
+.nav-dropdown a:hover:nth-child(5)::before { box-shadow: 0 0 10px rgba(255,200,60,.8); }
 .nav-dropdown a:nth-child(1) {
-  border-bottom: 1px solid var(--line); margin-bottom: 4px; padding-bottom: 14px;
+  border-bottom: 1px solid rgba(96,200,255,.09);
+  margin-bottom: 4px; padding-bottom: 13px;
 }
 
 /* ── Right-side nav links — invisible at top, reveal on scroll ── */
@@ -145,15 +144,14 @@ nav.waveform-active {
 .nav-links a:nth-child(3).illuminated { animation-delay: -4s; }
 .nav-links a:nth-child(4).illuminated { animation-delay: -6s; }
 @keyframes pill-cycle {
-  0%   { border-color:rgba(96,200,255,.5);  box-shadow:0 0 10px rgba(96,200,255,.25),  inset 0 1px 0 rgba(96,200,255,.08);  background:linear-gradient(135deg,#1e2d3d,#13161c); }
-  12%  { border-color:rgba(160,100,255,.5); box-shadow:0 0 10px rgba(160,100,255,.25), inset 0 1px 0 rgba(160,100,255,.08); background:linear-gradient(135deg,#1d1a2e,#13161c); }
-  24%  { border-color:rgba(255,100,160,.5); box-shadow:0 0 10px rgba(255,100,160,.25), inset 0 1px 0 rgba(255,100,160,.08); background:linear-gradient(135deg,#2e1a22,#13161c); }
-  36%  { border-color:rgba(60,220,180,.5);  box-shadow:0 0 10px rgba(60,220,180,.25),  inset 0 1px 0 rgba(60,220,180,.08);  background:linear-gradient(135deg,#1a2e28,#13161c); }
-  48%  { border-color:rgba(255,200,60,.5);  box-shadow:0 0 10px rgba(255,200,60,.25),  inset 0 1px 0 rgba(255,200,60,.08);  background:linear-gradient(135deg,#2e2a1a,#13161c); }
-  60%  { border-color:rgba(255,140,80,.5);  box-shadow:0 0 10px rgba(255,140,80,.25),  inset 0 1px 0 rgba(255,140,80,.08);  background:linear-gradient(135deg,#2e1e14,#13161c); }
-  72%  { border-color:rgba(80,220,255,.5);  box-shadow:0 0 10px rgba(80,220,255,.25),  inset 0 1px 0 rgba(80,220,255,.08);  background:linear-gradient(135deg,#1a2a2e,#13161c); }
-  84%  { border-color:rgba(184,118,26,.5);  box-shadow:0 0 10px rgba(184,118,26,.25),  inset 0 1px 0 rgba(184,118,26,.08);  background:linear-gradient(135deg,#2a2014,#13161c); }
-  100% { border-color:rgba(96,200,255,.5);  box-shadow:0 0 10px rgba(96,200,255,.25),  inset 0 1px 0 rgba(96,200,255,.08);  background:linear-gradient(135deg,#1e2d3d,#13161c); }
+  0%   { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12), 0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
+  14%  { border-color:rgba(160,100,255,.42); box-shadow:inset 0 1px 0 rgba(160,100,255,.12),0 0 14px rgba(160,100,255,.14); background:rgba(160,100,255,.10); }
+  28%  { border-color:rgba(255,100,160,.42); box-shadow:inset 0 1px 0 rgba(255,100,160,.12),0 0 14px rgba(255,100,160,.14); background:rgba(255,100,160,.10); }
+  42%  { border-color:rgba(60,220,180,.42);  box-shadow:inset 0 1px 0 rgba(60,220,180,.12), 0 0 14px rgba(60,220,180,.14);  background:rgba(60,220,180,.10); }
+  56%  { border-color:rgba(255,200,60,.42);  box-shadow:inset 0 1px 0 rgba(255,200,60,.12), 0 0 14px rgba(255,200,60,.14);  background:rgba(255,200,60,.10); }
+  70%  { border-color:rgba(255,140,80,.42);  box-shadow:inset 0 1px 0 rgba(255,140,80,.12), 0 0 14px rgba(255,140,80,.14);  background:rgba(255,140,80,.10); }
+  84%  { border-color:rgba(80,220,255,.42);  box-shadow:inset 0 1px 0 rgba(80,220,255,.12), 0 0 14px rgba(80,220,255,.14);  background:rgba(80,220,255,.10); }
+  100% { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12), 0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
 }
 .nav-links a.illuminated:hover { opacity: 1 !important; }
 
@@ -492,18 +490,18 @@ footer {
     MH
     <span class="nav-monogram-arrow">&#9660;</span>
     <div class="nav-dropdown" id="navDropdown">
-      <a href="index.html">Home</a>
-      <a href="resume.html">Resume</a>
-      <a href="photography.html">Photography</a>
-      <a href="projects.html">Projects</a>
+      <a href="/">Home</a>
+      <a href="/resume">Resume</a>
+      <a href="/photography">Photography</a>
+      <a href="/projects">Projects</a>
       <a id="navContactDrop" href="#">Contact</a>
     </div>
   </div>
   <!-- Right-side links — hidden at top, reveal on scroll -->
   <div class="nav-links" id="navLinks">
-    <a href="resume.html">Resume</a>
-    <a href="photography.html">Photography</a>
-    <a href="projects.html">Projects</a>
+    <a href="/resume">Resume</a>
+    <a href="/photography">Photography</a>
+    <a href="/projects">Projects</a>
     <a id="navContact" href="#">Contact</a>
   </div>
   <div class="nav-status">
@@ -528,7 +526,7 @@ footer {
 
 <div class="section-panels">
 
-  <a href="resume.html" class="section-panel" style="--panel-glow:rgba(96,200,255,.08);--panel-accent:rgba(96,200,255,.9);--panel-shimmer:rgba(144,220,255,.05)">
+  <a href="/resume" class="section-panel" style="--panel-glow:rgba(96,200,255,.08);--panel-accent:rgba(96,200,255,.9);--panel-shimmer:rgba(144,220,255,.05)">
     <div class="section-panel-left">
       <div class="section-panel-num">01</div>
       <div class="section-panel-title">Resume</div>
@@ -539,7 +537,7 @@ footer {
     </div>
   </a>
 
-  <a href="photography.html" class="section-panel" style="--panel-glow:rgba(255,140,80,.08);--panel-accent:rgba(255,160,100,.9);--panel-shimmer:rgba(255,180,120,.04)">
+  <a href="/photography" class="section-panel" style="--panel-glow:rgba(255,140,80,.08);--panel-accent:rgba(255,160,100,.9);--panel-shimmer:rgba(255,180,120,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">02</div>
       <div class="section-panel-title">Photography</div>
@@ -550,7 +548,7 @@ footer {
     </div>
   </a>
 
-  <a href="projects.html" class="section-panel" style="--panel-glow:rgba(160,100,255,.08);--panel-accent:rgba(180,120,255,.9);--panel-shimmer:rgba(180,120,255,.04)">
+  <a href="/projects" class="section-panel" style="--panel-glow:rgba(160,100,255,.08);--panel-accent:rgba(180,120,255,.9);--panel-shimmer:rgba(180,120,255,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">03</div>
       <div class="section-panel-title">Projects</div>
