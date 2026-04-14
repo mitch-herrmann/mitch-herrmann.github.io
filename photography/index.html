@@ -224,8 +224,6 @@ nav {
   overflow: hidden; background: #111;
   z-index: 3;
 }
-/* Aspect-ratio placeholder — gives the container real height before the image
-   arrives so the browser knows where items are and fetches them eagerly */
 .photo-item-inner {
   position: relative; width: 100%;
 }
@@ -272,7 +270,7 @@ nav {
 .lightbox-img-wrap img {
   display: block;
   max-width: 92vw;
-  max-height: calc(92vh - 60px); /* 60px = lightbox bar height */
+  max-height: calc(92vh - 60px);
   width: auto; height: auto;
 }
 .lightbox-bar { min-width: 400px; }
@@ -393,8 +391,8 @@ nav {
    STATE
    ===================================================================== */
 var albums = [];
-var currentAlbum = null;   /* album object currently open */
-var currentIdx   = 0;      /* lightbox index within currentAlbum.photos */
+var currentAlbum = null;
+var currentIdx   = 0;
 
 /* =====================================================================
    ALBUM LANDING
@@ -412,7 +410,6 @@ function buildAlbumLanding(albumList) {
     var card = document.createElement('div');
     card.className = 'album-card';
 
-    /* Cover image — cycles through album photos automatically */
     var coverSrcs = album.photos
       .map(function(p) { return p.src; })
       .filter(Boolean);
@@ -449,7 +446,7 @@ function buildAlbumLanding(albumList) {
           imgEl.src = coverSrcs[coverIdx];
           imgEl.classList.remove('fade-out');
         }, 800);
-      }, 3000 + Math.random() * 2000); /* staggered so all cards don't flip at once */
+      }, 3000 + Math.random() * 2000);
     }
 
     card.addEventListener('click', function() { openAlbum(album); });
@@ -470,7 +467,6 @@ function openAlbum(album) {
   buildPhotoGrid(album.photos);
   window.scrollTo(0, 0);
 
-  /* push hash so back button / direct links work */
   history.pushState({ album: album.id }, '', '/photography#' + album.id);
 }
 
@@ -484,7 +480,6 @@ function closeAlbum() {
 
 document.getElementById('albumBack').addEventListener('click', closeAlbum);
 
-/* Handle browser back/forward */
 window.addEventListener('popstate', function(e) {
   var hash = window.location.hash.slice(1);
   if (hash) {
@@ -495,13 +490,12 @@ window.addEventListener('popstate', function(e) {
 });
 
 /* =====================================================================
-   PHOTO GRID — CSS Grid fills left-to-right naturally
+   PHOTO GRID
    ===================================================================== */
 function buildPhotoGrid(photos) {
   var grid = document.getElementById('photoGrid');
   grid.innerHTML = '';
 
-  /* Preload all thumbnails immediately so they're ready when user scrolls */
   photos.forEach(function(p) {
     if (p.src) { var pre = new Image(); pre.src = p.src; }
   });
@@ -533,7 +527,6 @@ function buildPhotoGrid(photos) {
     grid.appendChild(item);
   });
 
-  /* Reposition neon spill after grid renders */
   setTimeout(function() {
     var spill = document.getElementById('neonSpill');
     if (spill) spill.style.top = (document.body.scrollHeight - 90) + 'px';
@@ -541,7 +534,7 @@ function buildPhotoGrid(photos) {
 }
 
 /* =====================================================================
-   LIGHTBOX — shows thumb immediately, loads full res behind it
+   LIGHTBOX
    ===================================================================== */
 function openLightbox(idx) {
   if (!currentAlbum) return;
@@ -562,7 +555,6 @@ function renderLightboxPhoto() {
   var wrap   = document.getElementById('lightboxImgWrap');
 
   if (p.src) {
-    /* Load full-res directly — no thumb swap */
     var src = (p.full && p.full !== p.src) ? p.full : p.src;
     wrap.innerHTML = '<img src="' + src + '" alt="' + (p.location || '') + '">';
   } else {
@@ -609,11 +601,19 @@ fetch('../content.json')
     var descEl = document.getElementById('photoDesc');
     if (descEl && d.photography_desc) descEl.textContent = d.photography_desc;
 
+    /* ── FIX: make all photo paths root-relative so they resolve correctly
+       regardless of which subdirectory this page is served from ── */
+    (d.photography || []).forEach(function(album) {
+      (album.photos || []).forEach(function(p) {
+        if (p.src  && !p.src.startsWith('/')  && !p.src.startsWith('http'))  p.src  = '/' + p.src;
+        if (p.full && !p.full.startsWith('/') && !p.full.startsWith('http')) p.full = '/' + p.full;
+      });
+    });
+
     albums = d.photography || [];
     buildAlbumLanding(albums);
     injectNeonSpill();
 
-    /* If URL has a hash, open that album directly */
     var hash = window.location.hash.slice(1);
     if (hash) {
       var album = albums.find(function(a) { return a.id === hash; });
