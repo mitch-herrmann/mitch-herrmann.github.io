@@ -192,6 +192,7 @@
         /* brief hold then navigate */
         setTimeout(function() {
           sessionStorage.setItem('_tx', '1');
+          sessionStorage.setItem('_txReturning', '1');
           window.location.href = href;
         }, HOLD_DUR);
       }
