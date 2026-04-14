@@ -497,6 +497,13 @@
           "date": "February 2026",
           "location": "Paris",
           "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1616.jpg",
+          "full": "photos/full/DSCF1616.jpg",
+          "date": "February 2026",
+          "location": "Paris",
+          "aspect": 1.5
         }
       ]
     }
