@@ -518,11 +518,13 @@ footer {
 fetch('content.json')
   .then(function(r) { return r.json(); })
   .then(function(d) {
+    window._txStyle = d.site.transition_style || 'slingshot';
     populatePage(d);
     initWave(d.site.intro_animation || 'storm');
   })
   .catch(function(e) {
     console.warn('content.json not found, using fallback content.', e);
+    window._txStyle = 'slingshot';
     // Fallback so the page still works without a server (local file:// open)
     var fallback = {
       site: { title: 'Your Name', intro_animation: 'storm' },
