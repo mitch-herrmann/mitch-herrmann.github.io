@@ -77,10 +77,23 @@
      Entry: strings arrive from right, settle into place
   ================================================================ */
 
-  var SLING_EXIT  = 950;
+  var SLING_EXIT  = 1350;  /* slower overall — windup needs room to breathe */
   var SLING_HOLD  = 60;
-  var SLING_ENTRY = 700;
+  var SLING_ENTRY = 720;
   var SLING_CONTENT_IN = 380;
+
+  /* String Y positions — match the neon spill band (~90px from bottom).
+     Organically spaced rather than evenly stepped.
+     restFrac: fractional offset from bottom of viewport (0 = very bottom).
+     windupExtra: how many extra px this string spreads during windup.     */
+  var SLING_STRINGS = (function() {
+    /* 10 strings packed into roughly 90px, with organic jitter */
+    var offsets = [4, 11, 17, 24, 29, 36, 42, 52, 62, 74]; /* px from bottom */
+    var extras  = [6,  4,  8,  3,  7,  5, 10,  4,  6,  8]; /* px spread on windup */
+    return PAL.map(function(col, i) {
+      return { col: col, offsetPx: offsets[i], windupPx: extras[i] };
+    });
+  })();
 
   function slingshotExit(href, cv, ctx, W, H, dpr) {
     var clock = 0, last = null, start = null;
@@ -102,50 +115,61 @@
       ctx.fillStyle = 'rgba(13,15,20,' + dark.toFixed(3) + ')';
       ctx.fillRect(0, 0, W, H);
 
-      if (t < 0.58) {
-        /* ── WINDUP: strings bow left, amplitude tightens ── */
-        var wt = clamp(t / 0.58, 0, 1);
-        var windEased = eios(wt);
+      if (t < 0.60) {
+        /* ── WINDUP: slow calm tension build ── */
+        /* Use a very gentle ease so the windup feels deliberate, not rushed */
+        var wt = clamp(t / 0.60, 0, 1);
+        /* Cubic ease-in-out but only go to ~0.55 of the range so it never
+           feels frantic — the string is being drawn back, not snapping */
+        var windEased = eios(wt) * 0.55;
         for (var i = 0; i < 10; i++) {
-          var c = PAL[i];
-          var baseY = H * (0.80 + 0.16 * (i / 9));
+          var ss = SLING_STRINGS[i];
+          var c  = ss.col;
+          /* Base Y: bottom of viewport minus organic offset
+             During windup: spread slightly outward by windupPx */
+          var baseY = H - ss.offsetPx - ss.windupPx * windEased;
           var freq  = 0.016 + i * 0.003;
           var ph    = i * 0.9;
           var energy = windEased;
           ctx.beginPath();
           for (var x = 0; x <= W; x += 2) {
-            /* Bow: arch left — parabolic pull peaking at centre */
             var u   = x / W;
-            var bow = Math.sin(u * Math.PI); /* 0 at edges, 1 at centre */
-            var compression = windEased * W * 0.13 * bow;
-            /* Amplitude tightens as tension builds */
-            var tensionAmp = 1 + windEased * 2.2;
-            var wave = Math.sin(x * freq + ph + clock * 0.35) * (4 + i * 0.5);
+            var bow = Math.sin(u * Math.PI); /* peaks at centre */
+            /* Gentle leftward bow — calmer than before */
+            var compression = windEased * W * 0.09 * bow;
+            /* Amplitude grows modestly — strings tighten but don't thrash */
+            var tensionAmp = 1 + windEased * 1.1;
+            var wave = Math.sin(x * freq + ph + clock * 0.28) * (3.5 + i * 0.45);
             var px = x - compression;
             var py = baseY + wave * tensionAmp;
             x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
           }
-          var alpha = 0.55 + energy * 0.38;
+          var alpha = 0.55 + energy * 0.30;
           ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';
-          ctx.lineWidth   = 1.0 + energy * 0.7;
-          ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(energy * 0.55)+')';
-          ctx.shadowBlur  = energy * 14;
+          ctx.lineWidth   = 1.0 + energy * 0.5;
+          /* Only glow when energy is meaningful — skip shadowBlur at low values */
+          if (energy > 0.15) {
+            ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(energy * 0.45)+')';
+            ctx.shadowBlur  = energy * 10;
+          }
           ctx.stroke();
           ctx.shadowBlur  = 0;
         }
-        /* energy pulse brightening as tension peaks */
-        if (wt > 0.7) {
-          var ep = (wt - 0.7) / 0.3;
-          ctx.fillStyle = 'rgba(255,255,255,' + (ep * 0.05) + ')';
+        /* very subtle brightening near peak — just a breath, not a flash */
+        if (wt > 0.78) {
+          var ep = (wt - 0.78) / 0.22;
+          ctx.fillStyle = 'rgba(255,255,255,' + (ep * 0.03) + ')';
           ctx.fillRect(0, 0, W, H);
         }
       } else {
         /* ── RELEASE: strings snap to the right ── */
-        var rt = clamp((t - 0.58) / 0.42, 0, 1);
+        var rt = clamp((t - 0.60) / 0.40, 0, 1);
         var releaseEased = eo5(rt);
         for (var i = 0; i < 10; i++) {
-          var c = PAL[i];
-          var baseY = H * (0.80 + 0.16 * (i / 9));
+          var ss = SLING_STRINGS[i];
+          var c  = ss.col;
+          /* Start from the wound-up position — slightly spread from rest */
+          var baseY = H - ss.offsetPx - ss.windupPx * 0.55 * (1 - rt * 0.4);
           var freq  = 0.016 + i * 0.003;
           var ph    = i * 0.9;
           /* Slingshot: right end flies first, left anchors briefly */
@@ -221,26 +245,28 @@
 
       /* strings arrive from right, settle with slight overshoot */
       for (var i = 0; i < 10; i++) {
-        var c = PAL[i];
-        var baseY = H * (0.80 + 0.16 * (i / 9));
+        var ss = SLING_STRINGS[i];
+        var c  = ss.col;
+        var baseY = H - ss.offsetPx;  /* resting position matches spill band */
         var freq  = 0.016 + i * 0.003;
         var ph    = i * 0.9;
         var localT = clamp((t - i * 0.025) / (1 - i * 0.025 * 0.5), 0, 1);
-        /* overshoot spring: goes slightly past then bounces back */
         var spring = eo5(localT);
-        /* slight overshoot on arrival */
         var overshoot = Math.sin(localT * Math.PI * 1.8) * 0.04 * (1 - localT);
         var shift = (1 - spring - overshoot) * W * 0.55;
         ctx.beginPath();
         for (var x = 0; x <= W; x += 2) {
-          var py = baseY + Math.sin(x * freq + ph + clock * 0.35) * (4 + i * 0.5);
+          var py = baseY + Math.sin(x * freq + ph + clock * 0.35) * (3.5 + i * 0.45);
           var px = x + shift;
           x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
         }
-        ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(0.55 * eo3(localT))+')';
+        var entryAlpha = 0.55 * eo3(localT);
+        ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+entryAlpha+')';
         ctx.lineWidth   = 1.1;
-        ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(0.35 * eo3(localT))+')';
-        ctx.shadowBlur  = 5;
+        if (entryAlpha > 0.2) {
+          ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(0.35 * eo3(localT))+')';
+          ctx.shadowBlur  = 5;
+        }
         ctx.stroke();
         ctx.shadowBlur  = 0;
       }
