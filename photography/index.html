@@ -144,8 +144,8 @@ nav {
 .albums-wrap { padding: 48px 48px 160px; }
 .albums-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
+  gap: 24px;
 }
 .album-card {
   cursor: pointer; position: relative;
@@ -155,7 +155,7 @@ nav {
 .album-card:hover { transform: translateY(-3px); }
 .album-cover-wrap {
   position: relative; width: 100%;
-  padding-top: 66%; /* 3:2 aspect ratio */
+  padding-top: 72%; /* slightly taller crop for drama */
   overflow: hidden; background: #000;
 }
 .album-cover-img {
