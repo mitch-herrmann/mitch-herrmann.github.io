@@ -86,12 +86,12 @@ nav {
 .nav-dropdown a:nth-child(3)::before { background: #a064ff; }
 .nav-dropdown a:nth-child(4)::before { background: #3cdcb4; }
 .nav-dropdown a:nth-child(5)::before { background: #ffc83c; }
-.nav-dropdown a:hover:nth-child(1)::before { box-shadow: 0 0 10px #60c8ff; }
-.nav-dropdown a:hover:nth-child(2)::before { box-shadow: 0 0 10px #ff64a0; }
-.nav-dropdown a:hover:nth-child(3)::before { box-shadow: 0 0 10px #a064ff; }
-.nav-dropdown a:hover:nth-child(4)::before { box-shadow: 0 0 10px #3cdcb4; }
-.nav-dropdown a:hover:nth-child(5)::before { box-shadow: 0 0 10px #ffc83c; }
-.nav-dropdown a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; padding-bottom: 14px; }
+.nav-dropdown a:hover:nth-child(1)::before { box-shadow: 0 0 10px rgba(96,200,255,.8); }
+.nav-dropdown a:hover:nth-child(2)::before { box-shadow: 0 0 10px rgba(255,100,160,.8); }
+.nav-dropdown a:hover:nth-child(3)::before { box-shadow: 0 0 10px rgba(160,100,255,.8); }
+.nav-dropdown a:hover:nth-child(4)::before { box-shadow: 0 0 10px rgba(60,220,180,.8); }
+.nav-dropdown a:hover:nth-child(5)::before { box-shadow: 0 0 10px rgba(255,200,60,.8); }
+.nav-dropdown a:nth-child(1) { border-bottom: 1px solid rgba(96,200,255,.09); margin-bottom: 4px; padding-bottom: 13px; }
 .nav-links {
   display: flex; gap: 8px; font-family: var(--display); font-size: 9.5px;
   font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
@@ -109,15 +109,14 @@ nav {
   animation: pill-cycle 8s linear infinite;
 }
 @keyframes pill-cycle {
-  0%   { border-color:rgba(96,200,255,.5);  box-shadow:0 0 10px rgba(96,200,255,.25),  inset 0 1px 0 rgba(96,200,255,.08);  background:linear-gradient(135deg,#1e2d3d,#13161c); }
-  12%  { border-color:rgba(160,100,255,.5); box-shadow:0 0 10px rgba(160,100,255,.25), inset 0 1px 0 rgba(160,100,255,.08); background:linear-gradient(135deg,#1d1a2e,#13161c); }
-  24%  { border-color:rgba(255,100,160,.5); box-shadow:0 0 10px rgba(255,100,160,.25), inset 0 1px 0 rgba(255,100,160,.08); background:linear-gradient(135deg,#2e1a22,#13161c); }
-  36%  { border-color:rgba(60,220,180,.5);  box-shadow:0 0 10px rgba(60,220,180,.25),  inset 0 1px 0 rgba(60,220,180,.08);  background:linear-gradient(135deg,#1a2e28,#13161c); }
-  48%  { border-color:rgba(255,200,60,.5);  box-shadow:0 0 10px rgba(255,200,60,.25),  inset 0 1px 0 rgba(255,200,60,.08);  background:linear-gradient(135deg,#2e2a1a,#13161c); }
-  60%  { border-color:rgba(255,140,80,.5);  box-shadow:0 0 10px rgba(255,140,80,.25),  inset 0 1px 0 rgba(255,140,80,.08);  background:linear-gradient(135deg,#2e1e14,#13161c); }
-  72%  { border-color:rgba(80,220,255,.5);  box-shadow:0 0 10px rgba(80,220,255,.25),  inset 0 1px 0 rgba(80,220,255,.08);  background:linear-gradient(135deg,#1a2a2e,#13161c); }
-  84%  { border-color:rgba(184,118,26,.5);  box-shadow:0 0 10px rgba(184,118,26,.25),  inset 0 1px 0 rgba(184,118,26,.08);  background:linear-gradient(135deg,#2a2014,#13161c); }
-  100% { border-color:rgba(96,200,255,.5);  box-shadow:0 0 10px rgba(96,200,255,.25),  inset 0 1px 0 rgba(96,200,255,.08);  background:linear-gradient(135deg,#1e2d3d,#13161c); }
+  0%   { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12), 0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
+  14%  { border-color:rgba(160,100,255,.42); box-shadow:inset 0 1px 0 rgba(160,100,255,.12),0 0 14px rgba(160,100,255,.14); background:rgba(160,100,255,.10); }
+  28%  { border-color:rgba(255,100,160,.42); box-shadow:inset 0 1px 0 rgba(255,100,160,.12),0 0 14px rgba(255,100,160,.14); background:rgba(255,100,160,.10); }
+  42%  { border-color:rgba(60,220,180,.42);  box-shadow:inset 0 1px 0 rgba(60,220,180,.12), 0 0 14px rgba(60,220,180,.14);  background:rgba(60,220,180,.10); }
+  56%  { border-color:rgba(255,200,60,.42);  box-shadow:inset 0 1px 0 rgba(255,200,60,.12), 0 0 14px rgba(255,200,60,.14);  background:rgba(255,200,60,.10); }
+  70%  { border-color:rgba(255,140,80,.42);  box-shadow:inset 0 1px 0 rgba(255,140,80,.12), 0 0 14px rgba(255,140,80,.14);  background:rgba(255,140,80,.10); }
+  84%  { border-color:rgba(80,220,255,.42);  box-shadow:inset 0 1px 0 rgba(80,220,255,.12), 0 0 14px rgba(80,220,255,.14);  background:rgba(80,220,255,.10); }
+  100% { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12), 0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
 }
 .nav-links a:hover { opacity: 1 !important; }
 .nav-status { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 9px; color: var(--dim); }
@@ -149,6 +148,12 @@ nav {
   font-family: var(--body); font-size: 12px; color: var(--muted);
   margin-top: 24px; letter-spacing: .04em;
 }
+.page-desc {
+  font-family: var(--body); font-size: 13px; color: var(--muted);
+  line-height: 1.85; max-width: 560px;
+  margin-top: 20px; letter-spacing: .02em;
+}
+.page-desc:empty { display: none; }
 
 /* ── MASONRY GRID ── */
 .grid-wrap {
@@ -373,6 +378,7 @@ footer { border-top: none; padding: 0; min-height: 0; }
   <div class="page-eyebrow">Photography</div>
   <div class="page-title">Visual record</div>
   <div class="page-sub" id="photoCount">Loading…</div>
+  <p class="page-desc" id="photoDesc"></p>
 </div>
 
 <div class="grid-wrap">
@@ -559,24 +565,33 @@ document.addEventListener('keydown', function(e) {
 fetch('content.json')
   .then(function(r) { return r.json(); })
   .then(function(d) {
-    // Populate nav from content
     var _nc = document.getElementById('navContact');
     if (_nc) _nc.href = 'mailto:' + d.nav.email;
     var _ncd = document.getElementById('navContactDrop');
     if (_ncd) _ncd.href = 'mailto:' + d.nav.email;
     document.getElementById('navStatus').textContent = d.hero.status;
     document.title = 'Photography — ' + d.site.title;
-    // Use photography array from content.json if present, else placeholders
     window._txStyle = d.site.transition_style || 'slingshot';
     photos = (d.photography && d.photography.length) ? d.photography : PLACEHOLDER_PHOTOS;
+    /* populate description if present */
+    var descEl = document.getElementById('photoDesc');
+    if (descEl && d.photography_desc) descEl.textContent = d.photography_desc;
     buildPage(photos);
-    injectNeonSpill();
+    /* inject spill after images settle — window load fires after all imgs */
+    window.addEventListener('load', injectNeonSpill);
+    /* fallback: also inject after 2s in case load already fired */
+    setTimeout(function() {
+      if (!document.getElementById('neonSpill')) injectNeonSpill();
+    }, 2000);
   })
   .catch(function() {
     window._txStyle = 'slingshot';
     photos = PLACEHOLDER_PHOTOS;
     buildPage(photos);
-    injectNeonSpill();
+    window.addEventListener('load', injectNeonSpill);
+    setTimeout(function() {
+      if (!document.getElementById('neonSpill')) injectNeonSpill();
+    }, 2000);
   });
 
 /* =====================================================================
