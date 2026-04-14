@@ -221,11 +221,23 @@ nav {
   break-inside: avoid;
   margin-bottom: 12px;
   cursor: pointer; position: relative;
-  overflow: hidden; background: #000;
+  overflow: hidden; background: #111;
   z-index: 3;
 }
+/* Aspect-ratio placeholder — gives the container real height before the image
+   arrives so the browser knows where items are and fetches them eagerly */
+.photo-item-inner {
+  position: relative; width: 100%;
+}
+.photo-item-inner::before {
+  content: ''; display: block;
+  padding-top: var(--aspect-pad, 75%);
+}
 .photo-item img {
-  display: block; width: 100%; height: auto;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
   transition: transform .5s cubic-bezier(.25,.46,.45,.94);
 }
 .photo-item:hover img { transform: scale(1.03); }
@@ -499,8 +511,11 @@ function buildPhotoGrid(photos) {
     item.className = 'photo-item';
 
     if (p.src) {
+      var padPct = ((p.aspect || 0.75) * 100).toFixed(1) + '%';
       item.innerHTML =
-        '<img src="' + p.src + '" alt="' + (p.location || '') + '">' +
+        '<div class="photo-item-inner" style="--aspect-pad:' + padPct + '">' +
+          '<img src="' + p.src + '" alt="' + (p.location || '') + '">' +
+        '</div>' +
         '<div class="photo-overlay">' +
           '<div class="photo-meta-date">' + (p.date || '') + '</div>' +
           '<div class="photo-meta-loc">'  + (p.location || '') + '</div>' +
