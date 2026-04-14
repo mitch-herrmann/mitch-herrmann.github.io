@@ -436,17 +436,28 @@ function buildAlbumLanding(albumList) {
         '</div>' +
       '</div>';
 
-    /* Auto-cycle cover image */
+    /* Auto-cycle cover image — initial delay is randomised per card so
+       covers never cross-fade at the same instant */
     if (coverSrcs.length > 1) {
       var imgEl = card.querySelector('.album-cover-img');
-      setInterval(function() {
+      var cycleInterval = 3200 + Math.random() * 2000;
+      var initialDelay  = Math.random() * cycleInterval;
+      setTimeout(function() {
         coverIdx = (coverIdx + 1) % coverSrcs.length;
         imgEl.classList.add('fade-out');
         setTimeout(function() {
           imgEl.src = coverSrcs[coverIdx];
           imgEl.classList.remove('fade-out');
         }, 800);
-      }, 3000 + Math.random() * 2000);
+        setInterval(function() {
+          coverIdx = (coverIdx + 1) % coverSrcs.length;
+          imgEl.classList.add('fade-out');
+          setTimeout(function() {
+            imgEl.src = coverSrcs[coverIdx];
+            imgEl.classList.remove('fade-out');
+          }, 800);
+        }, cycleInterval);
+      }, initialDelay);
     }
 
     card.addEventListener('click', function() { openAlbum(album); });
