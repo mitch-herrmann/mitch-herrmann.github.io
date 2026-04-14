@@ -596,12 +596,12 @@ function initWave(introMode) {
   var cachedScrollY = 0;
 
   /* ---- intro state ---- */
-  // Single unified timeline: 0→1 covers build-up (0–0.5) + storm peak (0.4–0.65) + sag-off (0.6–1.0)
-  var INTRO_DUR   = 11.0; // total unified intro duration
-  var WAVE_START  = INTRO_DUR + 0.4; // when steady waves appear
-  var introActive = (introMode !== 'none');
-  var introT      = 0;    // 0→1 over INTRO_DUR
-  var clock       = 0;    // real elapsed seconds
+  var INTRO_DUR   = 11.0;
+  // Skip intro if returning from another page this session
+  var skipIntro   = (introMode === 'none') || !!sessionStorage.getItem('_txReturning');
+  var introActive = !skipIntro;
+  var introT      = skipIntro ? 1 : 0;
+  var clock       = skipIntro ? INTRO_DUR + 1 : 0;
 
   /* Per-wave organic droop seeds — different parts of each string fall at different speeds */
   var sagSpeeds = [];
@@ -622,39 +622,47 @@ function initWave(introMode) {
   /* Resting string state — computed once at end of intro */
   var restingStrings = null; // null until intro ends, then array of settled string descriptors
 
-  /* ---- steady-state wave clock ---- */
+  /* ---- wave clock ---- */
   var t = 0;
 
-  /* ---- ghost amplitude drift ---- */
-  var ghostDriftT = 0; // slow independent clock for ghost amp variation
-  var mainDriftT  = 0; // offset drift clock for main wave — runs at different speed
-  var freqDriftT  = 0; // independent clock for frequency drift on both waves
-
-  /* ---- store non-keeper wave state so xfade can continue fading them out ---- */
-  var nonKeeperAlphas = []; // per-wave alpha at moment intro ended, for xfade fadeout
-
-  /* ---- continuous flow clock (replaces discrete jitter + wiggle) ---- */
-  var flowT = 0;
-
-  /* ---- per-wave life parameters (breathing / pulse / shimmer / drift) ---- */
-  // Two waves: 0 = amber ghost, 1 = main ice/blue
-  // All rates are incommensurable so the two waves never fully sync
-  var waveLife = [
-    { // amber ghost
-      breathRate:  0.11,  breathDepth: 0.18, breathOff: 0.7,
-      pulseRate:   0.53,  pulseDepth:  0.22, pulseOff:  1.4,
-      shimmerRate: 0.07,  shimmerAmt:  0.14, shimmerOff: 0.3,
-      driftRate:   0.003,
-      glowBase:    6,     glowPulse:   10
-    },
-    { // main ice/blue
-      breathRate:  0.083, breathDepth: 0.15, breathOff: 2.1,
-      pulseRate:   0.71,  pulseDepth:  0.28, pulseOff:  0.6,
-      shimmerRate: 0.052, shimmerAmt:  0.11, shimmerOff: 1.8,
-      driftRate:   0.0022,
-      glowBase:    10,    glowPulse:   16
-    }
+  /* ---- per-string life descriptors for the permanent colorful strings ----
+     Each string has independent rates at incommensurable values so they
+     never lock into a repeating pattern. freqWander makes the frequency
+     slowly drift. burstRate/burstDepth add occasional amplitude surges.
+     speedJitter varies playback speed slightly per string.               */
+  var PALETTE = [
+    [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
+    [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
   ];
+  // Use Math.random seeded values — different every page load for true randomness
+  var stringLife = PALETTE.map(function(col, i) {
+    var phi = i * 1.6180339887;  // golden ratio offset — incommensurable phases
+    return {
+      col:          col,
+      baseFreq:     0.012 + (i * 0.0031 + Math.random() * 0.006),
+      freqWander:   0.0018 + Math.random() * 0.0022,   // how much freq drifts
+      freqWRate:    0.07  + Math.random() * 0.09,       // how fast freq wanders
+      freqWPhase:   Math.random() * Math.PI * 2,
+      phase:        phi * Math.PI * 2 % (Math.PI * 2),
+      speedMul:     0.82 + Math.random() * 0.38,        // each string runs at own speed
+      ampBase:      0.68 + Math.random() * 0.22,        // base amplitude fraction
+      breathRate:   0.055 + Math.random() * 0.085,      // slow amplitude breathing
+      breathDepth:  0.10  + Math.random() * 0.18,
+      breathOff:    Math.random() * Math.PI * 2,
+      burstRate:    0.19  + Math.random() * 0.28,       // occasional amplitude surge
+      burstDepth:   0.18  + Math.random() * 0.30,
+      burstOff:     Math.random() * Math.PI * 2,
+      shimmerRate:  0.04  + Math.random() * 0.09,
+      shimmerAmt:   0.07  + Math.random() * 0.12,
+      shimmerOff:   Math.random() * Math.PI * 2,
+      glowBase:     7  + Math.random() * 9,
+      glowPulse:    10 + Math.random() * 12,
+      alpha:        0.55 + Math.random() * 0.25,
+      lineW:        1.0  + Math.random() * 0.6
+    };
+  });
+  /* string-local time accumulators — each string advances at its own speed */
+  var stringT = PALETTE.map(function() { return Math.random() * 20; }); // random start offsets
 
   function syncBuffer() {
     var w = window.innerWidth;
@@ -698,10 +706,23 @@ function initWave(introMode) {
 
   var lastTimestamp = null;
   var smoothDt = 0.016;
-  var amberFadeAlpha = 0; // carries ghost sub-wave alpha from intro into xfade
-  var nameGlitchFired = false; // triggers hero name glitch at 60% through intro
-  var eyebrowFired    = false; // triggers eyebrow fadeup at 72%
-  var bottomFired     = false; // triggers tagline/meta fadeup at 86%
+  var amberFadeAlpha = 0;
+  var nameGlitchFired = false;
+  var eyebrowFired    = false;
+  var bottomFired     = false;
+
+  /* If skipping intro, fire UI elements immediately */
+  if (skipIntro) {
+    nameGlitchFired = true; eyebrowFired = true; bottomFired = true;
+    var _nameEl = document.getElementById('heroName');
+    if (_nameEl) { _nameEl.style.opacity = '1'; _nameEl.style.transition = 'none'; }
+    var _eyeEl = document.getElementById('heroEyebrow');
+    if (_eyeEl) { _eyeEl.style.opacity = '1'; }
+    var _botEl = document.querySelector('.hero-bottom');
+    if (_botEl) { _botEl.style.opacity = '1'; }
+    restingStrings = buildRestingStrings();
+    injectSpaghettiSVG();
+  }
 
   function draw(timestamp) {
     if (!syncBuffer()) { requestAnimationFrame(draw); return; }
@@ -724,49 +745,23 @@ function initWave(introMode) {
       introT = Math.min(1, clock / INTRO_DUR);
       if (introT >= 1) {
         introActive = false;
-        // Build resting strings once when intro ends
         if (!restingStrings) {
           restingStrings = buildRestingStrings();
           injectSpaghettiSVG();
         }
       }
     }
-    var inSteady = !introActive && clock >= WAVE_START;
-    ghostDriftT += dt * 0.06;
-    mainDriftT  += dt * 0.04;
-    freqDriftT  += dt * 0.025;
 
-    if (inSteady) { flowT += dt; }
-    var speedMul = 1.0
-      + 0.18 * Math.sin(flowT * 0.31)
-      + 0.12 * Math.sin(flowT * 0.17 + 1.1)
-      + 0.07 * Math.sin(flowT * 0.53 + 2.4);
+    /* advance per-string time at each string's own speed */
+    for (var _i = 0; _i < stringT.length; _i++) {
+      stringT[_i] += dt * stringLife[_i].speedMul * (introActive ? 1.4 : 1.0);
+    }
+    t += dt * (introActive ? 1.4 : 1.0);
 
-    t += dt * (introActive ? 1.4 : (inSteady ? speedMul : 1.0));
-
-    // Amplitude modulation: two waves at different rates for main and ghost
-    // Result wanders continuously — no plateau, no abrupt jump
-    var mainAmpMod = 0.78
-      + 0.12 * Math.sin(mainDriftT * 1.0)
-      + 0.08 * Math.sin(mainDriftT * 1.618 + 0.9)   // golden ratio ≈ incommensurable
-      + 0.04 * Math.sin(mainDriftT * 2.718 + 2.1);   // e ≈ incommensurable
-
-    var ghostAmpMod = 0.72
-      + 0.14 * Math.sin(ghostDriftT * 1.0)
-      + 0.09 * Math.sin(ghostDriftT * 1.414 + 1.7)   // √2
-      + 0.05 * Math.sin(ghostDriftT * 2.236 + 0.4);  // √5
-
-    // Continuous spatial ripple — replaces the discrete wiggle pulse
-    // Amplitude of the ripple itself wanders so it never feels like a pattern
-    var rippleAmp = 0.08
-      + 0.06 * Math.sin(flowT * 0.23 + 0.7)
-      + 0.04 * Math.sin(flowT * 0.41 + 2.0);
-    var rippleFreq = 0.028 + 0.008 * Math.sin(flowT * 0.19 + 1.2);
-
-    /* steady-state geometry — positioned higher, larger amp */
-    var maxAmp = h * 0.30;              // was 0.22 — bigger waves
+    /* geometry — cy and amp driven by scroll so strings migrate to bottom on scroll */
+    var maxAmp = h * 0.30;
     var amp    = maxAmp * (1 - sp);
-    var cy     = h * 0.35 * (1 - sp);  // was 0.45 — sits higher on screen
+    var cy     = h * 0.35 * (1 - sp);
     var mx     = mouseXNorm * w;
 
     /* ================================================================
@@ -906,14 +901,12 @@ function initWave(introMode) {
             var waveVal  = Math.sin(x * initFreq - tLocal + phase);
 
             // ── ORGANIC SAG ────────────────────────────────────────────────
-            // Each string segment droops independently based on its trough cycle index
-            // This creates the "noodle falling" look rather than a wipe
             var cycleIdx   = Math.floor((x * initFreq + phase + Math.PI) / (Math.PI * 2));
             var segIdx     = Math.abs(cycleIdx) % speeds.length;
             var speedSeed  = speeds[segIdx];
             var segAmpSeed = segAmps[segIdx];
 
-            // Local droop progress for this segment — faster seeds are further along
+            // Local droop progress for this segment — faster seeds further along
             var localSagT = Math.min(1, sagEased * (0.6 + speedSeed * 0.85));
             var localEased;
             if (localSagT < 0.4) {
@@ -925,16 +918,31 @@ function initWave(introMode) {
             }
 
             // Trough positions pull down faster than peaks (gravity-like)
-            var troughPull = Math.max(0, -waveVal); // 0 at peaks, 1 at troughs
-            var peakFloat  = Math.max(0, waveVal);  // 0 at troughs, 1 at peaks
-            // Troughs sag deep, peaks lag behind and drift a bit
-            var segDroop = localEased * localEased * h * 2.4 * segAmpSeed * (0.55 + troughPull * 1.1);
-            // Peaks resist: they stay up slightly longer before being dragged down
-            var peakLag  = peakFloat * (1 - localEased) * amp * 0.3 * wAmpMod;
-            // Overall string center of gravity falls too
-            var baseDrift = sagEased * sagEased * h * 1.15;
+            var troughPull = Math.max(0, -waveVal);
+            var peakFloat  = Math.max(0, waveVal);
+            var segDroop   = localEased * localEased * h * 2.4 * segAmpSeed * (0.55 + troughPull * 1.1);
+            var peakLag    = peakFloat * (1 - localEased) * amp * 0.3 * wAmpMod;
+            var baseDrift  = sagEased * sagEased * h * 1.15;
 
-            var y = cy + waveVal * amp * wAmpMod + baseDrift + segDroop - peakLag;
+            // ── LATERAL WANDER — low-freq noise pushes segments off the straight path
+            // Two incommensurable sine waves per string create a non-repeating kink pattern
+            var lateralNoise =
+              Math.sin(x * 0.007 + wi * 1.9 + sagEased * 4.1) * sagEased * h * 0.055 * speedSeed
+            + Math.sin(x * 0.019 + wi * 0.7 + sagEased * 2.3) * sagEased * h * 0.028 * segAmpSeed;
+            // Lateral wander only grows as sagEased increases — none at start, peaks mid-fall
+            var wanderWeight = Math.sin(sagEased * Math.PI) * 0.9; // arc: 0→peak→0
+
+            // ── BELLY: mid-span sections can bulge outward as tension releases
+            var midBulge = Math.exp(-Math.pow((x / w - 0.5) * 3.2, 2))
+              * sagEased * (1 - sagEased) * h * 0.12 * speedSeed;
+
+            var y = cy
+              + waveVal * amp * wAmpMod
+              + baseDrift
+              + segDroop
+              - peakLag
+              + lateralNoise * wanderWeight
+              + midBulge;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
 
@@ -971,164 +979,108 @@ function initWave(introMode) {
     } // end if (introActive)
 
     /* ================================================================
-       RESTING STRINGS — pile at bottom after intro, persist into steady state
+       RESTING STRINGS — no-op, handled by spill canvas
        ================================================================ */
     if (!introActive && restingStrings) {
-      var restFade = Math.min(1, (clock - INTRO_DUR) / 1.2);
-      if (restFade > 0.01) {
-        drawRestingStrings(ctx, w, h, restFade, clock);
-      }
+      drawRestingStrings(ctx, w, h, 1, clock);
     }
 
     /* ================================================================
-       STEADY STATE — blue + amber waves with warm-up ignition + per-wave life
+       PERMANENT COLORFUL STRINGS
+       Always visible after intro. Scroll collapses them to bottom.
+       Each string has independent wandering frequency, amplitude surges,
+       and speed jitter so the motion never feels pre-recorded.
        ================================================================ */
     if (!introActive) {
-      // ── Warm-up timeline (relative to when steady state began) ──────────
-      // Phase 0  0.0 – 0.6s  : sparse stuttery sparks — wave barely visible, random bright flashes
-      // Phase 1  0.4 – 1.8s  : shape resolves — wave form emerges, still flickering hard
-      // Phase 2  1.4 – 3.0s  : overdriven — wave is too bright, oversaturated, then eases down
-      // Phase 3  2.6s+       : settled into normal breathing life
-      var wt = Math.max(0, clock - WAVE_START); // seconds since waves started
+      // ── FLICKER-IN: multi-stage ignition per string ──────────────────────
+      // wt = seconds since permanent strings began
+      var wt = Math.max(0, clock - INTRO_DUR);
+      // Each string gets its own ignition window, staggered across 1.4s
+      // so they spark up one by one rather than all at once
 
-      // Spark phase: scattered high-frequency brightness spikes, amplitude near zero
-      var sparkAmt  = Math.max(0, 1 - wt / 0.7);
-      var sparkNoise = sparkAmt * sparkAmt * (
-        0.7  * Math.max(0, Math.sin(clock * 41.3 + 0.3))
-      + 0.5  * Math.max(0, Math.sin(clock * 67.7 + 1.8))
-      + 0.35 * Math.max(0, Math.sin(clock * 103.1 + 0.9))
-      + 0.25 * Math.max(0, Math.sin(clock * 29.3  + 2.1))
-      );
+      if (wt > 0.01) {
+        for (var wi = 0; wi < stringLife.length; wi++) {
+          var sl   = stringLife[wi];
+          var col  = sl.col;
+          var st   = stringT[wi];
 
-      // Shape resolve: amplitude ramps from 0 → full
-      var resolveT  = Math.min(1, Math.max(0, (wt - 0.3) / 1.4));
-      var xBlend    = easeOutCubic(resolveT);
+          // Per-string ignition offset: spread evenly + small random jitter
+          var igniteOffset = (wi / (stringLife.length - 1)) * 1.1 + sl.breathOff * 0.08;
+          var localWt = Math.max(0, wt - igniteOffset);
 
-      // Overdrive: brief brightness surge as shape locks in, then decays
-      var overdriveT   = Math.min(1, Math.max(0, (wt - 1.2) / 0.6));  // 0→1 ramp in
-      var overdriveOut = Math.max(0, 1 - Math.max(0, (wt - 1.6) / 1.0)); // fades out over 1s
-      var overdrive    = easeOutCubic(overdriveT) * overdriveOut * 1.4;
+          // Phase 0 (0–0.18s after ignite): sparse stuttery flashes, barely there
+          var sparkDecay = Math.max(0, 1 - localWt / 0.22);
+          var spark = sparkDecay * sparkDecay * (
+            0.6 * Math.max(0, Math.sin(clock * (38.1 + wi * 4.7) + wi * 1.3))
+          + 0.4 * Math.max(0, Math.sin(clock * (61.3 + wi * 3.1) + wi * 2.1))
+          );
 
-      // Flicker: fast irregular noise that decays as overdrive fades
-      var flickerDecay = Math.max(0, 1 - wt / 2.8);
-      var flickerPulse = flickerDecay * flickerDecay * (
-        0.5  * Math.max(0, Math.sin(clock * 23.1 + 0.3))
-      + 0.35 * Math.max(0, Math.sin(clock * 37.7 + 1.8))
-      + 0.25 * Math.max(0, Math.sin(clock * 61.3 + 0.9))
-      );
+          // Phase 1 (0.08–0.55s): shape resolves — base alpha ramps in
+          var resolveT = Math.min(1, Math.max(0, (localWt - 0.08) / 0.45));
+          var resolveAlpha = 1 - Math.pow(1 - resolveT, 3); // easeOutCubic
 
-      // Combined entry brightness modifier — all phases layered together
-      var entryMod = xBlend + sparkNoise * 0.9 + overdrive + flickerPulse * 0.6;
+          // Phase 2 (0.35–0.65s): brief overdrive spike as string locks in
+          var overdriveT   = Math.min(1, Math.max(0, (localWt - 0.35) / 0.18));
+          var overdriveOut = Math.max(0, 1 - Math.max(0, (localWt - 0.48) / 0.22));
+          var overdrive    = (1 - Math.pow(1 - overdriveT, 3)) * overdriveOut * 0.9;
 
-      if (amp > 0.5) {
+          // Combined entry brightness
+          var stringFadeIn = Math.min(1, resolveAlpha + spark * 0.7 + overdrive * 0.5);
+          if (stringFadeIn < 0.004) continue;
 
-        // ── AMBER GHOST ────────────────────────────────────────────────────
-        var wl0 = waveLife[0];
-        var breath0 = 1 + wl0.breathDepth * Math.sin(clock * wl0.breathRate * Math.PI * 2 + wl0.breathOff);
-        var rawP0   = Math.sin(clock * wl0.pulseRate * Math.PI * 2 + wl0.pulseOff);
-        var pulse0  = wl0.pulseDepth * Math.max(0, rawP0) * Math.max(0, rawP0);
-        var drift0  = clock * wl0.driftRate;
-        var alpha0  = Math.min(0.95, 0.22 * (1 - sp) * entryMod * (breath0 + pulse0));
+          // ── Wandering frequency ──
+          var freq = sl.baseFreq + sl.freqWander * Math.sin(clock * sl.freqWRate + sl.freqWPhase);
 
-        var ghostFreq = 0.007 + 0.003 * Math.sin(freqDriftT * 0.8);
+          // ── Amplitude: breathing + burst surge ──
+          var breath = 1 + sl.breathDepth * Math.sin(clock * sl.breathRate * Math.PI * 2 + sl.breathOff);
+          var rawBurst = Math.sin(clock * sl.burstRate * Math.PI * 2 + sl.burstOff);
+          var burst = sl.burstDepth * Math.max(0, rawBurst) * Math.max(0, rawBurst);
+          var ampMod = sl.ampBase * (breath + burst);
 
-        // Glow pass
-        ctx.beginPath();
-        for (var x = 0; x <= w; x += 3) {
-          var sh0 = 1 + wl0.shimmerAmt * Math.sin(x * 0.0035 + clock * wl0.shimmerRate * Math.PI * 2 + wl0.shimmerOff);
-          var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.32;
-          var y   = cy
-            + Math.sin(x * ghostFreq + t * 0.5 + 1.8 + drift0) * amp * ghostAmpMod * 0.55 * breath0 * sh0
-            + lb + rippleAmp * amp * 0.4 * Math.sin(x * rippleFreq + t * 0.5 + 1.8);
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = 'rgba(184,118,26,' + (alpha0 * 0.5) + ')';
-        ctx.lineWidth   = 1.8 + pulse0 * 2.5;
-        ctx.shadowColor = 'rgba(184,118,26,' + Math.min(0.9, alpha0 * (1.2 + pulse0 + overdrive * 0.5)) + ')';
-        ctx.shadowBlur  = wl0.glowBase + pulse0 * wl0.glowPulse + overdrive * 8;
-        ctx.stroke();
-        ctx.shadowBlur  = 0;
-        // Core
-        ctx.strokeStyle = 'rgba(184,118,26,' + alpha0 + ')';
-        ctx.lineWidth   = 1.1;
-        ctx.stroke();
+          var wAlpha = sl.alpha * stringFadeIn * Math.min(1, (breath + burst * 0.5));
+          var glowAmt = sl.glowBase + burst * sl.glowPulse + overdrive * 8 + spark * 6;
 
-        // ── MAIN ICE/BLUE ──────────────────────────────────────────────────
-        var wl1 = waveLife[1];
-        var breath1 = 1 + wl1.breathDepth * Math.sin(clock * wl1.breathRate * Math.PI * 2 + wl1.breathOff);
-        var rawP1   = Math.sin(clock * wl1.pulseRate * Math.PI * 2 + wl1.pulseOff);
-        var pulse1  = wl1.pulseDepth * Math.max(0, rawP1) * Math.max(0, rawP1);
-        var drift1  = clock * wl1.driftRate;
+          if (wAlpha < 0.005) continue;
 
-        var mainFreq = 0.009 + 0.004 * Math.sin(freqDriftT * 1.3 + 1.1);
-        var wR = Math.round(96  + (30  - 96)  * sp);
-        var wG = Math.round(200 + (37  - 200) * sp);
-        var wB = Math.round(255 + (48  - 255) * sp);
-        var baseAlpha1 = (0.88 - sp * 0.3) * xBlend;
-        var wA = Math.min(0.99, baseAlpha1 * (breath1 + pulse1 + sparkNoise * 0.4 + overdrive * 0.7 + flickerPulse * 0.5));
-
-        // Glow pass
-        ctx.beginPath();
-        for (var x = 0; x <= w; x += 3) {
-          var sh1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
-          var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.48;
-          var y   = cy
-            + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * sh1
-            + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = 'rgba('+wR+','+wG+','+wB+','+(wA * 0.4)+')';
-        ctx.lineWidth   = 3.5 + pulse1 * 3.5 + overdrive * 2.5;
-        ctx.shadowColor = 'rgba(96,200,255,' + Math.min(0.98, (0.55 + pulse1 * 0.5 + overdrive * 0.6 + flickerPulse * 0.4) * (1-sp) * (xBlend + sparkNoise * 0.3)) + ')';
-        ctx.shadowBlur  = (wl1.glowBase + pulse1 * wl1.glowPulse + overdrive * 22 + flickerPulse * 14) * (1 - sp);
-        ctx.stroke();
-        ctx.shadowBlur  = 0;
-
-        // Core pass
-        ctx.beginPath();
-        for (var x = 0; x <= w; x += 2) {
-          var sh1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
-          var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.48;
-          var y   = cy
-            + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * sh1
-            + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = 'rgba('+wR+','+wG+','+wB+','+wA+')';
-        ctx.lineWidth   = 1.8;
-        ctx.stroke();
-
-        // Hot-core — flares on pulse and during overdrive
-        var hotAlpha = (pulse1 * 0.65 + overdrive * 0.5) * (1 - sp) * xBlend;
-        if (hotAlpha > 0.02) {
+          // Glow pass
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
-            var sh1 = 1 + wl1.shimmerAmt * Math.sin(x * 0.0028 + clock * wl1.shimmerRate * Math.PI * 2 + wl1.shimmerOff);
-            var lb  = Math.exp(-Math.pow((x - mx) / (w * 0.3), 2)) * amp * 0.48;
-            var y   = cy
-              + Math.sin(x * mainFreq - t + 0.4 + drift1) * amp * mainAmpMod * breath1 * sh1
-              + lb + rippleAmp * amp * 0.6 * Math.sin(x * rippleFreq - t * 6 + 0.4);
+            var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
+            var y = cy + Math.sin(x * freq - st + sl.phase) * amp * ampMod * shimmer;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = 'rgba(210,245,255,' + Math.min(0.9, hotAlpha) + ')';
-          ctx.lineWidth   = 0.6;
+          ctx.strokeStyle = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(wAlpha * 0.45)+')';
+          ctx.lineWidth   = sl.lineW + 2.0 + burst * 1.5;
+          ctx.shadowColor = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(wAlpha * 0.65)+')';
+          ctx.shadowBlur  = glowAmt;
           ctx.stroke();
-        }
-      }
+          ctx.shadowBlur  = 0;
 
-      // Flat line collapse → nav border handoff
-      if (sp > 0.6) {
-        var la = Math.min(1, (sp - 0.6) / 0.4);
-        ctx.beginPath();
-        ctx.moveTo(0, cy); ctx.lineTo(w, cy);
-        var gR = Math.round(30  + (96  - 30)  * la);
-        var gG = Math.round(37  + (200 - 37)  * la);
-        var gB = Math.round(48  + (255 - 48)  * la);
-        ctx.strokeStyle = 'rgba('+gR+','+gG+','+gB+','+la+')';
-        ctx.lineWidth   = 1 + la;
-        if (la > 0.3) { ctx.shadowColor = 'rgba(96,200,255,'+la*0.6+')'; ctx.shadowBlur = 8*la; }
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+          // Core pass
+          ctx.beginPath();
+          for (var x = 0; x <= w; x += 2) {
+            var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
+            var y = cy + Math.sin(x * freq - st + sl.phase) * amp * ampMod * shimmer;
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = 'rgba('+col[0]+','+col[1]+','+col[2]+','+wAlpha+')';
+          ctx.lineWidth   = sl.lineW;
+          ctx.stroke();
+
+          // Hot core on burst peaks
+          if (burst > 0.08) {
+            ctx.beginPath();
+            for (var x = 0; x <= w; x += 4) {
+              var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
+              var y = cy + Math.sin(x * freq - st + sl.phase) * amp * ampMod * shimmer;
+              x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            }
+            var hc = [Math.min(255,col[0]+80),Math.min(255,col[1]+80),Math.min(255,col[2]+80)];
+            ctx.strokeStyle = 'rgba('+hc[0]+','+hc[1]+','+hc[2]+','+(burst * 0.6 * stringFadeIn)+')';
+            ctx.lineWidth   = 0.4;
+            ctx.stroke();
+          }
+        }
       }
     }
 
