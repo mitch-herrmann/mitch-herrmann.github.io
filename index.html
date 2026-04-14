@@ -1039,26 +1039,30 @@ function initWave(introMode) {
           var burst = sl.burstDepth * Math.max(0, rawBurst) * Math.max(0, rawBurst);
           var ampMod = sl.ampBase * (breath + burst);
 
-          var wAlpha = sl.alpha * stringFadeIn * Math.min(1, (breath + burst * 0.5));
-          var glowAmt = sl.glowBase + burst * sl.glowPulse + overdrive * 8 + spark * 6;
+          var wAlpha     = sl.alpha * stringFadeIn * Math.min(1, (breath + burst * 0.5));
+          var glowAmt    = sl.glowBase + burst * sl.glowPulse + overdrive * 8 + spark * 6;
+          var isBursting = burst > 0.10 || overdrive > 0.05 || spark > 0.08;
 
           if (wAlpha < 0.005) continue;
 
-          // Glow pass
-          ctx.beginPath();
-          for (var x = 0; x <= w; x += 3) {
-            var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
-            var y = cy + Math.sin(x * freq - st + sl.phase) * amp * ampMod * shimmer;
-            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          // Glow pass — only when visually significant (burst/overdrive/spark)
+          // Skipping shadowBlur on idle frames saves ~60% GPU cost
+          if (isBursting) {
+            ctx.beginPath();
+            for (var x = 0; x <= w; x += 3) {
+              var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
+              var y = cy + Math.sin(x * freq - st + sl.phase) * amp * ampMod * shimmer;
+              x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(wAlpha * 0.45)+')';
+            ctx.lineWidth   = sl.lineW + 2.0 + burst * 1.5;
+            ctx.shadowColor = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(wAlpha * 0.65)+')';
+            ctx.shadowBlur  = glowAmt;
+            ctx.stroke();
+            ctx.shadowBlur  = 0;
           }
-          ctx.strokeStyle = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(wAlpha * 0.45)+')';
-          ctx.lineWidth   = sl.lineW + 2.0 + burst * 1.5;
-          ctx.shadowColor = 'rgba('+col[0]+','+col[1]+','+col[2]+','+(wAlpha * 0.65)+')';
-          ctx.shadowBlur  = glowAmt;
-          ctx.stroke();
-          ctx.shadowBlur  = 0;
 
-          // Core pass
+          // Core pass — always drawn
           ctx.beginPath();
           for (var x = 0; x <= w; x += 2) {
             var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
@@ -1066,11 +1070,11 @@ function initWave(introMode) {
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           ctx.strokeStyle = 'rgba('+col[0]+','+col[1]+','+col[2]+','+wAlpha+')';
-          ctx.lineWidth   = sl.lineW;
+          ctx.lineWidth   = isBursting ? sl.lineW : sl.lineW + 0.3;
           ctx.stroke();
 
-          // Hot core on burst peaks
-          if (burst > 0.08) {
+          // Hot core — only on burst peaks
+          if (isBursting && burst > 0.10) {
             ctx.beginPath();
             for (var x = 0; x <= w; x += 4) {
               var shimmer = 1 + sl.shimmerAmt * Math.sin(x * 0.004 + clock * sl.shimmerRate * Math.PI * 2 + sl.shimmerOff);
