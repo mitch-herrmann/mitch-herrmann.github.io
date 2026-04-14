@@ -803,6 +803,7 @@ function initWave(introMode) {
 
   function draw(timestamp) {
     if (!syncBuffer()) { requestAnimationFrame(draw); return; }
+    if (document.hidden) { requestAnimationFrame(draw); return; }
     var dt = lastTimestamp ? Math.min((timestamp - lastTimestamp) / 1000, 0.05) : 0.016;
     lastTimestamp = timestamp;
     // Smooth dt with a light EMA to reduce micro-jerk from frame timing variance

@@ -208,24 +208,24 @@ nav {
   letter-spacing: .06em; white-space: nowrap; padding-bottom: 6px;
 }
 
-/* ── PHOTO GRID — CSS Grid for true left-to-right ordering ── */
+/* ── PHOTO GRID — CSS columns for natural image heights (masonry) ── */
 .grid-wrap { padding: 32px 48px 160px; }
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  columns: 3;
+  column-gap: 12px;
 }
-@media (max-width: 1100px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px)  { .photo-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .photo-grid { columns: 2; } }
+@media (max-width: 600px)  { .photo-grid { columns: 1; } }
 
 .photo-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
   cursor: pointer; position: relative;
   overflow: hidden; background: #000;
   z-index: 3;
 }
 .photo-item img {
-  display: block; width: 100%; height: 100%;
-  object-fit: cover;
+  display: block; width: 100%; height: auto;
   transition: transform .5s cubic-bezier(.25,.46,.45,.94);
 }
 .photo-item:hover img { transform: scale(1.03); }
@@ -254,12 +254,13 @@ nav {
   background: #fff; overflow: hidden;
 }
 .lightbox-img-wrap {
-  flex: 1; min-height: 0; overflow: hidden;
+  flex: 1; min-height: 0;
   display: flex; align-items: center; justify-content: center;
-  background: #000; position: relative;
+  background: #000; position: relative; overflow: auto;
 }
 .lightbox-img-wrap img {
-  max-width: 100%; max-height: 100%;
+  max-width: 100%; max-height: 85vh;
+  width: auto; height: auto;
   object-fit: contain; display: block;
 }
 /* Two-stage load: thumb shown immediately, full swaps in */
@@ -494,14 +495,9 @@ function buildPhotoGrid(photos) {
     var item = document.createElement('div');
     item.className = 'photo-item';
 
-    /* Vary height slightly based on aspect ratio so grid has rhythm */
-    var h = Math.round(300 * (p.aspect || 0.75));
-    h = Math.max(220, Math.min(520, h));
-    item.style.height = h + 'px';
-
     if (p.src) {
       item.innerHTML =
-        '<img src="' + p.src + '" alt="' + (p.location || '') + '" loading="lazy">' +
+        '<img src="' + p.src + '" alt="' + (p.location || '') + '">' +
         '<div class="photo-overlay">' +
           '<div class="photo-meta-date">' + (p.date || '') + '</div>' +
           '<div class="photo-meta-loc">'  + (p.location || '') + '</div>' +
@@ -655,6 +651,7 @@ function injectNeonSpill() {
   [500,1000,2000,4000].forEach(function(ms) { setTimeout(repositionSpill, ms); });
   var cx = cv.getContext('2d'), spillClock = 0, spillLast = null, fadeIn = 0;
   function spillDraw(ts) {
+    if (document.hidden) { requestAnimationFrame(spillDraw); return; }
     var dt = spillLast ? Math.min((ts-spillLast)/1000,0.05) : 0.016;
     spillLast = ts; spillClock += dt; fadeIn = Math.min(1, spillClock/2.0);
     cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,pageW,spillH);
