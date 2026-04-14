@@ -2,7 +2,7 @@
   "site": {
     "title": "Mitchell Herrmann",
     "intro_animation": "storm",
-    "transition_style": "prism"
+    "transition_style": "slingshot"
   },
   "nav": {
     "email": "mitchell@example.com"
