@@ -8,13 +8,13 @@
     "email": "mitchell@example.com"
   },
   "hero": {
-    "eyebrow": "Portfolio \u2014 2026",
+    "eyebrow": "Portfolio — 2026",
     "name_line1": "Mitchell",
     "name_line2": "Herrmann",
     "monogram": "MH",
     "tagline": "A short, honest line about what you build and why it matters. Let the work do the talking.",
     "location": "Denver, CO",
-    "focus": "Engineering \u00b7 Finance \u00b7 Design",
+    "focus": "Engineering · Finance · Design",
     "status": "Open to collaborations"
   },
   "projects": [
@@ -53,7 +53,7 @@
     }
   ],
   "about": {
-    "body": "Write a few sentences about yourself \u2014 your background, what you've built, and what problems genuinely interest you. Keep it direct and specific.\n\nMaybe mention what you're currently exploring or what draws you to the intersection of engineering and finance.",
+    "body": "Write a few sentences about yourself — your background, what you've built, and what problems genuinely interest you. Keep it direct and specific.\n\nMaybe mention what you're currently exploring or what draws you to the intersection of engineering and finance.",
     "stats": [
       {
         "label": "Current Focus",
@@ -77,7 +77,7 @@
     "UI / UX"
   ],
   "photography": [
-{
+    {
       "src": "photos/thumbs/IMG_1710.jpg",
       "full": "photos/full/IMG_1710.jpg",
       "date": "October 2025",
