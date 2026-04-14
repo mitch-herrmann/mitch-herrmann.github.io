@@ -576,21 +576,13 @@ fetch('content.json')
     var descEl = document.getElementById('photoDesc');
     if (descEl && d.photography_desc) descEl.textContent = d.photography_desc;
     buildPage(photos);
-    /* inject spill after images settle — window load fires after all imgs */
-    window.addEventListener('load', injectNeonSpill);
-    /* fallback: also inject after 2s in case load already fired */
-    setTimeout(function() {
-      if (!document.getElementById('neonSpill')) injectNeonSpill();
-    }, 2000);
+    injectNeonSpill();
   })
   .catch(function() {
     window._txStyle = 'slingshot';
     photos = PLACEHOLDER_PHOTOS;
     buildPage(photos);
-    window.addEventListener('load', injectNeonSpill);
-    setTimeout(function() {
-      if (!document.getElementById('neonSpill')) injectNeonSpill();
-    }, 2000);
+    injectNeonSpill();
   });
 
 /* =====================================================================
@@ -653,6 +645,22 @@ function injectNeonSpill() {
   document.body.appendChild(cv);
   requestAnimationFrame(function() {
     requestAnimationFrame(function() { cv.style.opacity = '1'; });
+  });
+
+  /* Reposition canvas whenever body height changes (lazy images, etc.) */
+  function repositionSpill() {
+    var newTop = document.body.scrollHeight - spillH;
+    if (cv.style.top !== newTop + 'px') {
+      cv.style.top = newTop + 'px';
+    }
+  }
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(repositionSpill);
+    ro.observe(document.body);
+  }
+  /* Belt-and-suspenders: also reposition at 500ms, 1s, 2s, 4s after inject */
+  [500, 1000, 2000, 4000].forEach(function(ms) {
+    setTimeout(repositionSpill, ms);
   });
 
   var cx = cv.getContext('2d');
