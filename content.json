@@ -77,95 +77,33 @@
     "UI / UX"
   ],
   "photography": [
-    {
-      "src": null,
-      "date": "March 2025",
-      "location": "Denver, CO"
+{
+      "src": "photos/thumbs/IMG_1710.jpg",
+      "full": "photos/full/IMG_1710.jpg",
+      "date": "October 2025",
+      "location": "Schoolhouse Beach, CA",
+      "aspect": 1.5
     },
     {
-      "src": null,
-      "date": "January 2025",
-      "location": "Rocky Mountains"
+      "src": "photos/thumbs/IMG_1718.jpg",
+      "full": "photos/full/IMG_1718.jpg",
+      "date": "October 2025",
+      "location": "Schoolhouse Beach, CA",
+      "aspect": 0.67
     },
     {
-      "src": null,
-      "date": "March 2025",
-      "location": "Denver, CO"
+      "src": "photos/thumbs/IMG_1730.jpg",
+      "full": "photos/full/IMG_1730.jpg",
+      "date": "October 2025",
+      "location": "Schoolhouse Beach, CA",
+      "aspect": 1.5
     },
     {
-      "src": null,
-      "date": "October 2024",
-      "location": "New York, NY"
-    },
-    {
-      "src": null,
-      "date": "October 2024",
-      "location": "New York, NY"
-    },
-    {
-      "src": null,
-      "date": "August 2024",
-      "location": "Pacific Coast"
-    },
-    {
-      "src": null,
-      "date": "August 2024",
-      "location": "Pacific Coast"
-    },
-    {
-      "src": null,
-      "date": "June 2024",
-      "location": "Chicago, IL"
-    },
-    {
-      "src": null,
-      "date": "June 2024",
-      "location": "Chicago, IL"
-    },
-    {
-      "src": null,
-      "date": "April 2024",
-      "location": "Denver, CO"
-    },
-    {
-      "src": null,
-      "date": "February 2024",
-      "location": "Rocky Mountains"
-    },
-    {
-      "src": null,
-      "date": "February 2024",
-      "location": "Rocky Mountains"
-    },
-    {
-      "src": null,
-      "date": "December 2023",
-      "location": "Denver, CO"
-    },
-    {
-      "src": null,
-      "date": "November 2023",
-      "location": "Santa Fe, NM"
-    },
-    {
-      "src": null,
-      "date": "November 2023",
-      "location": "Santa Fe, NM"
-    },
-    {
-      "src": null,
-      "date": "September 2023",
-      "location": "Denver, CO"
-    },
-    {
-      "src": null,
-      "date": "July 2023",
-      "location": "Rocky Mountains"
-    },
-    {
-      "src": null,
-      "date": "May 2023",
-      "location": "Denver, CO"
+      "src": "photos/thumbs/IMG_1764.jpg",
+      "full": "photos/full/IMG_1764.jpg",
+      "date": "October 2025",
+      "location": "Schoolhouse Beach, CA",
+      "aspect": 1.5
     }
   ],
   "footer": {
