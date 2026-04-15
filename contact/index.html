@@ -276,37 +276,37 @@ nav {
   /* Tighten the left cluster gap on small screens */
   .contact-link-left { gap: 18px; }
 
-  /* Number: slightly larger so it reads as intentional, not forgotten */
+  /* Number: size + lift color from --dim to --muted */
   .contact-link-num {
     font-size: 8px;
     letter-spacing: .16em;
     width: 18px;
+    color: var(--muted);
   }
 
-  /* Label: let clamp do its job — at 375px this renders ~41px,
-     which fills the row with presence without overflowing */
+  /* Label: no hover reveal on mobile, so the rest state IS the read state.
+     .75 keeps the design language of dim-until-active but stays clearly
+     readable — roughly the same perceived brightness as --muted text. */
   .contact-link-label {
-    /* On mobile: rest state is slightly more visible (opacity .22 vs .18)
-       since there's no hover to reveal — the label IS the content */
-    opacity: .22;
+    opacity: .75;
   }
 
-  /* Right side: hide the text label, keep only the arrow.
-     The arrow acts as a directional affordance — enough on mobile. */
+  /* Meta URL: lift color from --dim to --muted, slightly tighter tracking */
+  .contact-link-meta {
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: .06em;
+  }
+
+  /* Right side: hide the text label, keep only the arrow */
   .contact-link-right {
     gap: 0;
-    font-size: 0; /* hide the text */
+    font-size: 0;
     color: var(--dim);
   }
   .contact-link-right .contact-link-arrow {
-    font-size: 16px; /* restore arrow size */
+    font-size: 16px;
     color: var(--dim);
-  }
-
-  /* Meta URL: slightly smaller but still readable */
-  .contact-link-meta {
-    font-size: 9px;
-    letter-spacing: .06em;
   }
 }
 
