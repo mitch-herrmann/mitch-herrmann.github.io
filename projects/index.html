@@ -180,14 +180,14 @@ nav {
       <a href="/resume">Resume</a>
       <a href="/photography">Photography</a>
       <a href="/projects">Projects</a>
-      <a id="navContactDrop" href="#">Contact</a>
+      <a href="/contact">Contact</a>
     </div>
   </div>
   <div class="nav-links">
     <a href="/resume">Resume</a>
     <a href="/photography">Photography</a>
     <a href="/projects" class="active">Projects</a>
-    <a id="navContact" href="#">Contact</a>
+    <a href="/contact">Contact</a>
   </div>
   <div class="nav-status">
     <div class="nav-dot"></div>
@@ -211,13 +211,67 @@ fetch('../content.json')
   .then(function(d) {
     window._txStyle = d.site.transition_style || 'slingshot';
     document.title = 'Projects — ' + d.site.title;
-    var _nc = document.getElementById('navContact');
-    if (_nc) _nc.href = 'mailto:' + d.nav.email;
-    var _ncd = document.getElementById('navContactDrop');
-    if (_ncd) _ncd.href = 'mailto:' + d.nav.email;
+    /* contact links now point to /contact page */
     document.getElementById('navStatus').textContent = d.hero.status;
+    injectNeonSpill();
   })
-  .catch(function() { window._txStyle = 'slingshot'; });
+  .catch(function() { window._txStyle = 'slingshot'; injectNeonSpill(); });
+
+
+/* =====================================================================
+   NEON SPILL
+   ===================================================================== */
+function injectNeonSpill() {
+  var old = document.getElementById('neonSpill');
+  if (old) old.remove();
+  var palette = [[96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],[100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]];
+  var _seed = Date.now() % 99991;
+  function rand() { _seed = (_seed * 1664525 + 1013904223) & 0xffffffff; return ((_seed >>> 0) / 0xffffffff); }
+  var spillH = 90, pageW = Math.max(document.body.scrollWidth, window.innerWidth);
+  var spillTop = document.body.scrollHeight - spillH;
+  var NUM = 16, strings = [];
+  for (var i = 0; i < NUM; i++) {
+    var col = palette[i % palette.length];
+    strings.push({ col, baseY: spillH*(0.30+0.55*(i/(NUM-1)))+(rand()-0.5)*6, freq: 0.006+rand()*0.016, amp: 3.5+rand()*6.5, phase: rand()*Math.PI*2, breathRate: 0.08+rand()*0.18, breathDepth: 0.12+rand()*0.22, breathOff: rand()*Math.PI*2, pulseRate: 0.4+rand()*1.2, pulseDepth: 0.15+rand()*0.35, pulseOff: rand()*Math.PI*2, shimmerRate: 0.05+rand()*0.12, shimmerAmt: 0.08+rand()*0.18, shimmerOff: rand()*Math.PI*2, driftRate: 0.004+rand()*0.008, baseAlpha: 0.38+rand()*0.38, lineW: 0.8+rand()*1.2 });
+  }
+  window._spillStrings = strings;
+  window._spillH = spillH;
+  var cv = document.createElement('canvas');
+  cv.id  = 'neonSpill';
+  var dpr = window.devicePixelRatio || 1;
+  cv.width  = Math.round(pageW * dpr);
+  cv.height = Math.round(spillH * dpr);
+  cv.style.cssText = ['position:absolute','left:0','top:'+spillTop+'px','width:'+pageW+'px','height:'+spillH+'px','pointer-events:none','z-index:1','opacity:0','transition:opacity 2s ease'].join(';');
+  document.body.appendChild(cv);
+  requestAnimationFrame(function() { requestAnimationFrame(function() { cv.style.opacity = '1'; }); });
+  function repositionSpill() { var t = document.body.scrollHeight - spillH; if (cv.style.top !== t+'px') cv.style.top = t+'px'; }
+  if (window.ResizeObserver) { var ro = new ResizeObserver(repositionSpill); ro.observe(document.body); }
+  [500,1000,2000,4000].forEach(function(ms) { setTimeout(repositionSpill, ms); });
+  var cx = cv.getContext('2d'), spillClock = 0, spillLast = null, fadeIn = 0;
+  function spillDraw(ts) {
+    if (document.hidden) { requestAnimationFrame(spillDraw); return; }
+    var dt = spillLast ? Math.min((ts-spillLast)/1000,0.05) : 0.016;
+    spillLast = ts; spillClock += dt; fadeIn = Math.min(1, spillClock/2.0);
+    window._spillClock = spillClock;
+    cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,pageW,spillH);
+    for (var i = 0; i < NUM; i++) {
+      var s=strings[i],c=s.col;
+      var breath=1+s.breathDepth*Math.sin(spillClock*s.breathRate*Math.PI*2+s.breathOff);
+      var rawP=Math.sin(spillClock*s.pulseRate*Math.PI*2+s.pulseOff);
+      var pulse=s.pulseDepth*Math.max(0,rawP)*Math.max(0,rawP);
+      var alpha=Math.min(0.92,s.baseAlpha*(breath+pulse)*fadeIn);
+      var effAmp=s.amp*breath, drift=spillClock*s.driftRate;
+      cx.beginPath();
+      for (var x=0;x<=pageW;x+=3){var sh=1+s.shimmerAmt*Math.sin(x*0.004+spillClock*s.shimmerRate*Math.PI*2+s.shimmerOff);var y=s.baseY+Math.sin(x*s.freq+s.phase+drift)*effAmp*sh;x===0?cx.moveTo(x,y):cx.lineTo(x,y);}
+      cx.strokeStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha*0.55)+')';cx.lineWidth=s.lineW+1.5+pulse*3;cx.shadowColor='rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha*0.7)+')';cx.shadowBlur=10+pulse*14;cx.stroke();cx.shadowBlur=0;
+      cx.beginPath();
+      for (var x=0;x<=pageW;x+=2){var sh=1+s.shimmerAmt*Math.sin(x*0.004+spillClock*s.shimmerRate*Math.PI*2+s.shimmerOff);var y=s.baseY+Math.sin(x*s.freq+s.phase+drift)*effAmp*sh;x===0?cx.moveTo(x,y):cx.lineTo(x,y);}
+      cx.strokeStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';cx.lineWidth=s.lineW;cx.stroke();
+    }
+    requestAnimationFrame(spillDraw);
+  }
+  requestAnimationFrame(spillDraw);
+}
 
 /* Dropdown */
 (function() {
