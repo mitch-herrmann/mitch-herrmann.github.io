@@ -7,7 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Get in touch with Mitchell Herrmann — GitHub, LinkedIn, or email.">
 <title>Contact — Mitchell Herrmann</title>
+<!-- Perf: preconnect eliminates the DNS+TLS handshake from the critical path -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Perf: display=swap means text renders in fallback immediately; no invisible text while fonts load -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 
   <!-- Google tag (gtag.js) -->
@@ -48,6 +53,8 @@ body::after {
     repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(255,255,255,.008) 3px, rgba(255,255,255,.008) 4px),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 9999;
+  /* Perf: promote to own GPU layer so it doesn't repaint on scroll */
+  will-change: transform;
 }
 body::before {
   content: ''; position: fixed; inset: 0;
@@ -57,7 +64,7 @@ body::before {
   pointer-events: none; z-index: 0;
 }
 
-/* NAV */
+/* ─── NAV ─── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -127,11 +134,20 @@ nav {
   84%  { border-color:rgba(80,220,255,.42);  box-shadow:inset 0 1px 0 rgba(80,220,255,.12), 0 0 14px rgba(80,220,255,.14);  background:rgba(80,220,255,.10); }
   100% { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12), 0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
 }
+
+/* Mobile-only: current page label beside monogram */
+.nav-page-label {
+  display: none;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+  margin-left: 10px; vertical-align: middle;
+}
+
 .nav-status { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 9px; color: var(--dim); }
 .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: dotpulse 2.2s ease-in-out infinite; }
 @keyframes dotpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
 
-/* PAGE HEADER */
+/* ─── PAGE HEADER ─── */
 .page-header {
   padding: 120px 48px 56px;
   border-bottom: 1px solid var(--line);
@@ -152,7 +168,7 @@ nav {
   line-height: 1.85; max-width: 480px; margin-top: 20px; letter-spacing: .02em;
 }
 
-/* CONTACT LINKS */
+/* ─── CONTACT LINKS ─── */
 .contact-wrap {
   position: relative; z-index: 3;
   padding: 64px 48px 160px;
@@ -216,12 +232,88 @@ nav {
 .contact-link[data-link="linkedin"] { --link-glow: rgba(96,200,255,.35);  --link-accent: rgba(96,200,255,.95);  }
 .contact-link[data-link="email"]    { --link-glow: rgba(60,220,180,.35);  --link-accent: rgba(60,220,180,.95);  }
 
+/* ─── MOBILE ─── */
 @media (max-width: 768px) {
-  nav { padding: 0 24px; }
+
+  /* Nav: lose the pills entirely — dropdown covers navigation.
+     Show current page name as a dim label next to the monogram instead. */
+  nav {
+    padding: 0 20px;
+    /* Perf: reduce blur cost on mobile Safari */
+    backdrop-filter: blur(12px);
+  }
+  .nav-links { display: none; }
   .nav-status { display: none; }
-  .page-header { padding: 100px 24px 40px; }
-  .contact-wrap { padding: 40px 24px 120px; }
-  .contact-link-right { display: none; }
+  .nav-page-label { display: inline; }
+
+  /* Page header: let the title breathe without being cramped */
+  .page-header {
+    padding: 88px 20px 40px;
+  }
+  /* Title floor lower so it fills width intentionally at 375px
+     without overflowing — 40px reads confidently, not tiny */
+  .page-title {
+    font-size: clamp(40px, 11vw, 96px);
+  }
+
+  /* Contact wrap: tighter horizontal, more bottom room for spill */
+  .contact-wrap {
+    padding: 32px 20px 140px;
+  }
+
+  /* Contact links: full width, generous tap targets (min 64px touch area),
+     no max-width constraint — they should fill the screen edge to edge */
+  .contact-links { max-width: 100%; }
+  .contact-link {
+    padding: 24px 0;
+    /* Keep overflow hidden so the label reveal still clips cleanly */
+    overflow: hidden;
+    /* Remove the hover indent on touch — no hover state on mobile */
+    transition: none;
+  }
+  .contact-link:hover { padding-left: 0; }
+
+  /* Tighten the left cluster gap on small screens */
+  .contact-link-left { gap: 18px; }
+
+  /* Number: slightly larger so it reads as intentional, not forgotten */
+  .contact-link-num {
+    font-size: 8px;
+    letter-spacing: .16em;
+    width: 18px;
+  }
+
+  /* Label: let clamp do its job — at 375px this renders ~41px,
+     which fills the row with presence without overflowing */
+  .contact-link-label {
+    /* On mobile: rest state is slightly more visible (opacity .22 vs .18)
+       since there's no hover to reveal — the label IS the content */
+    opacity: .22;
+  }
+
+  /* Right side: hide the text label, keep only the arrow.
+     The arrow acts as a directional affordance — enough on mobile. */
+  .contact-link-right {
+    gap: 0;
+    font-size: 0; /* hide the text */
+    color: var(--dim);
+  }
+  .contact-link-right .contact-link-arrow {
+    font-size: 16px; /* restore arrow size */
+    color: var(--dim);
+  }
+
+  /* Meta URL: slightly smaller but still readable */
+  .contact-link-meta {
+    font-size: 9px;
+    letter-spacing: .06em;
+  }
+}
+
+/* Very small screens (320px) — just ensure nothing clips */
+@media (max-width: 360px) {
+  .contact-link-label { font-size: clamp(32px, 10vw, 96px); }
+  .contact-link-left { gap: 14px; }
 }
 </style>
 </head>
@@ -231,6 +323,8 @@ nav {
   <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
     MH
     <span class="nav-monogram-arrow">&#9660;</span>
+    <!-- Mobile only: shows current page so user has location context without pills -->
+    <span class="nav-page-label">Contact</span>
     <div class="nav-dropdown" id="navDropdown">
       <a href="/">Home</a>
       <a href="/resume">Resume</a>
