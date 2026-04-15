@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6DP7VZJ3MJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-6DP7VZJ3MJ');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loading…</title>
@@ -503,7 +494,7 @@ footer {
       <a href="/resume">Resume</a>
       <a href="/photography">Photography</a>
       <a href="/projects">Projects</a>
-      <a id="navContactDrop" href="#">Contact</a>
+      <a href="/contact">Contact</a>
     </div>
   </div>
   <!-- Right-side links — hidden at top, reveal on scroll -->
@@ -511,7 +502,7 @@ footer {
     <a href="/resume">Resume</a>
     <a href="/photography">Photography</a>
     <a href="/projects">Projects</a>
-    <a id="navContact" href="#">Contact</a>
+    <a href="/contact">Contact</a>
   </div>
   <div class="nav-status">
     <div class="nav-dot"></div>
@@ -568,7 +559,7 @@ footer {
     </div>
   </a>
 
-  <a href="/cdn-cgi/l/email-protection#c4bdabb184a1bca5a9b4a8a1eaa7aba9" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
+  <a href="/contact" class="section-panel" id="contactPanel" style="--panel-glow:rgba(60,220,180,.08);--panel-accent:rgba(60,220,180,.9);--panel-shimmer:rgba(60,220,180,.04)">
     <div class="section-panel-left">
       <div class="section-panel-num">04</div>
       <div class="section-panel-title">Contact</div>
@@ -623,15 +614,9 @@ function populatePage(d) {
   // <title> + nav
   document.title = d.site.title;
   // navName no longer exists — MH monogram is static
-  var _nc = document.getElementById('navContact');
-  if (_nc) _nc.href = 'mailto:' + d.nav.email;
-  var _ncd = document.getElementById('navContactDrop');
-  if (_ncd) _ncd.href = 'mailto:' + d.nav.email;
   document.getElementById('navStatus').textContent = d.hero.status;
 
   // Contact panel href
-  var cp = document.getElementById('contactPanel');
-  if (cp) cp.href = 'mailto:' + d.nav.email;
 
   // Hero
   document.getElementById('heroMonogram').textContent = d.hero.monogram;
@@ -1262,8 +1247,6 @@ function initWave(introMode) {
         baseAlpha, lineW
       });
     }
-    window._spillStrings = strings;
-    window._spillH = spillH;
 
     // ── Build canvas ─────────────────────────────────────────────────────────
     var cv  = document.createElement('canvas');
@@ -1300,7 +1283,6 @@ function initWave(introMode) {
       spillLast   = ts;
       spillClock += dt;
       fadeIn = Math.min(1, spillClock / 2.0);
-      window._spillClock = spillClock;
 
       cx.setTransform(dpr, 0, 0, dpr, 0, 0);
       cx.clearRect(0, 0, pageW, spillH);
