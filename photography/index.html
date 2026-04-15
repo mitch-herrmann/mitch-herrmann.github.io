@@ -12,7 +12,10 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mitchell Herrmann — photography. Fujifilm XT30-II, unedited SOOC film sim recipes.">
 <title>Photography — Mitchell Herrmann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -42,6 +45,7 @@ body::after {
     repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(255,255,255,.008) 3px, rgba(255,255,255,.008) 4px),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 2;
+  will-change: transform;
 }
 body::before {
   content: ''; position: fixed; inset: 0;
@@ -282,7 +286,6 @@ nav {
   max-height: calc(92vh - 60px);
   width: auto; height: auto;
 }
-.lightbox-bar { min-width: 400px; }
 .lightbox-bar {
   flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
   padding: 14px 20px; background: #fff; border-top: 1px solid #e8e8e8;
@@ -307,6 +310,55 @@ nav {
 }
 .lb-close:hover { background: #f4f4f4; color: #111; }
 .lb-close svg { width: 13px; height: 13px; }
+
+/* Mobile-only: current page label beside monogram */
+.nav-page-label {
+  display: none;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+  margin-left: 10px; vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 0 20px; backdrop-filter: blur(12px); }
+  .nav-links { display: none; }
+  .nav-status { display: none; }
+  .nav-page-label { display: inline; }
+
+  /* Page header */
+  .page-header { padding: 88px 20px 36px; }
+  .page-title { font-size: clamp(40px, 11vw, 96px); }
+  .page-sub { color: var(--muted); }
+  .page-desc { color: var(--muted); }
+
+  /* Album grid: drop 560px minimum — single column fills the screen */
+  .albums-wrap { padding: 24px 16px 120px; }
+  .albums-grid { grid-template-columns: 1fr; gap: 16px; }
+  .album-meta { color: var(--muted); }
+  .album-count { color: var(--muted); }
+
+  /* Album detail: stack header vertically */
+  .album-detail-header {
+    padding: 88px 20px 28px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .album-detail-title { font-size: clamp(32px, 10vw, 64px); }
+  .album-detail-meta { color: var(--muted); }
+  .album-detail-count { color: var(--muted); }
+
+  /* Photo grid padding */
+  .grid-wrap { padding: 20px 16px 120px; }
+
+  /* Lightbox: full viewport, hide counter to give image max room */
+  .lightbox-frame { max-width: 100vw; max-height: 100vh; width: 100vw; }
+  .lightbox-img-wrap img { max-width: 100vw; max-height: calc(100vh - 56px); }
+  .lightbox-bar { padding: 10px 14px; }
+  .lightbox-meta-loc { font-size: 12px; }
+  .lightbox-counter { display: none; }
+}
 </style>
 </head>
 <body>
@@ -315,19 +367,20 @@ nav {
   <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
     MH
     <span class="nav-monogram-arrow">&#9660;</span>
+    <span class="nav-page-label">Photography</span>
     <div class="nav-dropdown" id="navDropdown">
       <a href="/">Home</a>
       <a href="/resume">Resume</a>
       <a href="/photography">Photography</a>
       <a href="/projects">Projects</a>
-      <a id="navContactDrop" href="#">Contact</a>
+      <a href="/contact">Contact</a>
     </div>
   </div>
   <div class="nav-links">
     <a href="/resume">Resume</a>
     <a href="/photography" class="active">Photography</a>
     <a href="/projects">Projects</a>
-    <a href="#" id="navContact">Contact</a>
+    <a href="/contact">Contact</a>
   </div>
   <div class="nav-status">
     <div class="nav-dot"></div>
@@ -547,7 +600,7 @@ function buildPhotoGrid(photos) {
       var padPct = ((p.aspect || 0.75) * 100).toFixed(1) + '%';
       item.innerHTML =
         '<div class="photo-item-inner" style="--aspect-pad:' + padPct + '">' +
-          '<img src="' + p.src + '" alt="' + (p.location || '') + '">' +
+          '<img src="' + p.src + '" alt="' + (p.location || '') + '" loading="lazy">' +
         '</div>' +
         '<div class="photo-overlay">' +
           '<div class="photo-meta-date">' + (p.date || '') + '</div>' +
@@ -629,10 +682,6 @@ document.addEventListener('keydown', function(e) {
 fetch('../content.json')
   .then(function(r) { return r.json(); })
   .then(function(d) {
-    var _nc = document.getElementById('navContact');
-    if (_nc) _nc.href = 'mailto:' + d.nav.email;
-    var _ncd = document.getElementById('navContactDrop');
-    if (_ncd) _ncd.href = 'mailto:' + d.nav.email;
     document.getElementById('navStatus').textContent = d.hero.status;
     document.title = 'Photography — ' + d.site.title;
     window._txStyle = d.site.transition_style || 'slingshot';
