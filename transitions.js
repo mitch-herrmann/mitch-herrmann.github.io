@@ -44,46 +44,65 @@
     cv.remove();
   }
 
-  /* ── Snapshot the live neon spill strings at the moment of click ──
-     We read the neonSpill canvas pixel data and reproduce the string
-     descriptors so the transition feels like a direct continuation.
-     Falls back to generic descriptors if the spill canvas isn't present. */
-  function getLiveStringDescriptors(H) {
-    /* 10 strings packed into the ~90px spill band at the bottom */
-    var offsets = [4, 11, 17, 24, 29, 36, 42, 52, 62, 74];
-    var extras  = [6,  4,  8,  3,  7,  5, 10,  4,  6,  8];
-    return PAL.map(function(col, i) {
-      return {
-        col:      col,
-        baseY:    H - offsets[i],
-        windupPx: extras[i],
-        freq:     0.016 + i * 0.003,
-        phase:    i * 0.9,
-        amp:      3.5 + i * 0.45,
-        alpha:    0.55,
-        lineW:    1.1
-      };
+  /* ── Read live spill descriptors exposed by the page's neonSpill ──
+     baseY values in the spill are relative to the 90px spill canvas.
+     We remap them to viewport coordinates for the transition canvas.   */
+  function getLiveStrings(H) {
+    var raw    = window._spillStrings;
+    var spillH = window._spillH || 90;
+    if (!raw || !raw.length) return null;
+    return raw.map(function(s) {
+      return Object.assign({}, s, { baseY: H - spillH + s.baseY });
     });
   }
 
-  /* ── Draw a set of string descriptors at a given clock time ── */
-  function drawStrings(ctx, strings, W, clock, overrideAlpha) {
+  /* ── Draw strings with the exact same full render pass as the spill ──
+     clock    : current spillClock value
+     alphaMul : overall opacity multiplier (for fade in/out)
+     yShift   : extra vertical offset (for windup spread)
+     xFn      : function(x, u, t) → extra horizontal offset per-pixel (for slingshot)  */
+  function drawLiveStrings(ctx, strings, W, clock, alphaMul, yShift, xFn) {
+    yShift = yShift || 0;
     for (var i = 0; i < strings.length; i++) {
       var s = strings[i];
       var c = s.col;
-      var a = (overrideAlpha !== undefined) ? overrideAlpha : s.alpha;
-      if (a < 0.005) continue;
+      var breath   = 1 + s.breathDepth * Math.sin(clock * s.breathRate * Math.PI * 2 + s.breathOff);
+      var rawP     = Math.sin(clock * s.pulseRate * Math.PI * 2 + s.pulseOff);
+      var pulse    = s.pulseDepth * Math.max(0, rawP) * Math.max(0, rawP);
+      var alpha    = Math.min(0.92, s.baseAlpha * (breath + pulse)) * alphaMul;
+      if (alpha < 0.005) continue;
+      var effAmp   = s.amp * breath;
+      var drift    = clock * s.driftRate;
+      var baseY    = s.baseY + yShift;
+
+      /* Glow pass */
       ctx.beginPath();
-      for (var x = 0; x <= W; x += 2) {
-        var y = s.baseY + Math.sin(x * s.freq + s.phase + clock * 0.3) * s.amp;
-        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      for (var x = 0; x <= W; x += 3) {
+        var u   = x / W;
+        var sh  = 1 + s.shimmerAmt * Math.sin(x * 0.004 + clock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+        var y   = baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * sh;
+        var px  = xFn ? x + xFn(x, u, alpha) : x;
+        x === 0 ? ctx.moveTo(px, y) : ctx.lineTo(px, y);
       }
-      ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';
-      ctx.lineWidth   = s.lineW;
-      ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(a * 0.6)+')';
-      ctx.shadowBlur  = 6;
+      ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.55)+')';
+      ctx.lineWidth   = s.lineW + 1.5 + pulse * 3;
+      ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha * 0.7)+')';
+      ctx.shadowBlur  = 10 + pulse * 14;
       ctx.stroke();
       ctx.shadowBlur  = 0;
+
+      /* Core pass */
+      ctx.beginPath();
+      for (var x = 0; x <= W; x += 2) {
+        var u   = x / W;
+        var sh  = 1 + s.shimmerAmt * Math.sin(x * 0.004 + clock * s.shimmerRate * Math.PI * 2 + s.shimmerOff);
+        var y   = baseY + Math.sin(x * s.freq + s.phase + drift) * effAmp * sh;
+        var px  = xFn ? x + xFn(x, u, alpha) : x;
+        x === 0 ? ctx.moveTo(px, y) : ctx.lineTo(px, y);
+      }
+      ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';
+      ctx.lineWidth   = s.lineW;
+      ctx.stroke();
     }
   }
 
@@ -124,14 +143,15 @@
   var SLING_CONTENT_IN = 600;
 
   function slingshotExit(href, cv, ctx, W, H, dpr) {
-    var clock = 0, last = null, start = null;
-    var strings = getLiveStringDescriptors(H);
+    var clock = window._spillClock || 0;
+    var last = null, start = null;
+    var strings = getLiveStrings(H);
 
     /* Hide the real spill canvas — transition takes over string rendering */
     var spill = document.getElementById('neonSpill');
     if (spill) { spill.style.transition = 'opacity 0.5s ease'; spill.style.opacity = '0'; }
 
-    /* Fade the page content (everything except the transition canvas) */
+    /* Dark overlay that rises over page content */
     var pageOverlay = document.createElement('div');
     pageOverlay.style.cssText = [
       'position:fixed','inset:0','z-index:99997',
@@ -147,86 +167,56 @@
 
     function step(ts) {
       if (!start) start = ts;
-      if (last) clock += (ts - last) / 1000;
+      var dt = last ? Math.min((ts - last) / 1000, 0.05) : 0.016;
+      clock += dt;
       last = ts;
       var t = clamp((ts - start) / SLING_EXIT, 0, 1);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      /* ── Phase 1 (0 → 0.30): strings fade in at rest position ── */
-      if (t <= 0.30) {
-        var fadeT  = clamp(t / 0.20, 0, 1);  /* fully opaque by t=0.20 */
-        var fadeIn = eo3(fadeT);
-        drawStrings(ctx, strings, W, clock, fadeIn * 0.65);
+      /* ── Phase 1 (0 → 0.28): strings fade in at rest, seamless with spill ── */
+      if (t <= 0.28) {
+        var fadeIn = eo3(clamp(t / 0.18, 0, 1));
+        if (strings) drawLiveStrings(ctx, strings, W, clock, fadeIn, 0, null);
 
-      /* ── Phase 2 (0.30 → 0.68): windup ── */
-      } else if (t <= 0.68) {
-        var wt        = clamp((t - 0.30) / 0.38, 0, 1);
+      /* ── Phase 2 (0.28 → 0.66): windup — bow left, tension builds ── */
+      } else if (t <= 0.66) {
+        var wt        = clamp((t - 0.28) / 0.38, 0, 1);
         var windEased = eios(wt) * 0.55;
-        var energy    = windEased;
 
-        for (var i = 0; i < strings.length; i++) {
-          var s = strings[i];
-          var c = s.col;
-          var baseY = s.baseY - s.windupPx * windEased;
-
-          ctx.beginPath();
-          for (var x = 0; x <= W; x += 2) {
-            var u           = x / W;
-            var bow         = Math.sin(u * Math.PI);
-            var compression = windEased * W * 0.09 * bow;
-            var tensionAmp  = 1 + windEased * 1.1;
-            var wave        = Math.sin(x * s.freq + s.phase + clock * 0.28) * s.amp;
-            var px = x - compression;
-            var py = baseY + wave * tensionAmp;
-            x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-          }
-          var alpha = 0.55 + energy * 0.35;
-          ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';
-          ctx.lineWidth   = 1.0 + energy * 0.6;
-          if (energy > 0.1) {
-            ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(energy * 0.5)+')';
-            ctx.shadowBlur  = energy * 12;
-          }
-          ctx.stroke();
-          ctx.shadowBlur = 0;
+        if (strings) {
+          drawLiveStrings(ctx, strings, W, clock, 1.0 + windEased * 0.4,
+            /* yShift: strings spread upward slightly as they tense */
+            -windEased * 12,
+            /* xFn: leftward bow peaks at centre */
+            function(x, u) {
+              var bow = Math.sin(u * Math.PI);
+              return -windEased * W * 0.09 * bow;
+            }
+          );
         }
 
-      /* ── Phase 3 (0.68 → 1.00): release — snap right with trails ── */
+      /* ── Phase 3 (0.66 → 1.00): release — snap right with trails ── */
       } else {
-        var rt           = clamp((t - 0.68) / 0.32, 0, 1);
+        var rt           = clamp((t - 0.66) / 0.34, 0, 1);
         var releaseEased = eo5(rt);
         var TRAILS       = 4;
 
-        for (var i = 0; i < strings.length; i++) {
-          var s     = strings[i];
-          var c     = s.col;
-          var baseY = s.baseY - s.windupPx * 0.55 * (1 - rt * 0.4);
-
+        if (strings) {
           for (var tr = TRAILS - 1; tr >= 0; tr--) {
-            var lag        = tr * 0.055;
-            var trailT     = clamp(releaseEased - lag, 0, 1);
-            var trailAlpha = (1 - rt * 0.7) * (1 - tr * 0.22);
-            if (trailAlpha < 0.01) continue;
+            var lag      = tr * 0.055;
+            var trailT   = clamp(releaseEased - lag, 0, 1);
+            var trailMul = (1 - rt * 0.7) * (1 - tr * 0.22);
+            if (trailMul < 0.01) continue;
 
-            ctx.beginPath();
-            for (var x = 0; x <= W; x += 2) {
-              var u     = x / W;
-              var pull  = Math.pow(u, 0.65);
-              var shift = trailT * W * 1.3 * pull;
-              var surge = Math.sin(rt * Math.PI) * 0.9;
-              var wave  = Math.sin(x * s.freq + s.phase + clock * 0.35) * s.amp;
-              var px    = x + shift;
-              var py    = baseY + wave * (1 + surge) - pull * rt * 16;
-              x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-            }
-            ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+trailAlpha+')';
-            ctx.lineWidth   = 1.1 - tr * 0.2;
-            ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(trailAlpha * 0.5)+')';
-            ctx.shadowBlur  = 8 - tr * 1.5;
-            ctx.stroke();
-            ctx.shadowBlur  = 0;
+            drawLiveStrings(ctx, strings, W, clock, trailMul,
+              -12 * (1 - rt * 0.6), /* yShift: settle back as they fly */
+              function(x, u) {
+                var pull  = Math.pow(u, 0.65);
+                return trailT * W * 1.3 * pull;
+              }
+            );
           }
         }
       }
@@ -257,65 +247,52 @@
   function slingshotEntry(cv, ctx, W, H, dpr) {
     var clock = 0, last = null, start = null;
     var contentStarted = false;
-    var strings = getLiveStringDescriptors(H);
+    var strings = getLiveStrings(H);
 
-    document.body.style.opacity   = '0';
+    document.body.style.opacity    = '0';
     document.body.style.transition = 'none';
 
-    /* Start fully dark */
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = '#0d0f14';
     ctx.fillRect(0, 0, W, H);
 
     function step(ts) {
       if (!start) start = ts;
-      if (last) clock += (ts - last) / 1000;
+      var dt = last ? Math.min((ts - last) / 1000, 0.05) : 0.016;
+      clock += dt;
       last = ts;
       var t = clamp((ts - start) / SLING_ENTRY, 0, 1);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      /* Dark bg — lifts gently as content fades in */
+      /* Dark bg lifts as content fades in */
       var bgAlpha = Math.max(0, 1 - eo3(clamp((t - 0.30) / 0.70, 0, 1)));
       if (bgAlpha > 0.005) {
         ctx.fillStyle = 'rgba(13,15,20,' + bgAlpha.toFixed(3) + ')';
         ctx.fillRect(0, 0, W, H);
       }
 
-      /* Strings arrive from right (0 → 0.55), each with a small stagger */
-      if (t <= 0.55) {
-        for (var i = 0; i < strings.length; i++) {
-          var s      = strings[i];
-          var c      = s.col;
-          var localT = clamp((t - i * 0.018) / (0.55 - i * 0.018 * 0.5), 0, 1);
-          var spring = eo5(localT);
-          /* slight overshoot then settle */
-          var overshoot = Math.sin(localT * Math.PI * 1.6) * 0.035 * (1 - localT);
-          var shift     = (1 - spring - overshoot) * W * 0.50;
-          var entryA    = eo3(localT) * 0.65;
-          if (entryA < 0.005) continue;
-
-          ctx.beginPath();
-          for (var x = 0; x <= W; x += 2) {
-            var py = s.baseY + Math.sin(x * s.freq + s.phase + clock * 0.3) * s.amp;
-            var px = x + shift;
-            x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-          }
-          ctx.strokeStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+entryA+')';
-          ctx.lineWidth   = s.lineW;
-          ctx.shadowColor = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(entryA * 0.5)+')';
-          ctx.shadowBlur  = 6;
-          ctx.stroke();
-          ctx.shadowBlur  = 0;
+      /* Strings arrive from right (0 → 0.55) then rest and fade (0.55 → 1.0) */
+      if (strings) {
+        if (t <= 0.55) {
+          drawLiveStrings(ctx, strings, W, clock,
+            eo3(clamp(t / 0.18, 0, 1)), /* fade in */
+            0,
+            function(x, u) {
+              /* each string staggered slightly, springs in from right */
+              var spring    = eo5(clamp(t / 0.55, 0, 1));
+              var overshoot = Math.sin(clamp(t / 0.55, 0, 1) * Math.PI * 1.6) * 0.035 * (1 - clamp(t / 0.55, 0, 1));
+              return (1 - spring - overshoot) * W * 0.50;
+            }
+          );
+        } else {
+          /* settled — fade out as canvas lifts */
+          var restAlpha = 1 - eo3(clamp((t - 0.55) / 0.45, 0, 1));
+          if (restAlpha > 0.005) drawLiveStrings(ctx, strings, W, clock, restAlpha, 0, null);
         }
-      } else {
-        /* After settle — strings rest in place, alpha fades as canvas lifts */
-        var restAlpha = (1 - eo3(clamp((t - 0.55) / 0.45, 0, 1))) * 0.65;
-        if (restAlpha > 0.005) drawStrings(ctx, strings, W, clock, restAlpha);
       }
 
-      /* Fade page content in starting at 35% */
       if (!contentStarted && t >= 0.35) {
         contentStarted = true;
         document.body.style.transition = 'opacity ' + SLING_CONTENT_IN + 'ms ease';

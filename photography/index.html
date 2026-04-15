@@ -443,20 +443,38 @@ function buildAlbumLanding(albumList) {
       var front = imgs[1], back = imgs[0];
       var cycleInterval = 3200 + Math.random() * 2000;
       var initialDelay  = Math.random() * cycleInterval;
+      var cycling = false;
+
       setTimeout(function() {
         (function cycle() {
+          if (cycling) return;
+          cycling = true;
           coverIdx = (coverIdx + 1) % coverSrcs.length;
-          /* Load next image into the hidden back layer */
+
+          /* Ensure back is fully hidden before we load into it */
+          back.classList.add('behind');
           back.src = coverSrcs[coverIdx];
-          back.onload = function() {
-            /* Fade front out, revealing back */
+
+          function doSwap() {
+            /* back is loaded — reveal it by fading front out */
             front.classList.add('behind');
-            /* After transition completes, swap roles for next cycle */
+            back.classList.remove('behind');
+            /* After CSS transition finishes, tidy up and schedule next */
             setTimeout(function() {
               var tmp = front; front = back; back = tmp;
+              cycling = false;
               setTimeout(cycle, cycleInterval);
-            }, 1300);
-          };
+            }, 1400);
+          }
+
+          /* decode() resolves even for cached images;
+             fall back to onload for older browsers */
+          if (back.decode) {
+            back.decode().then(doSwap).catch(doSwap);
+          } else {
+            if (back.complete) { doSwap(); }
+            else { back.onload = doSwap; back.onerror = doSwap; }
+          }
         })();
       }, initialDelay);
     }
@@ -654,6 +672,8 @@ function injectNeonSpill() {
     var col = palette[i % palette.length];
     strings.push({ col, baseY: spillH*(0.30+0.55*(i/(NUM-1)))+(rand()-0.5)*6, freq: 0.006+rand()*0.016, amp: 3.5+rand()*6.5, phase: rand()*Math.PI*2, breathRate: 0.08+rand()*0.18, breathDepth: 0.12+rand()*0.22, breathOff: rand()*Math.PI*2, pulseRate: 0.4+rand()*1.2, pulseDepth: 0.15+rand()*0.35, pulseOff: rand()*Math.PI*2, shimmerRate: 0.05+rand()*0.12, shimmerAmt: 0.08+rand()*0.18, shimmerOff: rand()*Math.PI*2, driftRate: 0.004+rand()*0.008, baseAlpha: 0.38+rand()*0.38, lineW: 0.8+rand()*1.2 });
   }
+  window._spillStrings = strings;
+  window._spillH = spillH;
   var cv = document.createElement('canvas');
   cv.id  = 'neonSpill';
   var dpr = window.devicePixelRatio || 1;
@@ -670,6 +690,7 @@ function injectNeonSpill() {
     if (document.hidden) { requestAnimationFrame(spillDraw); return; }
     var dt = spillLast ? Math.min((ts-spillLast)/1000,0.05) : 0.016;
     spillLast = ts; spillClock += dt; fadeIn = Math.min(1, spillClock/2.0);
+    window._spillClock = spillClock;
     cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,pageW,spillH);
     for (var i = 0; i < NUM; i++) {
       var s=strings[i],c=s.col;

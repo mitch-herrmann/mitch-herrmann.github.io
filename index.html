@@ -1253,6 +1253,8 @@ function initWave(introMode) {
         baseAlpha, lineW
       });
     }
+    window._spillStrings = strings;
+    window._spillH = spillH;
 
     // ── Build canvas ─────────────────────────────────────────────────────────
     var cv  = document.createElement('canvas');
@@ -1289,6 +1291,7 @@ function initWave(introMode) {
       spillLast   = ts;
       spillClock += dt;
       fadeIn = Math.min(1, spillClock / 2.0);
+      window._spillClock = spillClock;
 
       cx.setTransform(dpr, 0, 0, dpr, 0, 0);
       cx.clearRect(0, 0, pageW, spillH);
