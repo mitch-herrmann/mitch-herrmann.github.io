@@ -2624,6 +2624,154 @@
           "aspect": 1.5
         }
       ]
+    },
+    {
+      "id": "stockholm",
+      "title": "Stockholm",
+      "date": "February 2025",
+      "location": "Stockholm",
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF6522.jpg",
+          "full": "photos/full/DSCF6522.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6539.jpg",
+          "full": "photos/full/DSCF6539.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6560.jpg",
+          "full": "photos/full/DSCF6560.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6568.jpg",
+          "full": "photos/full/DSCF6568.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6587.jpg",
+          "full": "photos/full/DSCF6587.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6592.jpg",
+          "full": "photos/full/DSCF6592.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6595.jpg",
+          "full": "photos/full/DSCF6595.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6596.jpg",
+          "full": "photos/full/DSCF6596.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF6597.jpg",
+          "full": "photos/full/DSCF6597.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6608.jpg",
+          "full": "photos/full/DSCF6608.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6612.jpg",
+          "full": "photos/full/DSCF6612.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6616.jpg",
+          "full": "photos/full/DSCF6616.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6622.jpg",
+          "full": "photos/full/DSCF6622.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6633.jpg",
+          "full": "photos/full/DSCF6633.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6638.jpg",
+          "full": "photos/full/DSCF6638.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6649.jpg",
+          "full": "photos/full/DSCF6649.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6652.jpg",
+          "full": "photos/full/DSCF6652.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6656.jpg",
+          "full": "photos/full/DSCF6656.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6662.jpg",
+          "full": "photos/full/DSCF6662.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6666.jpg",
+          "full": "photos/full/DSCF6666.jpg",
+          "date": "February 2025",
+          "location": "Stockholm",
+          "aspect": 1.5
+        }
+      ]
     }
   ],
   "footer": {
