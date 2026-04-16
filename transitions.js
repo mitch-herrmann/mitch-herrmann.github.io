@@ -147,6 +147,23 @@
     var last = null, start = null;
     var strings = getLiveStrings(H);
 
+    /* Fallback: if the spill hasn't been injected yet (e.g. mid-intro on home),
+       synthesise a minimal set of strings at the bottom of the viewport */
+    if (!strings) {
+      var spillH = 90;
+      strings = PAL.map(function(col, i) {
+        return {
+          col: col,
+          baseY: H - spillH + spillH * (0.2 + 0.6 * (i / (PAL.length - 1))),
+          freq: 0.008 + i * 0.002, amp: 3 + i * 0.4, phase: i * 0.63,
+          breathRate: 0.1, breathDepth: 0.1, breathOff: i,
+          pulseRate: 0.5, pulseDepth: 0.1, pulseOff: i * 0.5,
+          shimmerAmt: 0.08, shimmerRate: 0.07, shimmerOff: i,
+          driftRate: 0.004, baseAlpha: 0.55, lineW: 0.9
+        };
+      });
+    }
+
     /* Hide the real spill canvas — transition takes over string rendering */
     var spill = document.getElementById('neonSpill');
     if (spill) { spill.style.transition = 'opacity 0.5s ease'; spill.style.opacity = '0'; }
@@ -511,7 +528,15 @@
   function boot() {
     if (sessionStorage.getItem('_tx')) {
       sessionStorage.removeItem('_tx');
-      requestAnimationFrame(function() { requestAnimationFrame(runEntry); });
+      /* Skip entry animation on home — the light hero background
+         would clash with the dark slingshot canvas */
+      var isHome = (window.location.pathname === '/' ||
+                    window.location.pathname === '/index.html' ||
+                    window.location.pathname.split('/').pop() === '' ||
+                    window.location.pathname.split('/').pop() === 'index.html');
+      if (!isHome) {
+        requestAnimationFrame(function() { requestAnimationFrame(runEntry); });
+      }
     }
     document.addEventListener('click', function(e) {
       var el = e.target;
