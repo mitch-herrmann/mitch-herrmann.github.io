@@ -149,6 +149,14 @@ nav {
   padding: 120px 48px 56px;
   border-bottom: 1px solid var(--line);
   position: relative; z-index: 3;
+  transition: opacity .25s ease, max-height .35s ease;
+  overflow: hidden;
+}
+.page-header.hidden {
+  opacity: 0; max-height: 0;
+  padding-top: 0; padding-bottom: 0;
+  border-bottom-color: transparent;
+  pointer-events: none;
 }
 .page-eyebrow {
   font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
@@ -214,14 +222,33 @@ nav {
   display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
 }
 .album-back {
-  display: flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--mono); font-size: 9px; letter-spacing: .16em;
   text-transform: uppercase; color: var(--dim);
-  cursor: pointer; transition: color .2s; padding-bottom: 2px;
+  cursor: pointer; transition: color .2s;
+  padding: 10px 16px 10px 10px;
+  margin-left: -10px;
   background: none; border: none;
+  border-radius: 6px;
 }
-.album-back:hover { color: var(--muted); }
+.album-back:hover { color: var(--muted); background: rgba(255,255,255,.04); }
 .album-back svg { width: 12px; height: 12px; }
+
+/* Sticky floating back link */
+.sticky-back {
+  position: fixed; top: 72px; left: 24px; z-index: 100;
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--dim);
+  cursor: pointer; background: rgba(13,15,20,.88);
+  backdrop-filter: blur(12px); border: 1px solid var(--line);
+  border-radius: 99px; padding: 8px 16px 8px 12px;
+  transition: opacity .25s ease, color .2s, background .2s;
+  opacity: 0; pointer-events: none;
+}
+.sticky-back.visible { opacity: 1; pointer-events: all; }
+.sticky-back:hover { color: var(--muted); background: rgba(30,37,48,.95); }
+.sticky-back svg { width: 11px; height: 11px; }
 .album-detail-title {
   font-family: var(--display); font-size: clamp(32px, 5vw, 64px);
   font-weight: 800; letter-spacing: -.03em; color: var(--text); line-height: .95;
@@ -407,6 +434,14 @@ nav {
   </div>
 </nav>
 
+<!-- STICKY BACK LINK (appears when scrolled down in album view) -->
+<button class="sticky-back" id="stickyBack" aria-label="Back to all albums">
+  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9,2 4,7 9,12"/>
+  </svg>
+  All albums
+</button>
+
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-eyebrow">Photography</div>
@@ -570,6 +605,7 @@ function buildAlbumLanding(albumList) {
    ===================================================================== */
 function openAlbum(album) {
   currentAlbum = album;
+  document.querySelector('.page-header').classList.add('hidden');
   document.getElementById('albumLanding').style.display = 'none';
   document.getElementById('albumDetail').style.display  = 'block';
   document.getElementById('albumDetailTitle').textContent = album.title;
@@ -584,12 +620,29 @@ function openAlbum(album) {
 function closeAlbum() {
   document.getElementById('albumDetail').style.display  = 'none';
   document.getElementById('albumLanding').style.display = 'block';
+  document.querySelector('.page-header').classList.remove('hidden');
+  document.getElementById('stickyBack').classList.remove('visible');
   currentAlbum = null;
   history.pushState({}, '', '/photography');
   window.scrollTo(0, 0);
 }
 
 document.getElementById('albumBack').addEventListener('click', closeAlbum);
+document.getElementById('stickyBack').addEventListener('click', closeAlbum);
+
+/* Show sticky back link once user scrolls past the album header */
+window.addEventListener('scroll', function() {
+  if (!currentAlbum) return;
+  var header = document.querySelector('.album-detail-header');
+  if (!header) return;
+  var threshold = header.offsetTop + header.offsetHeight;
+  var stickyBack = document.getElementById('stickyBack');
+  if (window.scrollY > threshold) {
+    stickyBack.classList.add('visible');
+  } else {
+    stickyBack.classList.remove('visible');
+  }
+});
 
 window.addEventListener('popstate', function(e) {
   var hash = window.location.hash.slice(1);
@@ -718,6 +771,18 @@ fetch('../content.json')
     });
 
     albums = d.photography || [];
+
+    /* ── Build virtual Favorites album from photos tagged favorite:true ── */
+    var favPhotos = [];
+    albums.forEach(function(album) {
+      (album.photos || []).forEach(function(p) {
+        if (p.favorite) favPhotos.push(p);
+      });
+    });
+    if (favPhotos.length > 0) {
+      albums = [{ id: 'favorites', title: 'Favorites', date: '', location: '', photos: favPhotos }].concat(albums);
+    }
+
     buildAlbumLanding(albums);
     injectNeonSpill();
 
