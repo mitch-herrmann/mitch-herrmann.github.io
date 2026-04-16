@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9974c1afc0454d66b612c1fe42ca6c6d"}'></script><!-- End Cloudflare Web Analytics -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Mitchell Herrmann — engineering, finance, and design. Based in Denver, CO.">
+<meta property="og:title" content="Mitchell Herrmann">
+<meta property="og:description" content="Learning and building in an accelerating world.">
+<meta property="og:image" content="https://mitchell-herrmann.github.io/og-preview.jpg">
+<meta property="og:url" content="https://mitchell-herrmann.github.io/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mitchell Herrmann">
+<meta name="twitter:description" content="Learning and building in an accelerating world.">
+<meta name="twitter:image" content="https://mitchell-herrmann.github.io/og-preview.jpg">
 <title>Loading…</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='6' fill='%230d0f14'/%3E%3Cpolyline points='3,30 3,6 12,6 18,16 24,6 33,6 33,30' stroke='%2360c8ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cline x1='3' y1='30' x2='8' y2='30' stroke='%2360c8ff' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='28' y1='30' x2='33' y2='30' stroke='%2360c8ff' stroke-width='2' stroke-linecap='round'/%3E%3Cpolyline points='13,30 13,20 23,20 23,30' stroke='%2360c8ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9974c1afc0454d66b612c1fe42ca6c6d"}'></script><!-- End Cloudflare Web Analytics -->
 <style>
 :root {
   --bg:    #0d0f14;
@@ -93,44 +103,34 @@ nav.nav-light .nav-dot { background: rgba(26,42,58,.45); }
 .nav-dropdown {
   position: absolute; top: calc(100% + 8px); left: 0;
   background: rgba(13,15,20,.97); backdrop-filter: blur(24px);
-  border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 0; min-width: 200px;
-  opacity: 0; transform: translateY(-8px) scale(.97);
-  pointer-events: none;
-  transition: opacity .22s ease, transform .25s cubic-bezier(.16,1,.3,1);
-  z-index: 300;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 0; min-width: 260px;
+  opacity: 0; transform: translateY(-8px) scale(.97); pointer-events: none;
+  transition: opacity .22s ease, transform .25s cubic-bezier(.16,1,.3,1); z-index: 300;
 }
 .nav-monogram.open .nav-dropdown {
   opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
 }
 .nav-dropdown a {
-  display: flex; align-items: center; gap: 14px;
-  padding: 13px 24px;
-  font-family: var(--display); font-size: 11px; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted); text-decoration: none;
-  transition: color .2s, background .2s;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 28px;
+  font-family: var(--display); font-size: 17px; font-weight: 800;
+  letter-spacing: -.02em;
+  color: rgba(232,237,245,.22); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color .18s ease, border-left-color .18s ease, background .18s ease;
   position: relative;
 }
-.nav-dropdown a:hover { color: var(--text); background: rgba(255,255,255,.04); }
-.nav-dropdown a::before {
-  content: ''; display: block; width: 2.5px; height: 16px;
-  border-radius: 2px; flex-shrink: 0;
-  transition: box-shadow .2s;
-}
-.nav-dropdown a:nth-child(1)::before { background: #60c8ff; }
-.nav-dropdown a:nth-child(2)::before { background: #ff64a0; }
-.nav-dropdown a:nth-child(3)::before { background: #a064ff; }
-.nav-dropdown a:nth-child(4)::before { background: #3cdcb4; }
-.nav-dropdown a:nth-child(5)::before { background: #ffc83c; }
-.nav-dropdown a:hover:nth-child(1)::before { box-shadow: 0 0 10px rgba(96,200,255,.8); }
-.nav-dropdown a:hover:nth-child(2)::before { box-shadow: 0 0 10px rgba(255,100,160,.8); }
-.nav-dropdown a:hover:nth-child(3)::before { box-shadow: 0 0 10px rgba(160,100,255,.8); }
-.nav-dropdown a:hover:nth-child(4)::before { box-shadow: 0 0 10px rgba(60,220,180,.8); }
-.nav-dropdown a:hover:nth-child(5)::before { box-shadow: 0 0 10px rgba(255,200,60,.8); }
-.nav-dropdown a:nth-child(1) {
-  border-bottom: 1px solid rgba(96,200,255,.09);
-  margin-bottom: 4px; padding-bottom: 13px;
+.nav-dropdown a:hover { background: rgba(255,255,255,.03); }
+.nav-dropdown a:nth-child(1):hover { color: #60c8ff; border-left-color: #60c8ff; }
+.nav-dropdown a:nth-child(2):hover { color: #ff64a0; border-left-color: #ff64a0; }
+.nav-dropdown a:nth-child(3):hover { color: #a064ff; border-left-color: #a064ff; }
+.nav-dropdown a:nth-child(4):hover { color: #3cdcb4; border-left-color: #3cdcb4; }
+.nav-dropdown a:nth-child(5):hover { color: #ffc83c; border-left-color: #ffc83c; }
+.nav-dropdown a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.nav-dropdown-num {
+  font-family: var(--mono); font-size: 8px; color: var(--dim);
+  letter-spacing: .14em; font-weight: 400;
 }
 
 /* ── Right-side nav links — invisible at top, reveal on scroll ── */
@@ -417,22 +417,22 @@ nav.nav-light .nav-dot { background: rgba(26,42,58,.45); }
 
 .section-panel-left {
   padding: 64px 48px; display: flex; flex-direction: column;
-  justify-content: space-between; border-right: 1px solid var(--line);
+  justify-content: flex-start; border-right: 1px solid var(--line);
   position: relative; z-index: 1;
 }
 .section-panel-num {
   font-family: var(--mono); font-size: 9px; color: var(--dim);
-  letter-spacing: .12em; margin-bottom: auto;
+  letter-spacing: .12em;
   transition: color .3s ease;
 }
 .section-panel:hover .section-panel-num { color: var(--panel-accent, var(--ice)); }
 .section-panel-title {
-  font-family: var(--display); font-size: clamp(48px, 6vw, 88px);
-  font-weight: 800; letter-spacing: -.04em; line-height: .9;
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 6.5vw, 96px);
+  font-weight: 400; letter-spacing: .04em; line-height: .9;
   color: var(--text); opacity: .45;
   transition: opacity .4s ease, transform .45s cubic-bezier(.25,.46,.45,.94),
               color .4s ease, text-shadow .4s ease;
-  margin-top: 32px;
+  margin-top: 16px;
 }
 .section-panel:hover .section-panel-title {
   opacity: 1;
@@ -537,9 +537,9 @@ footer {
   }
   /* Title opacity: no hover on touch, so rest state must be readable */
   .section-panel-title {
-    font-size: clamp(32px, 8vw, 56px);
+    font-size: clamp(36px, 9vw, 64px);
     opacity: .75;
-    margin-top: 0;
+    margin-top: 8px;
   }
   .section-panel-num { margin-bottom: 0; }
   .section-panel-right {
@@ -562,14 +562,19 @@ footer {
 <nav id="mainNav">
   <!-- MH monogram dropdown trigger -->
   <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
-    MH
+    <svg width="46" height="30" viewBox="0 0 36 24" fill="none" aria-label="MH" style="display:inline-block;vertical-align:middle;margin-right:2px">
+      <polyline points="2,21 2,3 10,3 18,14 26,3 34,3 34,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="2" y1="21" x2="7" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="29" y1="21" x2="34" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <polyline points="13,21 13,14 23,14 23,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
     <span class="nav-monogram-arrow">&#9660;</span>
     <div class="nav-dropdown" id="navDropdown">
-      <a href="/">Home</a>
-      <a href="/resume">Resume</a>
-      <a href="/photography">Photography</a>
-      <a href="/projects">Projects</a>
-      <a href="/contact">Contact</a>
+      <a href="/">Home <span class="nav-dropdown-num">00</span></a>
+      <a href="/resume">Resume <span class="nav-dropdown-num">01</span></a>
+      <a href="/photography">Photography <span class="nav-dropdown-num">02</span></a>
+      <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
+      <a href="/contact">Contact <span class="nav-dropdown-num">04</span></a>
     </div>
   </div>
   <!-- Right-side links — hidden at top, reveal on scroll -->
@@ -672,7 +677,7 @@ fetch('content.json')
       site: { title: 'Your Name', intro_animation: 'storm' },
       nav:  { email: 'you@example.com' },
       hero: { eyebrow: 'Portfolio — 2026', name_line1: 'Your', name_line2: 'Name',
-              monogram: 'YN', tagline: 'Learning and building at an accelerating pace',
+              monogram: 'YN', tagline: 'Learning and building in an accelerating world.',
               location: 'Your City', focus: 'Engineering · Finance · Design', status: 'Open to collaborations' },
       projects: [
         { num:'01', title:'Project Name', tags:['Engineering','Python'], year:'2025', cat:'engineering', url:'#' },
@@ -866,7 +871,11 @@ function initWave(introMode) {
     /* Fade chevron out as soon as the user starts scrolling */
     var scrollHint = document.querySelector('.scroll-hint');
     if (scrollHint) {
-      scrollHint.style.opacity = sp > 0.08 ? '0' : '1';
+      var hidden = sp > 0;
+      scrollHint.style.opacity = hidden ? '0' : '';
+      scrollHint.style.pointerEvents = hidden ? 'none' : '';
+      var chevSvg = scrollHint.querySelector('svg');
+      if (chevSvg) chevSvg.style.animationPlayState = hidden ? 'paused' : 'running';
     }
     var bgOpacity = sp < 1 ? Math.max(0, 1 - smoothstep(Math.min(1, sp / 0.6))) : 0;
     document.body.style.setProperty('--hero-bg-opacity', bgOpacity.toFixed(3));
