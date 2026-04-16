@@ -2772,6 +2772,330 @@
           "aspect": 1.5
         }
       ]
+    },
+    {
+      "id": "life-in-nyc",
+      "title": "Life in NYC",
+      "date": "February 2024",
+      "location": "NYC",
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF1864.jpg",
+          "full": "photos/full/DSCF1864.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1890.jpg",
+          "full": "photos/full/DSCF1890.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1891.jpg",
+          "full": "photos/full/DSCF1891.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1895.jpg",
+          "full": "photos/full/DSCF1895.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1903.jpg",
+          "full": "photos/full/DSCF1903.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2873.jpg",
+          "full": "photos/full/DSCF2873.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2895.jpg",
+          "full": "photos/full/DSCF2895.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2898.jpg",
+          "full": "photos/full/DSCF2898.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2936.jpg",
+          "full": "photos/full/DSCF2936.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2940.jpg",
+          "full": "photos/full/DSCF2940.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2958.jpg",
+          "full": "photos/full/DSCF2958.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2965.jpg",
+          "full": "photos/full/DSCF2965.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2976.jpg",
+          "full": "photos/full/DSCF2976.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2987.jpg",
+          "full": "photos/full/DSCF2987.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3024.jpg",
+          "full": "photos/full/DSCF3024.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3028.jpg",
+          "full": "photos/full/DSCF3028.jpg",
+          "date": "February 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3096.jpg",
+          "full": "photos/full/DSCF3096.jpg",
+          "date": "March 2024",
+          "location": "NYC",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3113.jpg",
+          "full": "photos/full/DSCF3113.jpg",
+          "date": "March 2024",
+          "location": "NYC",
+          "aspect": 1.5
+        }
+      ]
+    },
+    {
+      "id": "life-in-colorado",
+      "title": "Life in Colorado",
+      "date": "",
+      "location": "Colorado",
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF3143.jpg",
+          "full": "photos/full/DSCF3143.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3179.jpg",
+          "full": "photos/full/DSCF3179.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3214.jpg",
+          "full": "photos/full/DSCF3214.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3260.jpg",
+          "full": "photos/full/DSCF3260.jpg",
+          "date": "April 2024",
+          "location": "Colorado",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3313.jpg",
+          "full": "photos/full/DSCF3313.jpg",
+          "date": "April 2024",
+          "location": "Colorado",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3354.jpg",
+          "full": "photos/full/DSCF3354.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3366.jpg",
+          "full": "photos/full/DSCF3366.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3368.jpg",
+          "full": "photos/full/DSCF3368.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3459.jpg",
+          "full": "photos/full/DSCF3459.jpg",
+          "date": "May 2024",
+          "location": "Colorado",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3487.jpg",
+          "full": "photos/full/DSCF3487.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3494.jpg",
+          "full": "photos/full/DSCF3494.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3517.jpg",
+          "full": "photos/full/DSCF3517.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3585.jpg",
+          "full": "photos/full/DSCF3585.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3602.jpg",
+          "full": "photos/full/DSCF3602.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3627.jpg",
+          "full": "photos/full/DSCF3627.jpg",
+          "date": "May 2024",
+          "location": "Colorado",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3747.jpg",
+          "full": "photos/full/DSCF3747.jpg",
+          "date": "May 2024",
+          "location": "Colorado",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF3748.jpg",
+          "full": "photos/full/DSCF3748.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3773.jpg",
+          "full": "photos/full/DSCF3773.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3776.jpg",
+          "full": "photos/full/DSCF3776.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3783.jpg",
+          "full": "photos/full/DSCF3783.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3788.jpg",
+          "full": "photos/full/DSCF3788.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3882.jpg",
+          "full": "photos/full/DSCF3882.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3928.jpg",
+          "full": "photos/full/DSCF3928.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3930.jpg",
+          "full": "photos/full/DSCF3930.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF3985.jpg",
+          "full": "photos/full/DSCF3985.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF6678.jpg",
+          "full": "photos/full/DSCF6678.jpg",
+          "date": "",
+          "location": "Colorado",
+          "aspect": 1.5
+        }
+      ]
     }
   ],
   "footer": {
