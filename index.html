@@ -29,8 +29,7 @@ body {
   background: var(--bg); color: var(--text);
   font-family: var(--body); min-height: 100vh; overflow-x: hidden;
   position: relative;
-}
-body::after {
+}body::after {
   content: ''; position: fixed; inset: 0;
   background-image:
     repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(255,255,255,.008) 3px, rgba(255,255,255,.008) 4px),
@@ -40,10 +39,10 @@ body::after {
 }
 body::before {
   content: ''; position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 50% 35% at 0% 100%, rgba(96,200,255,.03) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 25% at 100% 0%,  rgba(96,200,255,.02) 0%, transparent 65%);
+  background: #c8d4de;
+  opacity: var(--hero-bg-opacity, 1);
   pointer-events: none; z-index: 0;
+  transition: opacity 0.1s linear;
 }
 
 /* NAV */
@@ -59,6 +58,18 @@ nav.waveform-active {
   border-bottom-color: var(--ice);
   box-shadow: 0 0 20px rgba(96,200,255,.15);
 }
+
+/* ── Light-hero nav state: active while scrolled into the hero ── */
+nav.nav-light {
+  background: rgba(180,196,210,.92);
+  backdrop-filter: blur(16px);
+  border-bottom-color: rgba(26,42,58,.14);
+}
+nav.nav-light .nav-monogram { color: #1a2a3a; }
+nav.nav-light .nav-monogram:hover { color: #0d1820; }
+nav.nav-light .nav-monogram-arrow { color: rgba(26,42,58,.45); }
+nav.nav-light .nav-status { color: rgba(26,42,58,.5); }
+nav.nav-light .nav-dot { background: rgba(26,42,58,.45); }
 
 /* ── MH monogram trigger ── */
 .nav-monogram {
@@ -159,10 +170,7 @@ nav.waveform-active {
 }
 .nav-links a.illuminated:hover { opacity: 1 !important; }
 
-.nav-status {
-  display: flex; align-items: center; gap: 7px;
-  font-family: var(--mono); font-size: 9px; color: var(--dim);
-}
+.nav-status { display: none; }
 .nav-dot {
   width: 5px; height: 5px; border-radius: 50%; background: var(--muted);
   animation: dotpulse 2.2s ease-in-out infinite;
@@ -171,88 +179,93 @@ nav.waveform-active {
 
 /* HERO */
 .hero {
-  position: relative; z-index: 3; min-height: 100vh;
+  position: relative; min-height: 100vh;
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: 0 48px 80px; border-bottom: 1px solid var(--line);
+}
+.hero::before { display: none; }
+/* Shadow strip at hero bottom — tight, smooth page-turn shadow */
+.hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(13,15,20,.04) 20%,
+    rgba(13,15,20,.12) 38%,
+    rgba(13,15,20,.32) 55%,
+    rgba(13,15,20,.62) 72%,
+    rgba(13,15,20,.88) 87%,
+    #0d0f14 100%);
+  pointer-events: none; z-index: 1;
 }
 #waveCanvas {
   position: fixed; top: 60px; left: 0; width: 100%;
   pointer-events: none; z-index: 2;
+  transition: opacity 0.3s ease;
 }
-.hero-orb-backdrop {
-  position: absolute; bottom: 60px; right: -100px;
-  width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, rgba(96,200,255,.08) 0%, rgba(96,200,255,.02) 30%, transparent 70%);
-  pointer-events: none; filter: blur(40px); z-index: 0;
-}
-.hero-monogram {
-  position: absolute; bottom: -60px; right: -20px;
-  font-family: var(--display); font-size: clamp(200px, 28vw, 420px);
-  font-weight: 800; line-height: 1; letter-spacing: -.08em;
-  color: rgba(232,237,245,.03); pointer-events: none;
-  user-select: none; white-space: nowrap;
-}
+.hero-orb-backdrop { display: none; }
+.hero-monogram { display: none; }
 .hero-eyebrow {
   font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--dim); margin-bottom: 24px;
+  text-transform: uppercase; color: rgba(26,42,58,.5); margin-bottom: 24px;
   display: flex; align-items: center; gap: 12px;
   opacity: 0;
 }
 .hero-eyebrow::before {
   content: ''; display: inline-block; width: 32px; height: 1px;
-  background: var(--dim); opacity: .8;
+  background: rgba(26,42,58,.35); opacity: 1;
 }
 .hero-name {
   font-family: var(--display); font-size: clamp(60px, 8vw, 120px);
   font-weight: 800; line-height: .88; letter-spacing: -.04em;
-  color: var(--text); margin-bottom: 40px; position: relative; z-index: 3;
+  color: #1a2a3a; margin-bottom: 40px; position: relative; z-index: 4;
   opacity: 0;
-  text-shadow: 0 0 80px rgba(96,200,255,.12), 0 2px 40px rgba(0,0,0,.5);
+  text-shadow: none;
 }
 .hero-name.glitch-active { animation: glitchReveal 1.8s cubic-bezier(.16,1,.3,1) forwards; }
 @keyframes glitchReveal {
-  0%   { opacity: 0; text-shadow: none; }
-  5%   { opacity: 1; color: rgba(232,237,245,.15); filter: blur(2px); transform: skewX(-3deg) translateX(4px); text-shadow: 0 0 20px rgba(96,200,255,.3); }
-  10%  { opacity: 1; color: rgba(96,200,255,.6);   filter: blur(0px); transform: skewX(2deg) translateX(-3px); text-shadow: 0 0 60px rgba(96,200,255,.8), 0 0 120px rgba(96,200,255,.3); }
-  15%  { opacity: 1; color: rgba(232,237,245,.2);  filter: blur(3px); transform: skewX(-1deg) translateX(2px); text-shadow: 0 0 30px rgba(96,200,255,.4); }
-  20%  { opacity: 1; color: var(--ice2);            filter: blur(0px); transform: skewX(0.5deg) translateX(-1px); text-shadow: 0 0 80px rgba(96,200,255,.6), 0 0 160px rgba(96,200,255,.2); }
-  28%  { opacity: 1; color: rgba(232,237,245,.5);  filter: blur(1px); transform: skewX(-2deg); text-shadow: 0 0 40px rgba(96,200,255,.3); }
-  36%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0.3deg); text-shadow: 0 0 60px rgba(96,200,255,.2); }
-  45%  { opacity: 1; color: rgba(232,237,245,.7);  filter: blur(0.5px); transform: skewX(-0.5deg); text-shadow: 0 0 50px rgba(96,200,255,.15); }
-  60%  { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg); text-shadow: 0 0 80px rgba(96,200,255,.12), 0 2px 40px rgba(0,0,0,.5); }
-  100% { opacity: 1; color: var(--text);            filter: blur(0px); transform: skewX(0deg) translateX(0); text-shadow: 0 0 80px rgba(96,200,255,.12), 0 2px 40px rgba(0,0,0,.5); }
+  0%   { opacity: 0; }
+  5%   { opacity: 1; filter: blur(2px);  transform: skewX(-3deg) translateX(4px); }
+  10%  { opacity: 1; filter: blur(0px);  transform: skewX(2deg) translateX(-3px); }
+  15%  { opacity: 1; filter: blur(3px);  transform: skewX(-1deg) translateX(2px); }
+  20%  { opacity: 1; filter: blur(0px);  transform: skewX(0.5deg) translateX(-1px); }
+  28%  { opacity: 1; filter: blur(1px);  transform: skewX(-2deg); }
+  36%  { opacity: 1; filter: blur(0px);  transform: skewX(0.3deg); }
+  60%  { opacity: 1; filter: blur(0px);  transform: skewX(0deg); }
+  100% { opacity: 1; filter: blur(0px);  transform: skewX(0deg) translateX(0); }
 }
-.hero-name .char {
-  display: inline-block;
+.hero-name .char { display: inline-block; }
+.hero-name .name-line-outline {
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #1a2a3a;
+}
+.hero-name .name-line-filled {
+  display: block;
+  color: #1a2a3a;
 }
 .hero-bottom {
   display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 40px; opacity: 0; position: relative; z-index: 3;
+  gap: 40px; opacity: 0; position: relative; z-index: 4;
 }
 .hero-tagline {
-  font-family: var(--display); font-size: 11px; font-variant: small-caps;
-  letter-spacing: .09em; color: var(--muted); line-height: 1.85; max-width: 420px;
+  font-family: var(--display); font-size: 15px;
+  letter-spacing: .02em; color: rgba(26,42,58,.6); line-height: 1.75; max-width: 480px;
 }
-.hero-meta {
-  display: flex; flex-direction: column; align-items: flex-end;
-  gap: 8px; font-family: var(--mono); font-size: 9px;
-  color: var(--dim); text-align: right; flex-shrink: 0; padding-bottom: 4px;
-}
-.hero-meta span { letter-spacing: .06em; }
-.hero-meta strong { color: var(--muted); font-weight: 400; }
+.hero-meta { display: none; }
 .scroll-hint {
-  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
-  font-family: var(--mono); font-size: 8px; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--dim);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
   animation: fadeUp .5s .9s ease both;
+  z-index: 10;
+  transition: opacity 0.4s ease;
 }
-.scroll-hint::after {
-  content: ''; width: 1px; height: 36px;
-  background: linear-gradient(to bottom, var(--dim), transparent);
-  animation: scrolldown 1.9s ease-in-out infinite;
+.scroll-hint svg { animation: chevbob 1.8s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes chevbob {
+  0%   { opacity: .35; transform: translateY(-3px); }
+  50%  { opacity: .85; transform: translateY(4px); }
+  100% { opacity: .35; transform: translateY(-3px); }
 }
-@keyframes scrolldown { 0%,100% { opacity: .3; } 50% { opacity: .8; } }
 
 /* FILTER BAR */
 .filter-bar {
@@ -368,6 +381,7 @@ nav.waveform-active {
   min-height: 340px; border-bottom: 1px solid var(--line);
   text-decoration: none; color: inherit; position: relative; overflow: hidden;
   border-left: 2px solid transparent;
+  background: var(--bg);
   transition: background .4s ease, border-left-color .35s ease;
 }
 .section-panel:last-child {
@@ -468,14 +482,23 @@ footer {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  /* Nav: tighter padding, reduced blur cost on mobile Safari */
+  /* Nav: tighter padding, reduced blur cost on mobile Safari.
+     Override nav-light's blur so it also respects the mobile limit. */
   nav { padding: 0 20px; backdrop-filter: blur(12px); }
+  nav.nav-light { backdrop-filter: blur(12px); }
   .nav-status { display: none; }
 
   /* Hero */
   .hero { padding: 0 20px 72px; }
+  /* Lower the name clamp floor so it breathes on narrow screens */
+  .hero-name { font-size: clamp(44px, 11vw, 120px); margin-bottom: 28px; }
+  /* Thinner stroke on non-retina Android */
+  .hero-name .name-line-outline { -webkit-text-stroke: 1px #1a2a3a; }
+  /* Tagline: full width, slightly smaller */
+  .hero-tagline { font-size: 14px; max-width: 100%; }
+  /* Chevron: lower so it clears the tagline on short phones */
+  .scroll-hint { bottom: 80px; }
   .hero-bottom { flex-direction: column; align-items: flex-start; }
-  .hero-meta { align-items: flex-start; text-align: left; }
 
   /* Filter / work index */
   .filter-bar { padding: 0 20px; }
@@ -526,6 +549,11 @@ footer {
   .section-panel-arrow { color: var(--muted); }
   .section-panel:last-child { padding-bottom: 0; }
 }
+
+@media (max-width: 390px) {
+  .hero-name { font-size: clamp(38px, 10vw, 120px); }
+  .hero-tagline { font-size: 13px; }
+}
 </style>
 </head>
 <body>
@@ -567,7 +595,11 @@ footer {
     <div class="hero-tagline" id="heroTagline"></div>
     <div class="hero-meta" id="heroMeta"></div>
   </div>
-  <div class="scroll-hint">Scroll</div>
+  <div class="scroll-hint" aria-hidden="true">
+    <svg width="36" height="20" viewBox="0 0 36 20" fill="none">
+      <polyline points="1,1 18,18 35,1" stroke="#4a90b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
 </div>
 
 <div class="section-panels">
@@ -676,9 +708,11 @@ function populatePage(d) {
     '<span><strong>Focus</strong> '    + d.hero.focus    + '</span>' +
     '<span><strong>Status</strong> '   + d.hero.status   + '</span>';
 
-  // Hero name — set text only; glitch animation triggered by wave engine at right moment
+  // Hero name — line 1 outlined, line 2 filled; glitch animation triggered by wave engine
   var nameEl = document.getElementById('heroName');
-  nameEl.innerHTML = d.hero.name_line1 + '<br>' + d.hero.name_line2;
+  nameEl.innerHTML =
+    '<span class="name-line-outline">' + d.hero.name_line1 + '</span>' +
+    '<span class="name-line-filled">'  + d.hero.name_line2 + '</span>';
 
   // footer intentionally left empty
 }
@@ -742,11 +776,25 @@ function initWave(introMode) {
     [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
     [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
   ];
+  /* Dark hero palette — deep blues, slates, and navy tones that read
+     clearly against #c8d4de without looking neon */
+  var PALETTE_HERO = [
+    [26, 60, 90],   // deep ocean
+    [18, 42, 68],   // navy
+    [40, 70, 100],  // slate blue
+    [22, 50, 80],   // dark steel
+    [30, 55, 85],   // medium navy
+    [15, 38, 62],   // darkest navy
+    [45, 78, 108],  // lighter slate
+    [20, 46, 74],   // mid navy
+    [35, 65, 95],   // cool blue
+    [10, 30, 55],   // near black blue
+  ];
   // Use Math.random seeded values — different every page load for true randomness
   var stringLife = PALETTE.map(function(col, i) {
     var phi = i * 1.6180339887;  // golden ratio offset — incommensurable phases
     return {
-      col:          col,
+      col:          PALETTE_HERO[i].slice(), // start with hero colours; updateNav will lerp
       baseFreq:     0.012 + (i * 0.0031 + Math.random() * 0.006),
       freqWander:   0.0018 + Math.random() * 0.0022,   // how much freq drifts
       freqWRate:    0.07  + Math.random() * 0.09,       // how fast freq wanders
@@ -795,10 +843,49 @@ function initWave(introMode) {
     return Math.min(1, Math.max(0, cachedScrollY / (hero.offsetHeight * 0.55)));
   }
   var navLinksEl = document.getElementById('navLinks');
+  var heroBg = document.querySelector('body::before') || null;
+  /* target the body::before via a class toggle instead */
+  function smoothstep(t) { return t * t * (3 - 2 * t); }
+  function lerpCol(a, b, t) {
+    return [
+      Math.round(a[0] + (b[0] - a[0]) * t),
+      Math.round(a[1] + (b[1] - a[1]) * t),
+      Math.round(a[2] + (b[2] - a[2]) * t)
+    ];
+  }
   function updateNav(sp) {
+    /* Interpolate string colours: hero palette (dark blues) → neon palette.
+       Only starts after the intro animation has finished. */
+    var colT = introActive ? 0 : smoothstep(Math.min(1, sp / 0.5));
+    if (stringLife) {
+      for (var _ci = 0; _ci < stringLife.length; _ci++) {
+        stringLife[_ci].col = lerpCol(PALETTE_HERO[_ci % PALETTE_HERO.length], PALETTE[_ci % PALETTE.length], colT);
+      }
+    }
+    /* Fade chevron out as soon as the user starts scrolling */
+    var scrollHint = document.querySelector('.scroll-hint');
+    if (scrollHint) {
+      scrollHint.style.opacity = sp > 0.08 ? '0' : '1';
+    }
+    var bgOpacity = sp < 1 ? Math.max(0, 1 - smoothstep(Math.min(1, sp / 0.6))) : 0;
+    document.body.style.setProperty('--hero-bg-opacity', bgOpacity.toFixed(3));
+    /* Wave canvas opacity */
+    var BLEND_SWAP = 0.35;
+    if (sp < BLEND_SWAP) {
+      var t = smoothstep(sp / BLEND_SWAP);
+      canvas.style.opacity = (0.28 + t * 0.30).toFixed(3);
+    } else {
+      var t2 = smoothstep(Math.min(1, (sp - BLEND_SWAP) / 0.15));
+      canvas.style.opacity = (0.58 + t2 * 0.42).toFixed(3);
+    }
+    /* light hero nav mode */
+    if (sp < BLEND_SWAP) {
+      nav.classList.add('nav-light');
+    } else {
+      nav.classList.remove('nav-light');
+    }
     /* right-side links: invisible until scroll threshold */
-    var SHOW_THRESHOLD = 0.35;
-    if (sp >= SHOW_THRESHOLD) {
+    if (sp >= BLEND_SWAP) {
       navLinksEl.classList.add('nav-visible');
     } else {
       navLinksEl.classList.remove('nav-visible');
@@ -812,6 +899,8 @@ function initWave(introMode) {
       navLinks.forEach(function(a) { a.classList.remove('illuminated'); });
     }
   }
+  /* Run once immediately so canvas opacity/blend is correct on first paint */
+  updateNav(0);
 
   /* ease functions */
   function easeOutCubic(x)  { return 1 - Math.pow(1 - x, 3); }
@@ -830,6 +919,9 @@ function initWave(introMode) {
 
   /* If skipping intro, fire UI elements immediately */
   if (skipIntro) {
+    nav.classList.add('nav-light');
+    canvas.style.opacity = '0.28';
+    document.body.style.setProperty('--hero-bg-opacity', '1');
     nameGlitchFired = true; eyebrowFired = true; bottomFired = true;
     var _nameEl = document.getElementById('heroName');
     if (_nameEl) { _nameEl.style.opacity = '1'; _nameEl.style.transition = 'none'; }
@@ -889,10 +981,10 @@ function initWave(introMode) {
 
       /* ── OPTION A: EXPLOSION ─────────────────────────────────────── */
       if (introMode === 'explosion') {
-        var settle = easeOutQuint(introT);           // 0→1 calm
+        var settle = easeOutQuint(introT);
         var chaos  = 1 - settle;
-
-        // Number of chaotic lines — shrinks from 8 to 1
+        var exCol  = PALETTE_HERO[0].slice();
+        var exColStr = exCol[0]+','+exCol[1]+','+exCol[2];
         var numLines = Math.max(1, Math.round(8 - 7 * settle));
         for (var li = 0; li < numLines; li++) {
           var phase   = li * (Math.PI * 2 / 8);
@@ -910,17 +1002,15 @@ function initWave(introMode) {
           }
           var glow = 0.08 + settle * 0.42;
           if (li === 0) {
-            // main line brightens in
-            ctx.strokeStyle = 'rgba(96,200,255,' + glow + ')';
+            ctx.strokeStyle = 'rgba(' + exColStr + ',' + glow + ')';
             ctx.lineWidth   = 1 + settle * 0.4;
           } else {
-            ctx.strokeStyle = 'rgba(96,200,255,' + (alphaMul * 0.3) + ')';
+            ctx.strokeStyle = 'rgba(' + exColStr + ',' + (alphaMul * 0.3) + ')';
             ctx.lineWidth   = 0.5;
           }
           ctx.stroke();
         }
 
-        // Ghost wave fades in
         if (settle > 0.3) {
           var ga = remap(settle, 0.3, 1) * 0.1;
           ctx.beginPath();
@@ -929,7 +1019,7 @@ function initWave(introMode) {
             var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = 'rgba(96,200,255,' + ga + ')';
+          ctx.strokeStyle = 'rgba(' + exColStr + ',' + ga + ')';
           ctx.lineWidth   = 0.8;
           ctx.stroke();
         }
@@ -960,18 +1050,7 @@ function initWave(introMode) {
           if (bottomEl) bottomEl.classList.add('fade-in');
         }
 
-        var palette = [
-          [96,200,255],   // 0 ice
-          [160,100,255],  // 1 violet
-          [255,100,160],  // 2 rose
-          [60,220,180],   // 3 teal
-          [255,200,60],   // 4 gold
-          [100,255,200],  // 5 mint
-          [255,140,80],   // 6 coral
-          [180,140,255],  // 7 lavender
-          [80,220,255],   // 8 sky
-          [184,118,26],   // 9 amber
-        ];
+        var palette = PALETTE_HERO.slice();
 
         for (var wi = 0; wi < numWaves; wi++) {
           var wFrac    = wi / (numWaves - 1);
@@ -1074,18 +1153,19 @@ function initWave(introMode) {
           ctx.shadowBlur = 0;
         }
 
-        // Amber ghost — early appearance, fades before storm peak
+        // Ghost — early appearance, fades before storm peak; colour lerps dark→amber
         if (introT > 0.18 && introT < 0.44) {
           var amberIn  = remap(introT, 0.18, 0.28);
           var amberOut = 1 - remap(introT, 0.30, 0.44);
           var curAmberAlpha = amberIn * amberOut * 0.18;
+          var amberCol = PALETTE_HERO[9].slice();
           ctx.beginPath();
           for (var x = 0; x <= w; x += 3) {
             var lb = Math.exp(-Math.pow((x - mx) / (w * 0.25), 2)) * amp * 0.28;
             var y  = cy + Math.sin(x * 0.014 + t * 0.5 + 1.8) * amp * 0.45 + lb;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = 'rgba(184,118,26,' + curAmberAlpha + ')';
+          ctx.strokeStyle = 'rgba(' + amberCol[0] + ',' + amberCol[1] + ',' + amberCol[2] + ',' + curAmberAlpha + ')';
           ctx.lineWidth   = 0.8;
           ctx.stroke();
           amberFadeAlpha = curAmberAlpha;
@@ -1223,10 +1303,9 @@ function initWave(introMode) {
     var old = document.getElementById('neonSpill');
     if (old) old.remove();
 
-    var palette = [
-      [96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],
-      [100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]
-    ];
+    var palette = PALETTE_HERO.map(function(hc, idx) {
+      return lerpCol(hc, PALETTE[idx % PALETTE.length], easeOutCubic(introT));
+    });
 
     // ── Seeded PRNG ──────────────────────────────────────────────────────────
     var _seed = Date.now() % 99991;
