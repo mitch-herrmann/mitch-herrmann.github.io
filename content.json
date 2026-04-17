@@ -3096,6 +3096,504 @@
           "aspect": 1.5
         }
       ]
+    },
+    {
+      "id": "portugal",
+      "title": "Portugal",
+      "date": "",
+      "location": "Lisbon",
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF1933.jpg",
+          "full": "photos/full/DSCF1933.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1947.jpg",
+          "full": "photos/full/DSCF1947.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1962.jpg",
+          "full": "photos/full/DSCF1962.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF1964.jpg",
+          "full": "photos/full/DSCF1964.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF1988.jpg",
+          "full": "photos/full/DSCF1988.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2007.jpg",
+          "full": "photos/full/DSCF2007.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2084.jpg",
+          "full": "photos/full/DSCF2084.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2087.jpg",
+          "full": "photos/full/DSCF2087.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2109.jpg",
+          "full": "photos/full/DSCF2109.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2111.jpg",
+          "full": "photos/full/DSCF2111.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2113.jpg",
+          "full": "photos/full/DSCF2113.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2120.jpg",
+          "full": "photos/full/DSCF2120.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2134.jpg",
+          "full": "photos/full/DSCF2134.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2148.jpg",
+          "full": "photos/full/DSCF2148.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2177.jpg",
+          "full": "photos/full/DSCF2177.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2187.jpg",
+          "full": "photos/full/DSCF2187.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2189.jpg",
+          "full": "photos/full/DSCF2189.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2194.jpg",
+          "full": "photos/full/DSCF2194.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2199.jpg",
+          "full": "photos/full/DSCF2199.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2201.jpg",
+          "full": "photos/full/DSCF2201.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2203.jpg",
+          "full": "photos/full/DSCF2203.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2219.jpg",
+          "full": "photos/full/DSCF2219.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2220.jpg",
+          "full": "photos/full/DSCF2220.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2223.jpg",
+          "full": "photos/full/DSCF2223.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2224.jpg",
+          "full": "photos/full/DSCF2224.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2225.jpg",
+          "full": "photos/full/DSCF2225.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2228.jpg",
+          "full": "photos/full/DSCF2228.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2229.jpg",
+          "full": "photos/full/DSCF2229.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2238.jpg",
+          "full": "photos/full/DSCF2238.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2256.jpg",
+          "full": "photos/full/DSCF2256.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2261.jpg",
+          "full": "photos/full/DSCF2261.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2276.jpg",
+          "full": "photos/full/DSCF2276.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2277.jpg",
+          "full": "photos/full/DSCF2277.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2279.jpg",
+          "full": "photos/full/DSCF2279.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2292.jpg",
+          "full": "photos/full/DSCF2292.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2308.jpg",
+          "full": "photos/full/DSCF2308.jpg",
+          "date": "February 2024",
+          "location": "Sintra",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2315.jpg",
+          "full": "photos/full/DSCF2315.jpg",
+          "date": "February 2024",
+          "location": "Lisbon",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2379.jpg",
+          "full": "photos/full/DSCF2379.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2407.jpg",
+          "full": "photos/full/DSCF2407.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2439.jpg",
+          "full": "photos/full/DSCF2439.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2442.jpg",
+          "full": "photos/full/DSCF2442.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2444.jpg",
+          "full": "photos/full/DSCF2444.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2460.jpg",
+          "full": "photos/full/DSCF2460.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2463.jpg",
+          "full": "photos/full/DSCF2463.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2471.jpg",
+          "full": "photos/full/DSCF2471.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2483.jpg",
+          "full": "photos/full/DSCF2483.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2494.jpg",
+          "full": "photos/full/DSCF2494.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2499.jpg",
+          "full": "photos/full/DSCF2499.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2506.jpg",
+          "full": "photos/full/DSCF2506.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2521.jpg",
+          "full": "photos/full/DSCF2521.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2526.jpg",
+          "full": "photos/full/DSCF2526.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2545.jpg",
+          "full": "photos/full/DSCF2545.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2551.jpg",
+          "full": "photos/full/DSCF2551.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2554.jpg",
+          "full": "photos/full/DSCF2554.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2610.jpg",
+          "full": "photos/full/DSCF2610.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2612.jpg",
+          "full": "photos/full/DSCF2612.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2622.jpg",
+          "full": "photos/full/DSCF2622.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2642.jpg",
+          "full": "photos/full/DSCF2642.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2655.jpg",
+          "full": "photos/full/DSCF2655.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2682.jpg",
+          "full": "photos/full/DSCF2682.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2705.jpg",
+          "full": "photos/full/DSCF2705.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2745.jpg",
+          "full": "photos/full/DSCF2745.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2748.jpg",
+          "full": "photos/full/DSCF2748.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2773.jpg",
+          "full": "photos/full/DSCF2773.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2778.jpg",
+          "full": "photos/full/DSCF2778.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2792.jpg",
+          "full": "photos/full/DSCF2792.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2794.jpg",
+          "full": "photos/full/DSCF2794.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2795.jpg",
+          "full": "photos/full/DSCF2795.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF2806.jpg",
+          "full": "photos/full/DSCF2806.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF2822.jpg",
+          "full": "photos/full/DSCF2822.jpg",
+          "date": "February 2024",
+          "location": "Porto",
+          "aspect": 0.67
+        }
+      ]
     }
   ],
   "footer": {
