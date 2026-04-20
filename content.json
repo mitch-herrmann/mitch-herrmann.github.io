@@ -5010,6 +5010,225 @@
           "aspect": 1.5
         }
       ]
+    },
+    {
+      "id": "banff",
+      "title": "Banff",
+      "date": "",
+      "location": "Banff",
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF4936.jpg",
+          "full": "photos/full/DSCF4936.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF4937.jpg",
+          "full": "photos/full/DSCF4937.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF4982.jpg",
+          "full": "photos/full/DSCF4982.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF4990.jpg",
+          "full": "photos/full/DSCF4990.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5048.jpg",
+          "full": "photos/full/DSCF5048.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5061.jpg",
+          "full": "photos/full/DSCF5061.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5068.jpg",
+          "full": "photos/full/DSCF5068.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF5076.jpg",
+          "full": "photos/full/DSCF5076.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5078.jpg",
+          "full": "photos/full/DSCF5078.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5144.jpg",
+          "full": "photos/full/DSCF5144.jpg",
+          "date": "October 2024",
+          "location": "Banff",
+          "aspect": 1.5
+        }
+      ]
+    },
+    {
+      "id": "sf",
+      "title": "SF",
+      "date": "",
+      "location": "SF",
+      "photos": [
+        {
+          "src": "photos/thumbs/DSCF5575.jpg",
+          "full": "photos/full/DSCF5575.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5634.jpg",
+          "full": "photos/full/DSCF5634.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5652.jpg",
+          "full": "photos/full/DSCF5652.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5655.jpg",
+          "full": "photos/full/DSCF5655.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF5673.jpg",
+          "full": "photos/full/DSCF5673.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5678.jpg",
+          "full": "photos/full/DSCF5678.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5701.jpg",
+          "full": "photos/full/DSCF5701.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5732.jpg",
+          "full": "photos/full/DSCF5732.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5741.jpg",
+          "full": "photos/full/DSCF5741.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5761.jpg",
+          "full": "photos/full/DSCF5761.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF5765.jpg",
+          "full": "photos/full/DSCF5765.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5771.jpg",
+          "full": "photos/full/DSCF5771.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5787.jpg",
+          "full": "photos/full/DSCF5787.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5794.jpg",
+          "full": "photos/full/DSCF5794.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5824.jpg",
+          "full": "photos/full/DSCF5824.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 0.67
+        },
+        {
+          "src": "photos/thumbs/DSCF5826.jpg",
+          "full": "photos/full/DSCF5826.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5829.jpg",
+          "full": "photos/full/DSCF5829.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5853.jpg",
+          "full": "photos/full/DSCF5853.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        },
+        {
+          "src": "photos/thumbs/DSCF5863.jpg",
+          "full": "photos/full/DSCF5863.jpg",
+          "date": "October 2024",
+          "location": "SF",
+          "aspect": 1.5
+        }
+      ]
     }
   ],
   "footer": {
