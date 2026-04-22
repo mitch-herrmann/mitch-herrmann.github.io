@@ -1,41 +1,74 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     PAGE: Resume  (/resume/index.html)
+     Mitchell Herrmann personal site
+     ============================================================ -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="SPY 0DTE TradeBot — automated intraday options trading system built by Mitchell Herrmann.">
-<title>SPY TradeBot — Mitchell Herrmann</title>
+<meta name="description" content="Mitchell Herrmann — work history, education, and skills.">
+<meta property="og:title" content="Résumé — Mitchell Herrmann">
+<meta property="og:description" content="Work history, education, and skills.">
+<meta property="og:image" content="https://mitchell-herrmann.com/og-preview.jpg">
+<meta property="og:url" content="https://mitchell-herrmann.com/resume/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Résumé — Mitchell Herrmann">
+<meta name="twitter:description" content="Work history, education, and skills.">
+<meta name="twitter:image" content="https://mitchell-herrmann.com/og-preview.jpg">
+<title>Résumé — Mitchell Herrmann</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='6' fill='%23a8cce0'/%3E%3Cpolyline points='3,30 3,6 12,6 18,16 24,6 33,6 33,30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cline x1='3' y1='30' x2='8' y2='30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='28' y1='30' x2='33' y2='30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpolyline points='13,30 13,20 23,20 23,30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-<style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9974c1afc0454d66b612c1fe42ca6c6d"}'></script><!-- End Cloudflare Web Analytics -->
 
-/* ── TOKENS ──────────────────────────────────────────── */
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6DP7VZJ3MJ');
+</script>
+
+<style>
 :root {
-  --hero-bg:    #c8d4de;
-  --hero-text:  #182636;
-  --hero-muted: rgba(24,38,54,.5);
-  --hero-line:  rgba(24,38,54,.1);
-  --bg:         #0c0e13;
-  --bg2:        #12151b;
-  --bg3:        #181c24;
-  --line:       #1c2230;
-  --ice:        #60c8ff;
-  --ice2:       #90dcff;
-  --text:       #e6ecf4;
-  --muted:      #7888a0;
-  --dim:        #36445a;
-  --green:      #38c99a;
-  --red:        #ff4060;
-  --display:    'Syne', sans-serif;
-  --mono:       'Chivo Mono', monospace;
-  --body:       'Chivo Mono', monospace;
+  --bg:    #0d0f14;
+  --bg2:   #13161c;
+  --bg3:   #1a1e26;
+  --line:  #1e2530;
+  --ice:   #60c8ff;
+  --ice2:  #90dcff;
+  --text:  #e8edf5;
+  --muted: #7a8a9e;
+  --dim:   #38445a;
+  --display: 'Syne', sans-serif;
+  --mono:    'Syne Mono', monospace;
+  --body:    'Chivo Mono', monospace;
 }
-*,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; overflow-x: hidden; }
-body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); min-height: 100vh; overflow-x: hidden;
+  position: relative;
+}
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(255,255,255,.008) 3px, rgba(255,255,255,.008) 4px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+  will-change: transform;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 35% at 0% 100%, rgba(96,200,255,.03) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 25% at 100% 0%,  rgba(96,200,255,.02) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
 
 /* NAV */
 nav {
@@ -44,15 +77,7 @@ nav {
   padding: 0 48px; height: 60px;
   background: rgba(13,15,20,.94); backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--line);
-  transition: background .3s, border-color .3s;
 }
-nav.nav-light { background: rgba(180,196,210,.92); border-bottom-color: rgba(24,38,54,.14); }
-nav.nav-light .nav-monogram { color: #182636; }
-nav.nav-light .nav-monogram:hover { color: #0d1820; }
-nav.nav-light .nav-monogram-arrow { color: rgba(24,38,54,.4); }
-nav.nav-light .nav-links a { color: rgba(24,38,54,.45); border-color: rgba(24,38,54,.18); }
-nav.nav-light .nav-links a:hover { color: #182636; border-color: rgba(24,38,54,.4); background: rgba(24,38,54,.06); }
-nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54,.4); background: rgba(24,38,54,.08); }
 .nav-monogram {
   position: relative; cursor: pointer; user-select: none;
   font-family: var(--display); font-size: 18px; font-weight: 800;
@@ -135,8 +160,6 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
 .nav-links:hover a { opacity: 0.4; }
 .nav-links a:hover { opacity: 1 !important; color: var(--muted); border-color: var(--dim); }
 .nav-links a.active { color: var(--text); animation: pill-cycle 8s linear infinite; }
-.nav-links a.nav-cta { background: rgba(96,200,255,.14); border-color: rgba(96,200,255,.55); color: var(--ice2); box-shadow: 0 0 12px rgba(96,200,255,.12), inset 0 1px 0 rgba(255,255,255,.08); }
-.nav-links a.nav-cta:hover { background: rgba(96,200,255,.24); border-color: rgba(96,200,255,.75); color: #d0f0ff; box-shadow: 0 0 18px rgba(96,200,255,.2); }
 @keyframes pill-cycle {
   0%   { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12), 0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
   14%  { border-color:rgba(160,100,255,.42); box-shadow:inset 0 1px 0 rgba(160,100,255,.12),0 0 14px rgba(160,100,255,.14); background:rgba(160,100,255,.10); }
@@ -157,541 +180,230 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
 .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: dotpulse 2.2s ease-in-out infinite; }
 @keyframes dotpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
 
-/* ── HERO ────────────────────────────────────────────── */
-.hero { position: relative; min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; background: var(--hero-bg); overflow: hidden; }
-/* no texture - clean hero */
-/* bottom fade to dark */
-.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to bottom, transparent 0%, rgba(12,14,19,.06) 22%, rgba(12,14,19,.22) 42%, rgba(12,14,19,.52) 60%, rgba(12,14,19,.78) 76%, rgba(12,14,19,.94) 88%, #0c0e13 100%); pointer-events: none; z-index: 2; }
-
-.hero-left { padding: 96px 56px 96px 56px; position: relative; z-index: 4; }
-.hero-right { padding: 88px 32px 80px 12px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 4; }
-
-/* On large/4K screens give the dashboard more room */
-@media(min-width:1600px){
-  #miniDash { max-width: min(900px, 44vw); }
-  .hero { grid-template-columns: 1fr 1.2fr; }
-}
-@media(min-width:2400px){
-  #miniDash { max-width: min(1100px, 46vw); }
-  .hero { grid-template-columns: 1fr 1.4fr; }
-}
-
-.hero-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--hero-muted); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
-.hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: rgba(24,38,54,.3); }
-
-.hero-name { font-family: var(--display); font-size: clamp(52px,6.5vw,108px); font-weight: 800; line-height: .88; letter-spacing: -.04em; margin-bottom: 32px; }
-.hero-name .name-line-outline { display: block; color: transparent; -webkit-text-stroke: 1.5px #182636; }
-.hero-name .name-line-filled  { display: block; color: #182636; }
-
-.hero-tagline { font-family: var(--body); font-size: 13px; line-height: 1.85; color: rgba(24,38,54,.56); max-width: 400px; margin-bottom: 36px; }
-
-.hero-cta { display: inline-flex; align-items: center; gap: 10px; padding: 11px 24px; border-radius: 99px; background: #182636; color: #cad6e0; font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(24,38,54,.3); transition: background .2s, color .2s, box-shadow .2s; margin-bottom: 44px; }
-.hero-cta:hover { background: #243650; color: #e4f0fa; box-shadow: 0 0 24px rgba(96,200,255,.16); }
-
-.hero-stats { display: flex; gap: 28px; padding-top: 28px; border-top: 1px solid rgba(24,38,54,.1); }
-.hero-stat { font-family: var(--mono); font-size: 9px; color: rgba(24,38,54,.42); letter-spacing: .06em; line-height: 1.4; }
-.hero-stat strong { font-family: var(--display); font-size: 15px; font-weight: 800; color: #182636; display: block; letter-spacing: -.02em; margin-bottom: 1px; }
-
-/* ── DASHBOARD CARD (in-flow) ────────────────────────── */
-#miniDash { width: min(780px, 90vw); max-width: min(780px, 90vw); min-width: min(780px, 90vw); height: 560px; min-height: 560px; max-height: 560px; display: flex; flex-direction: column; background: #1c2028; border-radius: 12px; border: 1px solid rgba(96,200,255,.12); box-shadow: 0 4px 8px rgba(0,0,0,.18), 0 14px 40px rgba(0,0,0,.34), 0 32px 72px rgba(0,0,0,.22), 0 0 0 1px rgba(255,255,255,.04), inset 0 1px 0 rgba(255,255,255,.06); overflow: hidden; transform: rotate(1.5deg); transform-origin: center center; transition: box-shadow .3s, border-color .3s, transform .3s; }
-#miniDashLink:hover #miniDash { border-color: rgba(96,200,255,.32); box-shadow: 0 4px 8px rgba(0,0,0,.18), 0 14px 40px rgba(0,0,0,.34), 0 32px 72px rgba(0,0,0,.22), 0 0 0 1px rgba(255,255,255,.04), inset 0 1px 0 rgba(255,255,255,.06), 0 0 40px rgba(96,200,255,.1); }
-
-/* ── MINI DASHBOARD COMPONENTS ───────────────────────── */
-:root { --bone:#1c2028; --bone2:#242a34; --bone3:#343d4a; --shadow:#e8edf5; --dust:#8a9ab0; --dust2:#556070; }
-.db-nav { display: flex; align-items: center; justify-content: space-between; padding: 0 18px; height: 42px; background: rgba(28,32,40,.98); border-bottom: 1px solid var(--bone3); flex-shrink: 0; }
-.db-logo { font-family: var(--display); font-size: 11px; font-weight: 800; color: var(--shadow); display: flex; align-items: center; gap: 7px; }
-.logo-orb { width: 7px; height: 7px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #d0e8ff, #60c8ff 40%, #1a3050 100%); box-shadow: 0 0 8px rgba(96,200,255,.5); animation: chromepulse 3s ease-in-out infinite; flex-shrink: 0; }
-@keyframes chromepulse { 0%,100%{box-shadow:0 0 8px rgba(96,200,255,.5)} 50%{box-shadow:0 0 18px rgba(96,200,255,.7)} }
-@keyframes orbpulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:.7} }
-.db-nav-right { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 9px; color: var(--dust2); }
-#dbTime { font-family: var(--mono); font-size: 9px; color: var(--dust); }
-.live-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 99px; background: rgba(28,32,40,.9); border: 1px solid rgba(96,200,255,.22); font-family: var(--display); font-size: 7px; font-weight: 700; letter-spacing: .1em; color: #90dcff; }
-.live-badge::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #90dcff; box-shadow: 0 0 5px #90dcff; animation: orbpulse 1.8s ease-in-out infinite; }
-
-.db-hero-strip { display: grid; grid-template-columns: 1fr auto; align-items: end; padding: 14px 18px 10px; border-bottom: 1px solid var(--bone3); gap: 12px; flex-shrink: 0; }
-.db-price { font-family: var(--display); font-size: 44px; font-weight: 800; line-height: .9; letter-spacing: -.03em; color: var(--shadow); transition: color .2s; }
-.db-price.flash-up { color: var(--green)!important; }
-.db-price.flash-down { color: var(--red)!important; }
-.db-price-sub { font-family: var(--mono); font-size: 8px; color: var(--dust2); margin-top: 5px; letter-spacing: .04em; }
-.db-inds { text-align: right; }
-.vwap-lbl { font-family: var(--display); font-size: 6.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dust2); margin-bottom: 2px; }
-.vwap-val { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--dust); letter-spacing: -.02em; }
-.ind-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 6px; }
-.ind-cell { text-align: right; }
-.ind-lbl { font-family: var(--display); font-size: 6px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dust2); margin-bottom: 1px; }
-.ind-val { font-family: var(--display); font-size: 13px; font-weight: 700; color: var(--dust); transition: color .3s; }
-.ind-val.up,.ind-val.roc-pos,.ind-val.rsi-os { color: var(--green); }
-.ind-val.dn,.ind-val.roc-neg,.ind-val.rsi-ob { color: var(--red); }
-
-.db-kpi { display: grid; grid-template-columns: repeat(5,1fr); border-bottom: 1px solid var(--bone3); flex-shrink: 0; }
-.kpi-cell { padding: 8px 10px; border-right: 1px solid var(--bone3); }
-.kpi-cell:last-child { border-right: none; }
-.kpi-l { font-family: var(--display); font-size: 6px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--dust2); margin-bottom: 3px; }
-.kpi-v { font-family: var(--display); font-size: 18px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
-.kpi-v.pos{color:var(--green)} .kpi-v.neg{color:var(--red)} .kpi-v.neu{color:var(--shadow)} .kpi-v.warn{color:#60c8ff;}
-
-.db-main { display: grid; grid-template-columns: 1fr 148px; flex: 1; min-height: 0; overflow: hidden; }
-.db-gallery { border-right: 1px solid var(--bone3); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.db-sec-hdr { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px 6px; border-bottom: 1px solid var(--bone3); flex-shrink: 0; }
-.db-sec-ttl { font-family: var(--display); font-size: 7.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dust); }
-
-.db-vc { background: var(--bone2); padding: 12px 14px; position: relative; overflow: hidden; flex-shrink: 0; border-top: 1px solid rgba(144,180,220,.08); }
-.db-vc.has-pos { background: linear-gradient(160deg,#222a34 50%,rgba(96,200,255,.04) 100%); }
-.db-vc.has-pos::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg,#60c8ff,#90dcff,transparent); }
-.db-vc-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
-.db-vc-name { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--shadow); line-height: 1; }
-.db-vc-desc { font-family: var(--body); font-size: 7px; color: var(--dust2); margin-top: 2px; font-style: italic; }
-.sp { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 99px; font-family: var(--display); font-size: 6px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
-.sp.active { background: rgba(28,32,40,.9); color: var(--shadow); }
-.sp.active::before { content: '●'; font-size: 4px; color: #90dcff; }
-.sp.standby { background: var(--bone3); color: var(--dust2); }
-.score-row { margin-bottom: 5px; }
-.score-lbl { font-family: var(--body); font-size: 6px; color: var(--dust2); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; font-style: italic; }
-.score-track { height: 2px; background: var(--bone3); border-radius: 99px; overflow: hidden; }
-.score-fill { height: 100%; border-radius: 99px; transition: width .5s cubic-bezier(.34,1.56,.64,1); }
-.score-fill.bull { background: linear-gradient(90deg,#4a6080,#90b8d8,#c8e0f0); box-shadow: 0 0 4px rgba(96,200,255,.3); }
-.score-fill.bear { background: linear-gradient(90deg,#802040,#c04060,#ff6080); box-shadow: 0 0 4px rgba(255,64,96,.3); }
-.score-nums { font-family: var(--mono); font-size: 7.5px; color: var(--dust2); margin-top: 2px; }
-.score-nums .hot { color: #60c8ff; font-weight: bold; }
-.vc-vel { margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--bone3); font-family: var(--mono); display: flex; align-items: center; justify-content: space-between; }
-.vel-lbl { color: var(--dust2); font-size: 7px; font-style: italic; }
-.vel-live { font-size: 13px; font-weight: 800; font-family: var(--display); transition: color .3s; }
-.vel-live.pos { color: var(--green); } .vel-live.neg { color: var(--red); }
-
-.db-chart-area { border-top: 1px solid var(--bone3); flex-shrink: 0; }
-.db-chart-hdr { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px 5px; border-bottom: 1px solid var(--bone3); }
-.db-chart-ttl { font-family: var(--display); font-size: 7.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dust); }
-.db-chart-meta { font-family: var(--mono); font-size: 7.5px; color: var(--dust2); display: flex; align-items: baseline; gap: 6px; }
-#dbVelLive { font-size: 14px; font-weight: 800; font-family: var(--display); }
-#dbVelLive.pos{color:var(--green);} #dbVelLive.neg{color:var(--red);}
-canvas#dbVelChart { display: block; width: 100%!important; height: 52px!important; max-height: 52px; }
-
-.db-tbl-wrap { flex: 1; overflow-y: auto; min-height: 0; max-height: 180px; }
-.db-tbl { width: 100%; border-collapse: collapse; }
-.db-tbl th { font-family: var(--display); font-size: 5.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dust2); padding: 5px 7px; border-bottom: 1px solid var(--bone3); text-align: left; position: sticky; top: 0; background: var(--bone2); }
-.db-tbl td { padding: 6px 7px; border-bottom: 1px solid rgba(52,61,74,.5); font-family: var(--body); font-size: 8px; color: var(--dust); white-space: nowrap; }
-.dir-badge { display: inline-flex; align-items: center; gap: 2px; padding: 1px 5px; border-radius: 99px; font-family: var(--display); font-size: 6px; font-weight: 700; }
-.dir-badge.call { background: rgba(56,200,154,.1); color: var(--green); border: 1px solid rgba(56,200,154,.2); }
-.dir-badge.put  { background: rgba(255,64,96,.1); color: var(--red); border: 1px solid rgba(255,64,96,.16); }
-.r-tag { font-family: var(--display); font-size: 5.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1px 4px; border-radius: 99px; background: var(--bone3); color: var(--dust); }
-.r-tag.tp { background: rgba(56,200,154,.1); color: var(--green); }
-.r-tag.ts { background: rgba(96,200,255,.1); color: #90dcff; }
-
-.db-sidebar { padding: 12px 10px; display: flex; flex-direction: column; gap: 0; overflow: hidden; }
-.sb-sec { padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--bone3); }
-.sb-sec:last-child { border-bottom: none; margin-bottom: 0; flex: 1; }
-.sb-eye { font-family: var(--display); font-size: 6px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dust2); margin-bottom: 5px; }
-.sb-big { font-family: var(--display); font-size: 20px; font-weight: 800; line-height: 1; margin-bottom: 2px; transition: color .4s; }
-.sb-big.pos{color:var(--green);} .sb-big.neg{color:var(--red);} .sb-big.neu{color:var(--shadow);}
-.sb-sm  { font-family: var(--display); font-size: 13px; font-weight: 800; line-height: 1; margin-bottom: 2px; transition: color .4s; }
-.sb-sm.pos{color:var(--green);} .sb-sm.neg{color:var(--red);} .sb-sm.neu{color:var(--shadow);}
-.sb-sub { font-family: var(--body); font-size: 6.5px; color: var(--dust2); font-style: italic; margin-bottom: 6px; }
-.health-bar { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; background: var(--bone2); border: 1px solid var(--bone3); font-family: var(--mono); font-size: 7px; color: var(--dust); }
-.opts-orb { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; background: radial-gradient(circle at 35% 35%,#d0e8ff,#60c8ff 40%,#1a3050 100%); box-shadow: 0 0 6px rgba(96,200,255,.5); animation: chromepulse 2.2s ease-in-out infinite; }
-.pnl-row { display: grid; grid-template-columns: 28px 1fr; padding: 4px 0; border-bottom: 1px solid rgba(52,61,74,.4); font-family: var(--mono); font-size: 7px; gap: 2px; align-items: center; }
-.pnl-row:last-child { border-bottom: none; }
-.pe-t { color: var(--dust2); font-style: italic; }
-.pe-v { text-align: right; }
-.pe-v.pos{color:var(--green);} .pe-v.neg{color:var(--red);}
-
-.db-ticker { display: flex; align-items: center; height: 26px; padding: 0 14px; gap: 10px; border-top: 1px solid var(--bone3); font-family: var(--body); font-size: 7.5px; color: var(--dust2); background: var(--bone2); font-style: italic; overflow: hidden; flex-shrink: 0; }
-.ticker-tag { flex-shrink: 0; font-family: var(--display); font-size: 6px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; background: rgba(60,75,90,.6); border: 1px solid rgba(96,200,255,.16); color: #90c8e0; padding: 2px 6px; border-radius: 99px; }
-#dbTickerMsg { flex-shrink: 0; white-space: nowrap; transition: opacity .3s; }
-
-/* ── SECTIONS COMMON ─────────────────────────────────── */
-.work-section { position: relative; z-index: 1; }
-
-/* ── HOW IT WORKS — CAROUSEL ─────────────────────────── */
-.how-section { border-bottom: 1px solid var(--line); }
-
-/* header above the carousel */
-.how-header-row {
-  padding: 72px 56px 48px;
+/* PAGE HEADER */
+.page-header {
+  padding: 120px 48px 56px;
   border-bottom: 1px solid var(--line);
+  position: relative; z-index: 3;
+}
+.page-eyebrow {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.page-eyebrow::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--dim); opacity: .8; }
+.page-title {
+  font-family: var(--display); font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800; letter-spacing: -.04em; line-height: .9; color: var(--text);
+}
+.page-desc { font-family: var(--body); font-size: 13px; color: var(--muted); line-height: 1.85; max-width: 560px; margin-top: 20px; letter-spacing: .02em; }
+
+/* ── PHOTO HEADER ── */
+.resume-photo-header {
+  position: relative; z-index: 3;
+  padding: 48px 48px 0;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: flex-end;
   gap: 40px;
 }
-.how-header-left { flex-shrink: 0; }
-.how-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
-.how-title { font-family: var(--display); font-size: clamp(32px,4vw,52px); font-weight: 800; letter-spacing: -.03em; color: var(--text); line-height: 1; }
-.how-intro-above { font-family: var(--body); font-size: 13px; line-height: 1.85; color: var(--muted); max-width: 520px; padding-top: 6px; }
-
-/* progress bar in header */
-.how-progress-row { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.how-counter { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .06em; white-space: nowrap; }
-.how-counter .how-current { font-family: var(--display); font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; display: inline; }
-.how-progress { width: 120px; height: 2px; background: var(--line); border-radius: 99px; overflow: hidden; }
-.how-progress-fill { height: 100%; background: var(--ice); border-radius: 99px; transition: width .45s cubic-bezier(.25,.46,.45,.94); }
-
-/* dots */
-.how-dots { display: flex; gap: 6px; align-items: center; }
-.how-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--line); transition: background .3s, transform .3s; cursor: pointer; border: none; padding: 0; }
-.how-dot.active { background: var(--ice); transform: scale(1.3); }
-
-/* carousel stage */
-.how-stage { overflow: hidden; position: relative; }
-.how-track { display: flex; transition: transform .5s cubic-bezier(.25,.46,.45,.94); }
-.arch-card {
-  flex: 0 0 100%;
-  padding: 0 0 60px 0;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  opacity: 0; transform: translateX(24px);
-  transition: opacity .45s ease, transform .45s cubic-bezier(.25,.46,.45,.94);
-  pointer-events: none;
-}
-.arch-card.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-
-/* floating viz */
-.arch-viz {
-  width: calc(100% - 112px);
-  max-width: 600px;
-  margin: 48px auto 0;
-  height: 340px;
-  background: #0c0e13;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow:
-    0 2px 4px rgba(0,0,0,.3),
-    0 8px 24px rgba(0,0,0,.4),
-    0 24px 56px rgba(0,0,0,.3),
-    0 0 0 1px rgba(255,255,255,.04),
-    inset 0 1px 0 rgba(255,255,255,.05);
-  overflow: hidden;
-  position: relative;
+.resume-photo-wrap {
   flex-shrink: 0;
-}
-.arch-viz svg { width: 100%; height: 100%; display: block; }
-
-/* text + inline arrows below the viz */
-.arch-text {
-  padding: 32px 56px 0;
-  display: flex;
-  flex-direction: column;
-}
-.arch-text-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-}
-.arch-text-body { flex: 0 1 620px; text-align: center; }
-.arch-num { font-family: var(--mono); font-size: 9px; color: var(--dim); letter-spacing: .16em; margin-bottom: 14px; }
-.arch-title { font-family: var(--display); font-size: clamp(20px,2.5vw,30px); font-weight: 800; letter-spacing: -.025em; color: var(--text); margin-bottom: 10px; line-height: 1.05; }
-.arch-body { font-family: var(--body); font-size: 13px; line-height: 1.85; color: var(--muted); max-width: 560px; margin: 0 auto; }
-
-/* inline prev/next buttons */
-.how-nav-inline { display: flex; gap: 0; align-items: center; flex-shrink: 0; }
-.how-btn { width: 52px; height: 52px; border-radius: 99px; border: 1px solid rgba(96,136,160,.35); background: rgba(255,255,255,.04); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .2s, color .2s, background .2s; }
-.how-btn:hover { border-color: rgba(96,136,160,.6); color: var(--text); background: rgba(255,255,255,.08); }
-.how-btn:disabled { opacity: .2; cursor: default; pointer-events: none; }
-.how-btn svg { display: block; }
-
-/* ── VIZ ANIMATIONS ──────────────────────────────────── */
-
-@keyframes lineFillIn { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
-
-/* ── Card 01: candle chart ── */
-/* Bodies use SVG animate elements for correct grow direction — no CSS transforms needed */
-@keyframes wickFade { 0%{opacity:0} 20%,100%{opacity:1} }
-.w1{animation:wickFade 6s 0s    infinite} .w2{animation:wickFade 6s .55s  infinite}
-.w3{animation:wickFade 6s 1.1s  infinite} .w4{animation:wickFade 6s 1.65s infinite}
-.w5{animation:wickFade 6s 2.2s  infinite} .w6{animation:wickFade 6s 2.75s infinite}
-.w7{animation:wickFade 6s 3.3s  infinite} .w8{animation:wickFade 6s 3.85s infinite}
-@keyframes priceTick { 0%,8%{opacity:0} 15%,90%{opacity:1} 97%,100%{opacity:0} }
-.price-lbl { animation: priceTick 6s .5s infinite; }
-
-/* ── Card 02: full CALL + PUT waveform ── */
-/* Wave total path length ≈1200. Draw duration: 7s LINEAR.
-   x-span: 80→720 = 640px.
-   +THRESH crossing: x=258 → (258-80)/640 = 27.8%
-   −THRESH crossing: x=478 → (478-80)/640 = 62.2%
-   All animations use linear so timing matches wave draw exactly.
-*/
-@keyframes waveDraw2 { 0%{stroke-dashoffset:1200} 100%{stroke-dashoffset:0} }
-.vel-wave2 { stroke-dasharray:1200; stroke-dashoffset:1200; animation:waveDraw2 7s linear infinite; }
-
-@keyframes callFire { 0%,27.5%{r:0;opacity:0} 27.8%{r:9;opacity:1} 29%{r:6;opacity:1} 36%,100%{r:0;opacity:0} }
-@keyframes callRing  { 0%,27.5%{r:0;opacity:0} 27.8%{r:9;opacity:.9} 40%{r:28;opacity:0} 100%{opacity:0} }
-@keyframes putFire  { 0%,62%{r:0;opacity:0} 62.2%{r:9;opacity:1} 63.5%{r:6;opacity:1} 70%,100%{r:0;opacity:0} }
-@keyframes putRing  { 0%,62%{r:0;opacity:0} 62.2%{r:9;opacity:.9} 74%{r:28;opacity:0} 100%{opacity:0} }
-@keyframes labelShow    { 0%,27.5%{opacity:0} 27.8%,39%{opacity:1} 44%,100%{opacity:0} }
-@keyframes putLabelShow { 0%,62%{opacity:0} 62.2%,73%{opacity:1} 78%,100%{opacity:0} }
-.sig-call-dot  { animation: callFire 7s linear infinite; }
-.sig-call-ring { animation: callRing 7s linear infinite; fill:none; stroke:#38c99a; stroke-width:1.5; }
-.sig-put-dot   { animation: putFire  7s linear infinite; }
-.sig-put-ring  { animation: putRing  7s linear infinite; fill:none; stroke:#ff4060; stroke-width:1.5; }
-.call-label    { animation: labelShow    7s linear infinite; opacity:0; }
-.put-label     { animation: putLabelShow 7s linear infinite; opacity:0; }
-
-/* ── Card 03: gate sequence with outer border highlight ── */
-@keyframes gateSignalIn { 0%,5%{opacity:0} 10%,92%{opacity:1} 98%,100%{opacity:0} }
-.gate-sig-in  { animation: gateSignalIn 10s ease infinite; opacity:0; }
-
-/* Each gate lights up sequentially from unlit, holds until end, then all snap off.
-   Total cycle: 10s
-   Gate1 starts lighting at 15% (1.5s), Gate2 at 32% (3.2s), Gate3 at 49% (4.9s)
-   All hold until 88%, then snap dark at 95%.
-*/
-@keyframes gateBorderGreen1 { 0%,14%{stroke:#1c2230} 21%,88%{stroke:rgba(56,201,154,.6)} 95%,100%{stroke:#1c2230} }
-@keyframes gateTextGreen1   { 0%,14%{fill:#7888a0}   21%,88%{fill:#38c99a}             95%,100%{fill:#7888a0} }
-@keyframes gateDotOn1       { 0%,14%{fill:#36445a}   21%,88%{fill:#38c99a}             95%,100%{fill:#36445a} }
-
-@keyframes gateBorderGreen2 { 0%,31%{stroke:#1c2230} 38%,88%{stroke:rgba(56,201,154,.6)} 95%,100%{stroke:#1c2230} }
-@keyframes gateTextGreen2   { 0%,31%{fill:#7888a0}   38%,88%{fill:#38c99a}             95%,100%{fill:#7888a0} }
-@keyframes gateDotOn2       { 0%,31%{fill:#36445a}   38%,88%{fill:#38c99a}             95%,100%{fill:#36445a} }
-
-@keyframes gateBorderGreen3 { 0%,48%{stroke:#1c2230} 55%,88%{stroke:rgba(56,201,154,.6)} 95%,100%{stroke:#1c2230} }
-@keyframes gateTextGreen3   { 0%,48%{fill:#7888a0}   55%,88%{fill:#38c99a}             95%,100%{fill:#7888a0} }
-@keyframes gateDotOn3       { 0%,48%{fill:#36445a}   55%,88%{fill:#38c99a}             95%,100%{fill:#36445a} }
-
-.gb1{animation:gateBorderGreen1 10s ease infinite} .gt1{animation:gateTextGreen1 10s ease infinite} .gd1{animation:gateDotOn1 10s ease infinite}
-.gb2{animation:gateBorderGreen2 10s ease infinite} .gt2{animation:gateTextGreen2 10s ease infinite} .gd2{animation:gateDotOn2 10s ease infinite}
-.gb3{animation:gateBorderGreen3 10s ease infinite} .gt3{animation:gateTextGreen3 10s ease infinite} .gd3{animation:gateDotOn3 10s ease infinite}
-@keyframes orderOut { 0%,65%{opacity:0} 73%,88%{opacity:1} 95%,100%{opacity:0} }
-.gate-order-out { animation: orderOut 10s ease infinite; opacity:0; }
-
-/* ── Card 04: rolling P&L ledger ── */
-@keyframes rowSlideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-@keyframes flashGreen { 0%{background:rgba(56,201,154,.18)} 60%,100%{background:transparent} }
-@keyframes flashRed   { 0%{background:rgba(255,64,96,.14)}  60%,100%{background:transparent} }
-/* Net P&L counter pulses when updated */
-@keyframes netPop { 0%,100%{transform:scale(1)} 15%{transform:scale(1.08)} }
-
-/* ── Card 05: sim run reveal ── */
-@keyframes rowReveal { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-@keyframes runningPulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-@keyframes winnerPulse  {
-  0%,100%{ fill:rgba(96,200,255,.06); stroke:rgba(96,200,255,.18); }
-  50%    { fill:rgba(96,200,255,.16); stroke:rgba(96,200,255,.45); }
-}
-@keyframes barGrow { from{width:0} to{width:var(--bw)} }
-.param-bar { animation: barGrow .5s ease both; }
-.param-winner-bg { animation: winnerPulse 2s 1.4s ease-in-out infinite; }
-
-
-/* ── OPTIMIZATION & OBSERVABILITY (merged) ──────────── */
-.opt-section { border-bottom: 1px solid var(--line); }
-.opt-inner { display: grid; grid-template-columns: 1fr 1fr; }
-.opt-left  { padding: 72px 56px; border-right: 1px solid var(--line); }
-.opt-right { padding: 72px 56px; display: flex; flex-direction: column; justify-content: center; }
-.opt-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
-.opt-title { font-family: var(--display); font-size: clamp(28px,3.8vw,44px); font-weight: 800; letter-spacing: -.03em; color: var(--text); margin-bottom: 24px; line-height: 1.05; }
-.opt-body p { font-family: var(--body); font-size: 13px; line-height: 1.85; color: var(--muted); margin-bottom: 16px; }
-.opt-body p:last-child { margin-bottom: 0; }
-
-/* sweep results table */
-.opt-tbl { width: 100%; border-collapse: collapse; }
-.opt-tbl th { font-family: var(--display); font-size: 7px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; }
-.opt-tbl td { padding: 13px 14px; border-bottom: 1px solid rgba(28,34,48,.7); font-family: var(--mono); font-size: 11px; color: var(--muted); }
-.opt-tbl tr:last-child td { border-bottom: none; }
-.opt-tbl tr:hover td { background: var(--bg2); }
-.opt-row-winner td { color: var(--text); background: rgba(96,200,255,.04); border-bottom-color: rgba(96,200,255,.1); }
-.opt-row-winner:hover td { background: rgba(96,200,255,.07); }
-.opt-name { font-family: var(--display); font-size: 14px; font-weight: 800; color: var(--ice); }
-.opt-name.opt-dim { color: var(--dim); }
-.opt-stat-pos { color: var(--green); font-weight: 700; }
-.opt-badge { font-family: var(--display); font-size: 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; background: var(--bg3); color: var(--dim); border: 1px solid var(--line); }
-.opt-badge.opt-badge-live { background: rgba(96,200,255,.1); color: var(--ice2); border-color: rgba(96,200,255,.25); }
-.opt-caption { font-family: var(--body); font-size: 10px; font-style: italic; color: var(--dim); padding-top: 14px; }
-
-/* ── DEMO PANEL ──────────────────────────────────────── */
-.demo-panel-wrap { padding: 56px 56px; background: var(--bg); }
-.demo-panel { display: grid; grid-template-columns: 1fr 1fr; min-height: 280px; text-decoration: none; color: inherit; position: relative; overflow: hidden; background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; transition: background .35s; cursor: pointer; box-shadow: 0 4px 24px rgba(0,0,0,.3), 0 1px 0 rgba(255,255,255,.04); outline: 2px solid transparent; transition: background .35s, outline-color .3s, box-shadow .3s; }
-.demo-panel:hover { background: var(--bg3); outline-color: var(--ice); box-shadow: 0 4px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(96,200,255,.15), 0 0 40px rgba(96,200,255,.06); }
-.demo-panel::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 100% at 0% 50%, rgba(96,200,255,.06) 0%, transparent 60%); opacity: 0; transition: opacity .5s; pointer-events: none; border-radius: 14px; }
-.demo-panel:hover::after { opacity: 1; }
-.demo-panel-left  { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); position: relative; z-index: 1; }
-.demo-panel-right { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; }
-.demo-panel-label { font-family: var(--mono); font-size: 9px; color: var(--dim); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 16px; }
-.demo-panel-title { font-family: var(--display); font-size: clamp(48px,6vw,84px); font-weight: 800; letter-spacing: -.04em; line-height: .88; color: var(--text); opacity: .55; transition: opacity .35s, transform .4s cubic-bezier(.25,.46,.45,.94); }
-.demo-panel:hover .demo-panel-title { opacity: 1; transform: translateX(6px); }
-.demo-panel-desc { font-family: var(--body); font-size: 13px; color: var(--muted); line-height: 1.85; max-width: 380px; margin-bottom: 28px; transition: color .3s; }
-.demo-panel:hover .demo-panel-desc { color: var(--text); }
-.demo-panel-arrow { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--ice); display: flex; align-items: center; gap: 10px; transition: gap .3s; }
-.demo-panel:hover .demo-panel-arrow { gap: 18px; }
-.panel-live { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 99px; background: rgba(12,14,19,.8); border: 1px solid rgba(96,200,255,.2); font-family: var(--display); font-size: 7.5px; font-weight: 700; letter-spacing: .1em; color: #90dcff; margin-bottom: 20px; width: fit-content; }
-.panel-live::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #90dcff; box-shadow: 0 0 5px #90dcff; animation: orbpulse 1.8s ease-in-out infinite; }
-
-/* ── SCROLL REVEAL ───────────────────────────────────── */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
-.reveal.in { opacity: 1; transform: none; }
-
-/* ── FOOTER ──────────────────────────────────────────── */
-footer { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 32px 56px; font-family: var(--mono); font-size: 9px; color: var(--dim); border-top: 1px solid var(--line); }
-.footer-links { display: flex; gap: 32px; }
-.footer-links a { color: var(--dim); text-decoration: none; letter-spacing: .06em; transition: color .2s; }
-.footer-links a:hover { color: var(--text); }
-.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-
-/* ── TWEAKS PANEL ────────────────────────────────────── */
-.tweaks-panel { position: fixed; bottom: 24px; right: 24px; z-index: 10001; background: rgba(12,14,19,.97); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; min-width: 220px; display: none; backdrop-filter: blur(20px); box-shadow: 0 8px 40px rgba(0,0,0,.5); }
-.tweaks-panel.visible { display: block; }
-.tweaks-title { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--text); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.tweak-row { margin-bottom: 14px; }
-.tweak-row:last-child { margin-bottom: 0; }
-.tweak-label { font-family: var(--mono); font-size: 8px; color: var(--dim); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 7px; }
-.tweak-opts { display: flex; gap: 5px; flex-wrap: wrap; }
-.tweak-btn { padding: 4px 11px; border-radius: 99px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-family: var(--display); font-size: 9px; font-weight: 700; cursor: pointer; transition: all .16s; }
-.tweak-btn:hover { border-color: var(--dim); color: var(--text); }
-.tweak-btn.active { border-color: var(--ice); color: var(--ice); background: rgba(96,200,255,.08); }
-.tweak-swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); cursor: pointer; transition: border-color .16s, transform .16s; }
-.tweak-swatch:hover { transform: scale(1.12); }
-.tweak-swatch.active { border-color: var(--text); }
-.tweak-swatches { display: flex; gap: 8px; align-items: center; }
-
-/* ── HOW AND WHY ─────────────────────────────────────── */
-.why-section { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.why-inner { max-width: 780px; margin: 0 auto; padding: 80px 56px; }
-
-.why-header { margin-bottom: 40px; }
-.why-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
-.why-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--dim); opacity: .8; }
-.why-title { font-family: var(--display); font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -.03em; color: var(--text); line-height: 1.05; }
-.why-subtitle { font-family: var(--body); font-size: 13px; color: var(--muted); margin-top: 10px; font-style: italic; letter-spacing: .02em; }
-
-.why-body-wrap { position: relative; }
-.why-preview p,
-.why-expanded p {
-  font-family: var(--body);
-  font-size: 14px;
-  line-height: 1.9;
-  color: var(--muted);
-  margin-bottom: 22px;
-  text-indent: 2em;
-}
-.why-preview p:last-child,
-.why-expanded p:last-child { margin-bottom: 0; }
-
-/* Ensure first expanded paragraph has top spacing to separate from preview */
-.why-expanded p:first-child { margin-top: 22px; }
-
-.why-expanded {
-  max-height: 0;
+  width: 148px; height: 196px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: max-height .8s cubic-bezier(.25,.46,.45,.94);
+  border: 1px solid var(--line);
+  position: relative;
 }
-.why-expanded.open { max-height: 6000px; }
-
-/* fade overlay that sits above the preview text when collapsed */
-.why-fade {
-  position: absolute;
-  bottom: 44px; /* sits just above the toggle button */
-  left: 0; right: 0;
-  height: 72px;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-  pointer-events: none;
-  transition: opacity .4s ease;
+.resume-photo-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 8%;
+  display: block;
 }
-.why-fade.hidden { opacity: 0; }
+/* hover color reveal handled by JS-toggled .desaturated class */
 
-.why-toggle {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
+.resume-photo-name {
+  padding-bottom: 8px;
+}
+.resume-photo-name-line1 {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: .88;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--text);
+}
+.resume-photo-name-line2 {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: .92;
+  color: var(--text);
+}
+.resume-photo-tag {
   font-family: var(--mono);
   font-size: 9px;
-  letter-spacing: .16em;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--ice);
-  padding: 0;
-  transition: color .2s, gap .25s;
+  color: var(--dim);
+  margin-top: 14px;
 }
-.why-toggle:hover { color: var(--ice2); gap: 10px; }
-.why-toggle svg { transition: transform .35s cubic-bezier(.25,.46,.45,.94); flex-shrink: 0; }
-.why-toggle.open svg { transform: rotate(180deg); }
 
-/* ── RESPONSIVE ──────────────────────────────────────── */
-@media(max-width:720px){
-  /* Nav */
-  nav { padding: 0 20px; }
+/* ── RESUME LAYOUT ── */
+.resume-wrap {
+  position: relative; z-index: 3;
+  padding: 0 48px 160px;
+  max-width: 1100px;
+}
+.resume-section {
+  padding-top: 72px;
+}
+.resume-section-label {
+  font-family: var(--display); font-size: 13px; font-weight: 800; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ice2);
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 48px;
+}
+.resume-entry {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0 48px;
+  padding: 40px 0;
+  border-top: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.16,1,.3,1);
+}
+.resume-entry.visible {
+  opacity: 1; transform: translateY(0);
+}
+.resume-entry:last-child { border-bottom: 1px solid var(--line); }
+.entry-meta { padding-top: 4px; }
+.entry-dates {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
+  color: var(--ice); margin-bottom: 10px; line-height: 1.5;
+}
+.entry-org {
+  font-family: var(--display); font-size: 12px; font-weight: 800;
+  letter-spacing: -.01em; color: var(--text); margin-bottom: 4px;
+  line-height: 1.2;
+}
+.entry-location {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .08em;
+  color: var(--dim); margin-top: 8px;
+}
+.entry-role {
+  font-family: var(--display); font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800; letter-spacing: -.025em; color: var(--text);
+  line-height: 1.1; margin-bottom: 20px;
+}
+.entry-role-sub {
+  font-family: var(--display); font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800; letter-spacing: -.025em; color: var(--text);
+  line-height: 1.1;
+  margin-top: 32px; margin-bottom: 20px;
+  padding-top: 24px; border-top: 1px solid var(--line);
+}
+.entry-bullets {
+  list-style: none; display: flex; flex-direction: column; gap: 10px;
+}
+.entry-bullets li {
+  font-family: var(--body); font-size: 12.5px; line-height: 1.8;
+  color: var(--muted); padding-left: 18px; position: relative;
+  letter-spacing: .01em;
+}
+.entry-bullets li::before {
+  content: '—'; position: absolute; left: 0;
+  color: var(--dim); font-size: 10px; top: 4px;
+}
+.stat {
+  font-family: var(--display); font-weight: 800;
+  color: var(--ice2); letter-spacing: -.01em;
+}
+.entry-degree {
+  font-family: var(--body); font-size: 12px; color: var(--muted);
+  margin-top: 8px; line-height: 1.7; letter-spacing: .01em;
+}
+
+/* ── CERTIFICATIONS ── */
+.cert-list {
+  display: flex; flex-direction: column; gap: 10px; list-style: none;
+}
+.cert-list li {
+  font-family: var(--display); font-size: 14px; font-weight: 800;
+  letter-spacing: -.015em; color: var(--text); line-height: 1.2;
+  padding-left: 18px; position: relative;
+}
+.cert-list li::before {
+  content: '—'; position: absolute; left: 0;
+  color: var(--dim); font-size: 10px; top: 4px;
+  font-family: var(--body); font-weight: 400;
+}
+
+/* ── SECTION LABEL LINE DRAW ── */
+.resume-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .8s cubic-bezier(.16,1,.3,1);
+}
+.resume-section-label.line-drawn::after {
+  transform: scaleX(1);
+}
+
+/* ── PHOTO LOAD TRANSITION ── */
+.resume-photo-wrap img {
+  filter: grayscale(0%) contrast(1.02) brightness(.98);
+  transition: filter 1.6s ease .3s;
+}
+.resume-photo-wrap.desaturated img {
+  filter: grayscale(100%) contrast(1.05) brightness(.92);
+}
+.resume-photo-wrap:hover img {
+  filter: grayscale(0%) contrast(1.02) brightness(.98) !important;
+  transition: filter .5s ease !important;
+}
+.resume-photo-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(96,200,255,.06);
+  pointer-events: none;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 1.6s ease .3s;
+}
+.resume-photo-wrap.desaturated::after { opacity: 1; }
+.resume-photo-wrap:hover::after { opacity: 0 !important; transition: opacity .5s ease !important; }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; backdrop-filter: blur(12px); }
   .nav-links { display: none; }
+  .nav-status { display: none; }
   .nav-page-label { display: inline; }
-
-  /* Hero — stack columns, fix the giant hardcoded font */
-  .hero { grid-template-columns: 1fr; }
-  .hero-left { padding: 88px 24px 32px; }
-  .hero-name .name-line-outline {
-    font-size: clamp(48px, 14vw, 120px) !important;
-    line-height: .92 !important;
+  .page-header { padding: 88px 20px 40px; }
+  .page-title { font-size: clamp(40px, 11vw, 96px); }
+  .resume-photo-header {
+    padding: 32px 20px 0;
+    gap: 24px;
   }
-  .hero-name .name-line-filled {
-    font-size: clamp(48px, 14vw, 120px) !important;
+  .resume-photo-wrap { width: 100px; height: 133px; }
+  .resume-wrap { padding: 0 20px 120px; }
+  .resume-entry {
+    grid-template-columns: 1fr;
+    gap: 16px 0;
   }
-  .hero-tagline { font-size: 13px; margin-bottom: 28px; }
-  .hero-cta { margin-bottom: 32px; }
-  .hero-stats { gap: 18px; flex-wrap: wrap; }
-
-  /* Mini dashboard — unlock fixed dimensions, untilt, fit screen */
-  .hero-right { padding: 0 20px 56px; }
-  #miniDashLink { display: block !important; }
-  #miniDash {
-    width: 100% !important;
-    min-width: unset !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: unset !important;
-    max-height: 420px !important;
-    transform: none !important;
-    overflow-y: auto !important;
+  .entry-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; padding-top: 0;
   }
-  /* Scale down dashboard internals slightly */
-  .db-price { font-size: 32px !important; }
-  .db-kpi { grid-template-columns: repeat(3,1fr); }
-  .kpi-cell:nth-child(4), .kpi-cell:nth-child(5) { display: none; }
-  .db-main { grid-template-columns: 1fr; }
-  .db-sidebar { display: none; }
-  .db-gallery { border-right: none; }
-
-  /* How it works carousel */
-  .how-header-row { flex-direction: column; padding: 48px 24px 32px; gap: 16px; }
-  .how-progress-row { display: none; }
-  .arch-viz { width: calc(100% - 48px); margin: 32px 24px 0; height: 220px; }
-  .arch-text { padding: 20px 24px 0; }
-  .arch-text-row { gap: 12px; }
-  .arch-body { font-size: 12px; }
-  .how-btn { width: 40px; height: 40px; }
-
-  /* Optimisation section */
-  .opt-inner { grid-template-columns: 1fr; }
-  .opt-left { border-right: none; border-bottom: 1px solid var(--line); padding: 48px 24px; }
-  .opt-right { padding: 48px 24px; }
-
-  /* Demo panel */
-  .demo-panel-wrap { padding: 32px 24px; }
-  .demo-panel { grid-template-columns: 1fr; }
-  .demo-panel-left { border-right: none; border-bottom: 1px solid var(--line); padding: 40px 24px 28px; }
-  .demo-panel-right { padding: 28px 24px 40px; }
-  .demo-panel-title { font-size: clamp(36px,10vw,64px) !important; }
-
-  /* Why section */
-  .why-inner { padding: 56px 24px; }
-  .why-preview p, .why-expanded p {
-    font-size: 13px;
-    text-indent: 0;
-    line-height: 1.8;
-  }
-
-  /* Footer */
-  footer { padding: 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
-  .footer-right { align-items: flex-start; }
-
-  /* Tweaks panel — keep it accessible but move it so it doesn't block content */
-  .tweaks-panel { bottom: 16px; right: 16px; min-width: 180px; }
+  .entry-location { margin-top: 0; }
+  .resume-section { padding-top: 48px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══ -->
 <nav id="mainNav">
   <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
     <svg width="46" height="30" viewBox="0 0 36 24" fill="none" aria-label="MH" style="display:inline-block;vertical-align:middle;margin-right:2px">
@@ -701,893 +413,326 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
       <polyline points="13,21 13,14 23,14 23,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
     <span class="nav-monogram-arrow">&#9660;</span>
-    <span class="nav-page-label">TradeBot</span>
+    <span class="nav-page-label">Résumé</span>
     <div class="nav-dropdown" id="navDropdown">
       <div class="nav-dropdown-main">
         <a href="/">Home <span class="nav-dropdown-num">00</span></a>
-        <a href="/resume">Résumé <span class="nav-dropdown-num">01</span></a>
+        <a href="/resume" class="active">Résumé</a>
         <a href="/photography" id="navPhotoRow">Photography <span class="nav-dropdown-num">02</span><span class="nav-dropdown-chevron">&#9654;</span></a>
         <div class="nav-album-list" id="navAlbumList">
           <div id="navAlbumLinks"></div>
         </div>
         <div class="nav-album-list-spacer"></div>
         <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
-        <a href="/contact">Contact <span class="nav-dropdown-num">04</span></a>
+        <a href="/contact">Contact</a>
       </div>
     </div>
   </div>
   <div class="nav-links">
-    <a href="/projects">← Projects</a>
-    <a href="/projects/tradebot/dashboard/" target="_blank" class="nav-cta">Open Dashboard ↗</a>
+    <a href="/resume" class="active">Résumé</a>
+    <a href="/photography">Photography</a>
+    <a href="/projects">Projects</a>
+    <a href="/contact">Contact</a>
+  </div>
+  <div class="nav-status">
+    <div class="nav-dot"></div>
+    <span id="navStatus">Open to collaborations</span>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<div class="hero" id="hero">
-  <!-- left: text -->
-  <div class="hero-left">
-    <div class="hero-eyebrow">Automated options trading system</div>
-    <div class="hero-name">
-      <span class="name-line-outline" style="font-family:'Chivo Mono',monospace;font-size:160px;font-weight:800;line-height:0.88">SPY 0DTE</span>
-      <span class="name-line-filled">TradeBot</span>
-    </div>
-    <p class="hero-tagline">From market open to close, it watches every tick, sizes up momentum, and places real risk-minimized options trades without any manual intervention.</p>
-    <a href="/projects/tradebot/dashboard/" target="_blank" class="hero-cta">See it in action →</a>
+<div class="page-header">
+  <div class="page-eyebrow">Résumé</div>
+  <div class="page-title">Résumé</div>
+  <p class="page-desc">Healthcare IT consulting, system implementation, and revenue cycle optimization.</p>
+</div>
 
+<div class="resume-photo-header">
+  <div class="resume-photo-wrap">
+    <img src="/resume/mitchell.jpg" alt="Mitchell Herrmann">
   </div>
-
-  <!-- right: live dashboard -->
-  <div class="hero-right">
-    <a href="/projects/tradebot/dashboard/" target="_blank" id="miniDashLink" style="display:block;text-decoration:none;cursor:pointer;" aria-label="Open full dashboard">
-    <div id="miniDash">
-      <div class="db-nav">
-        <div class="db-logo"><div class="logo-orb"></div>SPY / 0DTE Terminal</div>
-        <div class="db-nav-right">
-          <span id="dbTime">--:--:--</span>
-          <div class="live-badge">LIVE</div>
-        </div>
-      </div>
-      <div class="db-hero-strip">
-        <div>
-          <div class="db-price" id="dbPrice">—</div>
-          <div class="db-price-sub">SPY · last · <span id="dbDelta">—</span></div>
-        </div>
-        <div class="db-inds">
-          <div class="vwap-lbl">VWAP</div>
-          <div class="vwap-val" id="dbVwap">—</div>
-          <div class="ind-row">
-            <div class="ind-cell"><div class="ind-lbl">ROC 5m</div><div class="ind-val" id="dbRoc">—</div></div>
-            <div class="ind-cell"><div class="ind-lbl">RSI 14</div><div class="ind-val" id="dbRsi">—</div></div>
-            <div class="ind-cell"><div class="ind-lbl">Trend</div><div class="ind-val up" id="dbTrend">—</div></div>
-            <div class="ind-cell"><div class="ind-lbl">Regime</div><div class="ind-val up" id="dbRegime">—</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="db-kpi">
-        <div class="kpi-cell"><div class="kpi-l">Open Pos</div><div class="kpi-v neu" id="dbKpiOpen">—</div></div>
-        <div class="kpi-cell"><div class="kpi-l">Txns</div><div class="kpi-v neu" id="dbKpiTxn">0</div></div>
-        <div class="kpi-cell"><div class="kpi-l">Blocked</div><div class="kpi-v neu" id="dbKpiBlocked">0</div></div>
-        <div class="kpi-cell"><div class="kpi-l">Day Type</div><div class="kpi-v warn" id="dbKpiDay">—</div></div>
-        <div class="kpi-cell"><div class="kpi-l">Threshold</div><div class="kpi-v neu" id="dbKpiThresh">—</div></div>
-      </div>
-      <div class="db-main">
-        <div class="db-gallery">
-          <div class="db-sec-hdr"><span class="db-sec-ttl">Signal layer</span><span style="font-family:var(--mono);font-size:7.5px;color:var(--dust2)">variant K</span></div>
-          <div class="db-vc" id="dbVc">
-            <div class="db-vc-hdr">
-              <div><div class="db-vc-name">K</div><div class="db-vc-desc">kalman momentum · live execution</div></div>
-              <div class="sp standby" id="dbPill">Standby</div>
-            </div>
-            <div class="score-row">
-              <div class="score-lbl">Bull score</div>
-              <div class="score-track"><div class="score-fill bull" id="dbBull" style="width:0%"></div></div>
-              <div class="score-nums">score <span class="hot" id="dbBullN">—</span> / 10</div>
-            </div>
-            <div class="score-row">
-              <div class="score-lbl">Bear score</div>
-              <div class="score-track"><div class="score-fill bear" id="dbBear" style="width:0%"></div></div>
-              <div class="score-nums">score <span id="dbBearN">—</span> / 10</div>
-            </div>
-          </div>
-          <div class="db-chart-area">
-            <div class="db-chart-hdr">
-              <div class="db-chart-ttl">Kalman velocity</div>
-              <div class="db-chart-meta"><span id="dbVelLive">—</span><span style="font-size:7.5px;color:var(--dust2)" id="dbVelThresh">thresh ±—</span></div>
-            </div>
-            <div style="height:52px;overflow:hidden;"><canvas id="dbVelChart" height="52"></canvas></div>
-          </div>
-          <div class="db-sec-hdr"><span class="db-sec-ttl">Position log</span><span style="font-family:var(--mono);font-size:7.5px;color:var(--dust2)" id="dbPosCount">—</span></div>
-          <div class="db-tbl-wrap">
-            <table class="db-tbl">
-              <thead><tr><th>Time</th><th>Dir</th><th>Contract</th><th>Entry</th><th>Exit</th><th>P&amp;L</th><th>Reason</th></tr></thead>
-              <tbody id="dbTbody"><tr><td colspan="7" style="text-align:center;padding:14px;color:var(--dust2);font-style:italic">Starting…</td></tr></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="db-sidebar">
-          <div class="sb-sec">
-            <div class="sb-eye">Session P&amp;L</div>
-            <div class="sb-big neu" id="dbNet">—</div>
-            <div class="sb-sub">net realized + unrealized</div>
-            <div class="sb-sm neu" id="dbUnreal" style="margin-top:6px">—</div>
-            <div class="sb-sub">unrealized</div>
-            <div class="sb-sm neu" id="dbReal">—</div>
-            <div class="sb-sub">realized</div>
-          </div>
-          <div class="sb-sec">
-            <div class="sb-eye">Data Health</div>
-            <div class="health-bar"><div class="opts-orb" id="dbOrb" style="animation:none;background:var(--bone3);box-shadow:none;"></div><span id="dbHealth">Initializing…</span></div>
-          </div>
-          <div class="sb-sec">
-            <div class="sb-eye">P&amp;L by Minute</div>
-            <div id="dbPnlLog"></div>
-          </div>
-        </div>
-      </div>
-      <div class="db-ticker"><div class="ticker-tag">Events</div><span id="dbTickerMsg">Replay starting…</span></div>
-    </div>
-    </a>
+  <div class="resume-photo-name">
+    <div class="resume-photo-name-line1">Mitchell</div>
+    <div class="resume-photo-name-line2">Herrmann</div>
+    <div class="resume-photo-tag">Healthcare IT &nbsp;·&nbsp; Revenue Cycle &nbsp;·&nbsp; Denver, CO</div>
   </div>
 </div>
 
-<!-- ═══ HOW IT WORKS ═══ -->
-<section class="how-section work-section" id="how">
+<div class="resume-wrap">
 
-  <!-- header row above carousel -->
-  <div class="how-header-row">
-    <div class="how-header-left">
-      <div class="how-eyebrow">Architecture</div>
-      <h2 class="how-title">How it works</h2>
+  <!-- ── PROFESSIONAL EXPERIENCE ── -->
+  <div class="resume-section">
+    <div class="resume-section-label">Professional Experience</div>
+
+    <!-- NYC H+H -->
+    <div class="resume-entry">
+      <div class="entry-meta">
+        <div class="entry-dates">Feb. 2020 — Present</div>
+        <div class="entry-org">New York City<br>Health + Hospitals</div>
+        <div class="entry-location">Remote</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">Senior Consultant<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">Home Health Billing</span></div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--dim);margin-bottom:18px;text-transform:uppercase">Contracted through TEKsystems</div>
+        <ul class="entry-bullets">
+          <li>Partner with agency leadership to collaboratively identify and prioritize key Epic enhancement projects, and lead analyst team in data analysis and technical implementation of new features across the full revenue cycle.</li>
+          <li>Develop business intelligence reports to provide operations actionable insights on agency productivity and revenue cycle performance and forecasting.</li>
+          <li>Successfully led multi-IT team discovery, scoping, and implementation efforts for six third-party integrations across multiple technologies including HL7, API, and SFTP.</li>
+          <li>Leveraged operational analytics and software optimizations to streamline revenue collection, resulting in a <span class="stat">50.3%</span> reduction in unbilled revenue and a <span class="stat">20.3%</span> decrease in accounts receivable.</li>
+          <li>Drove a <span class="stat">14%</span> increase in revenue from 2023 to 2024 by analyzing existing payer contracts and presenting potential renegotiation strategies to Business Development leadership.</li>
+        </ul>
+      </div>
     </div>
-    <div style="display:flex;align-items:center;gap:20px;">
+
+    <!-- Baker Tilly -->
+    <div class="resume-entry">
+      <div class="entry-meta">
+        <div class="entry-dates">Oct. 2018 — Jan. 2020</div>
+        <div class="entry-org">Baker Tilly</div>
+        <div class="entry-location">Chicago, IL</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">Senior Consultant<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">Payer Implementation</span></div>
+        <ul class="entry-bullets">
+          <li>Developed and managed the implementation plan for a new Value-Based Care insurance program launch in New Mexico and Oklahoma, coordinating deliverables across multiple teams.</li>
+          <li>Collaborated with BCBS executive leadership to identify and document business needs, translating them into clear technical requirements for development teams.</li>
+          <li>Communicated project progress and barriers to executive stakeholders to escalate delays, mitigate risk, and create actionable resolution plans.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Epic Systems -->
+    <div class="resume-entry">
+      <div class="entry-meta">
+        <div class="entry-dates">June 2014 — Aug. 2018</div>
+        <div class="entry-org">Epic Systems</div>
+        <div class="entry-location">Verona, WI</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">Technical Solutions Engineer<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">Jan. 2018 — Aug. 2018</span></div>
+        <ul class="entry-bullets">
+          <li>Fostered communication between operational leaders, IT analysts, and end users to identify, triage, and resolve a backlog of issues after going live on EpicCare Home Health.</li>
+          <li>Improved user satisfaction by providing guidance to enhance system configuration and optimize workflows.</li>
+          <li>Facilitated adoption of new functionality by working with IT staff to configure and demonstrate features.</li>
+        </ul>
+
+        <div class="entry-role-sub">Project Manager<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">June 2014 — Aug. 2018</span></div>
+        <ul class="entry-bullets">
+          <li>Conducted pre-implementation demonstration sessions for customer leadership to present Epic Home Health and Hospice software functionality and identify organizational goals and requirements.</li>
+          <li>Designed and installed custom software configurations to meet client needs in accordance with state and national regulations and industry standards.</li>
+          <li>Provided education and support to customer IT teams on all project needs, including technical system configuration and testing, operational decision making, change management, KPI monitoring, and user training.</li>
+          <li>Coordinated with internal development teams to design and optimize new functionality for Epic's Foundation System based on customer feedback.</li>
+          <li>Served as the Epic-wide Hospice Billing success owner, guiding continuous improvement to the module based on evolving industry and client demands.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- progress + dots above stage -->
-  <div style="display:flex;align-items:center;gap:16px;padding:20px 56px 0;">
-    <div class="how-progress-row">
-      <span class="how-counter"><span class="how-current" id="howCurrent">01</span> <span class="how-total">/ 05</span></span>
-      <div class="how-progress"><div class="how-progress-fill" id="howProgress" style="width:20%"></div></div>
-    </div>
-    <div class="how-dots" id="howDots"></div>
-  </div>
+  <!-- ── EDUCATION ── -->
+  <div class="resume-section">
+    <div class="resume-section-label">Education</div>
 
-  <!-- carousel stage — full width -->
-  <div class="how-stage" id="howStage">
-    <div class="how-track" id="howTrack">
-
-      <!-- CARD 01 -->
-      <div class="arch-card active">
-        <div class="arch-viz" style="position:relative;background:#0c0e13;">
-          <canvas id="card1canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
-          <div style="position:absolute;bottom:10px;right:14px;display:flex;align-items:center;gap:5px;font-family:'Chivo Mono',monospace;font-size:8px;color:#38c99a;letter-spacing:.08em;pointer-events:none;">
-            <span style="width:6px;height:6px;border-radius:50%;background:#38c99a;display:inline-block;animation:orbpulse 1.4s ease-in-out infinite;"></span>WS
-          </div>
-        </div>
-        <div class="arch-text">
-          <div class="arch-text-row">
-            <div class="how-nav-inline">
-              <button class="how-btn" id="howPrev" disabled aria-label="Previous"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="arch-text-body">
-              <div class="arch-num">01 — Live data stream</div>
-              <div class="arch-title">Every tick retrieved in milliseconds</div>
-              <div class="arch-body">Tick-by-tick SPY equity and options chain data arrives via Schwab WebSocket. Every price update is dispatched to the signal engine before the next one arrives without batching or polling.</div>
-            </div>
-            <div class="how-nav-inline">
-              <button class="how-btn" id="howNext" aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-          </div>
+    <div class="resume-entry edu">
+      <div class="entry-meta">
+        <div class="entry-dates">May 2014</div>
+        <div class="entry-org">University of Wisconsin</div>
+        <div class="entry-location">Madison, WI</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">B.S. Community and<br>Nonprofit Leadership</div>
+        <div class="entry-degree">
+          Minors: Business, Environmental Studies
         </div>
       </div>
-
-      <!-- CARD 02 -->
-      <div class="arch-card">
-        <div class="arch-viz">
-          <svg viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <defs>
-              <!-- Clip to above +THRESH (y < 85) -->
-              <clipPath id="clipAbove"><rect x="0" y="0" width="800" height="85"/></clipPath>
-              <!-- Clip to below -THRESH (y > 195) -->
-              <clipPath id="clipBelow"><rect x="0" y="195" width="800" height="85"/></clipPath>
-            </defs>
-            <!-- threshold lines -->
-            <line x1="80" y1="85"  x2="720" y2="85"  stroke="rgba(96,200,255,.3)" stroke-width="1.5" stroke-dasharray="6 4"/>
-            <line x1="80" y1="195" x2="720" y2="195" stroke="rgba(96,200,255,.3)" stroke-width="1.5" stroke-dasharray="6 4"/>
-            <line x1="80" y1="140" x2="720" y2="140" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-            <text x="86" y="79"  font-family="'Chivo Mono',monospace" font-size="9" fill="rgba(96,200,255,.5)" letter-spacing=".1em">+THRESH</text>
-            <text x="86" y="213" font-family="'Chivo Mono',monospace" font-size="9" fill="rgba(96,200,255,.5)" letter-spacing=".1em">−THRESH</text>
-            <!-- Layer 1: full neutral wave -->
-            <polyline class="vel-wave2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              points="80,138 115,142 148,135 175,140 200,134 222,126 242,112 258,95 270,80 282,70 294,64 306,70 318,82 330,95 342,110 355,124 368,135 384,140 400,142 415,146 430,152 444,160 456,170 467,182 478,196 489,208 500,218 510,210 518,200 526,190 536,180 548,168 562,154 578,142 594,138 614,140 638,140 665,139 695,140 720,140"
-              stroke="rgba(130,160,180,.4)"/>
-            <!-- Layer 2: green wave, clipped to above +THRESH (y<85) -->
-            <polyline class="vel-wave2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-              points="80,138 115,142 148,135 175,140 200,134 222,126 242,112 258,95 270,80 282,70 294,64 306,70 318,82 330,95 342,110 355,124 368,135 384,140 400,142 415,146 430,152 444,160 456,170 467,182 478,196 489,208 500,218 510,210 518,200 526,190 536,180 548,168 562,154 578,142 594,138 614,140 638,140 665,139 695,140 720,140"
-              stroke="#38c99a" clip-path="url(#clipAbove)"/>
-            <!-- Layer 3: red wave, clipped to below -THRESH (y>195) -->
-            <polyline class="vel-wave2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-              points="80,138 115,142 148,135 175,140 200,134 222,126 242,112 258,95 270,80 282,70 294,64 306,70 318,82 330,95 342,110 355,124 368,135 384,140 400,142 415,146 430,152 444,160 456,170 467,182 478,196 489,208 500,218 510,210 518,200 526,190 536,180 548,168 562,154 578,142 594,138 614,140 638,140 665,139 695,140 720,140"
-              stroke="#ff4060" clip-path="url(#clipBelow)"/>
-            <!-- CALL signal dot + ring fires AT +thresh crossing x=258,y=85 -->
-            <circle class="sig-call-dot" cx="258" cy="85" r="0" fill="#38c99a"/>
-            <circle class="sig-call-ring" cx="258" cy="85"/>
-            <!-- CALL label — sits above the wave peak (peak is y≈64, label above that) -->
-            <g class="call-label">
-              <rect x="252" y="18" width="88" height="22" rx="5" fill="rgba(56,201,154,.14)" stroke="rgba(56,201,154,.35)" stroke-width="1"/>
-              <text x="296" y="33" font-family="'Syne',sans-serif" font-size="10" font-weight="800" fill="#38c99a" text-anchor="middle" letter-spacing=".08em">▲ CALL</text>
-            </g>
-            <!-- PUT signal dot + ring fires AT −thresh crossing x=478,y=195 -->
-            <circle class="sig-put-dot" cx="478" cy="195" r="0" fill="#ff4060"/>
-            <circle class="sig-put-ring" cx="478" cy="195"/>
-            <!-- PUT label — sits below the wave trough (trough is y≈218, label below that) -->
-            <g class="put-label">
-              <rect x="434" y="236" width="88" height="22" rx="5" fill="rgba(255,64,96,.14)" stroke="rgba(255,64,96,.35)" stroke-width="1"/>
-              <text x="478" y="251" font-family="'Syne',sans-serif" font-size="10" font-weight="800" fill="#ff4060" text-anchor="middle" letter-spacing=".08em">▼ PUT</text>
-            </g>
-            <text x="86" y="268" font-family="'Chivo Mono',monospace" font-size="8" fill="#556070" letter-spacing=".1em">KALMAN VELOCITY</text>
-          </svg>
-        </div>
-        <div class="arch-text">
-          <div class="arch-text-row">
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Previous" onclick="howCarousel(-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="arch-text-body">
-              <div class="arch-num">02 — Momentum signal detection</div>
-              <div class="arch-title">The signal layer watches every tick</div>
-              <div class="arch-body">On each update, the signal layer evaluates Kalman-filtered price momentum against a calibrated threshold. When velocity crosses the threshold, a buy signal fires — CALL on the way up, PUT on the way down.</div>
-            </div>
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Next" onclick="howCarousel(1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 03 -->
-      <div class="arch-card">
-        <div class="arch-viz">
-          <svg viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <!-- signal in pill — lights up first, ungated -->
-            <g class="gate-sig-in">
-              <rect x="310" y="16" width="180" height="26" rx="13" fill="rgba(96,200,255,.1)" stroke="rgba(96,200,255,.3)" stroke-width="1"/>
-              <text x="400" y="33" font-family="'Syne',sans-serif" font-size="10" font-weight="700" fill="#90dcff" letter-spacing=".1em" text-anchor="middle">▲ SIGNAL IN</text>
-            </g>
-            <line x1="400" y1="42" x2="400" y2="60" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- Gate 1: RSI -->
-            <rect class="gb1" x="160" y="60" width="480" height="44" rx="7" stroke="#1c2230" stroke-width="1.5" fill="#0c0e13"/>
-            <circle class="gd1" cx="196" cy="82" r="5" fill="#36445a"/>
-            <text class="gt1" x="214" y="87" font-family="'Syne',sans-serif" font-size="11" font-weight="700" fill="#7888a0">RSI gate</text>
-            <text x="380" y="87" font-family="'Chivo Mono',monospace" font-size="10" fill="#556070">RSI 54.2 — within range</text>
-            <line x1="400" y1="104" x2="400" y2="120" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- Gate 2: Regime -->
-            <rect class="gb2" x="160" y="120" width="480" height="44" rx="7" stroke="#1c2230" stroke-width="1.5" fill="#0c0e13"/>
-            <circle class="gd2" cx="196" cy="142" r="5" fill="#36445a"/>
-            <text class="gt2" x="214" y="147" font-family="'Syne',sans-serif" font-size="11" font-weight="700" fill="#7888a0">Regime gate</text>
-            <text x="380" y="147" font-family="'Chivo Mono',monospace" font-size="10" fill="#556070">bull trend — confirmed</text>
-            <line x1="400" y1="164" x2="400" y2="180" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- Gate 3: Position cap -->
-            <rect class="gb3" x="160" y="180" width="480" height="44" rx="7" stroke="#1c2230" stroke-width="1.5" fill="#0c0e13"/>
-            <circle class="gd3" cx="196" cy="202" r="5" fill="#36445a"/>
-            <text class="gt3" x="214" y="207" font-family="'Syne',sans-serif" font-size="11" font-weight="700" fill="#7888a0">Position cap</text>
-            <text x="380" y="207" font-family="'Chivo Mono',monospace" font-size="10" fill="#556070">0 of 2 slots used</text>
-            <line x1="400" y1="224" x2="400" y2="240" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- order out -->
-            <g class="gate-order-out">
-              <rect x="310" y="240" width="180" height="26" rx="13" fill="rgba(56,201,154,.1)" stroke="rgba(56,201,154,.3)" stroke-width="1"/>
-              <text x="400" y="257" font-family="'Syne',sans-serif" font-size="10" font-weight="700" fill="#38c99a" letter-spacing=".1em" text-anchor="middle">ORDER ↓</text>
-            </g>
-          </svg>
-        </div>
-        <div class="arch-text">
-          <div class="arch-text-row">
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Previous" onclick="howCarousel(-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="arch-text-body">
-              <div class="arch-num">03 — Risk &amp; gate layer</div>
-              <div class="arch-title">Every signal goes through the gate</div>
-              <div class="arch-body">Before any order is placed, the system checks RSI, market regime, and concurrent position limits to ensure it's safe to fire. Orders are then placed and verified with minimal latency.</div>
-            </div>
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Next" onclick="howCarousel(1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 04: rolling P&L ledger -->
-      <div class="arch-card">
-        <div class="arch-viz" id="card4viz">
-          <svg id="card4svg" viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <!-- headers -->
-            <text x="60"  y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">TIME</text>
-            <text x="170" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">CONTRACT</text>
-            <text x="370" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">ENTRY</text>
-            <text x="460" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">EXIT</text>
-            <text x="560" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">P&amp;L</text>
-            <text x="640" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">REASON</text>
-            <line x1="40" y1="36" x2="760" y2="36" stroke="#1c2230" stroke-width="1"/>
-            <!-- clip rows so they never overflow the footer line -->
-            <defs><clipPath id="rowClip"><rect x="0" y="36" width="800" height="196"/></clipPath></defs>
-            <g id="card4rows" clip-path="url(#rowClip)"></g>
-            <!-- fixed footer zone — always visible -->
-            <rect x="0" y="235" width="800" height="45" fill="#0c0e13"/>
-            <line x1="40" y1="236" x2="760" y2="236" stroke="#1c2230" stroke-width="1"/>
-            <text x="60" y="258" font-family="'Syne',sans-serif" font-size="9" font-weight="700" fill="#556070" letter-spacing=".12em">SESSION NET</text>
-            <text id="card4net" x="740" y="260" font-family="'Syne',sans-serif" font-size="20" font-weight="800" fill="#e8edf5" text-anchor="end">—</text>
-          </svg>
-        </div>
-        <div class="arch-text">
-          <div class="arch-text-row">
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Previous" onclick="howCarousel(-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="arch-text-body">
-              <div class="arch-num">04 — Live order execution</div>
-              <div class="arch-title">Real orders, on a real account</div>
-              <div class="arch-body">Qualifying signals place actual 0DTE options orders via Schwab's REST API. The system selects the strike by delta, manages trailing stops and take-profits automatically, and logs every fill in real time for future analysis.</div>
-            </div>
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Next" onclick="howCarousel(1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 05: sim run reveal leaderboard -->
-      <div class="arch-card">
-        <div class="arch-viz" id="card5viz">
-          <svg id="card5svg" viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <text x="60"  y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">CONFIG</text>
-            <text x="200" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">THRESHOLD</text>
-            <text x="340" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">WIN RATE</text>
-            <text x="460" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">SESSION P&amp;L</text>
-            <text x="660" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">STATUS</text>
-            <line x1="40" y1="36" x2="760" y2="36" stroke="#1c2230" stroke-width="1"/>
-            <g id="card5rows"></g>
-            <text id="card5footer" x="40" y="268" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".08em" opacity="0"></text>
-          </svg>
-        </div>
-        <div class="arch-text">
-          <div class="arch-text-row">
-            <div class="how-nav-inline">
-              <button class="how-btn" aria-label="Previous" onclick="howCarousel(-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="arch-text-body">
-              <div class="arch-num">05 — Simulation &amp; optimization</div>
-              <div class="arch-title">Every session makes the next one smarter</div>
-              <div class="arch-body">After each session, trade data is fed into a Bayesian table to optimize live parameter configurations for future sessions. </div>
-            </div>
-            <div class="how-nav-inline">
-              <button class="how-btn" id="howNext" disabled aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /.how-track -->
-  </div><!-- /.how-stage -->
-
-</section>
-
-
-<!-- ═══ FULL DASHBOARD LINK ═══ -->
-<div class="demo-panel-wrap work-section" id="demo">
-<a href="/projects/tradebot/dashboard/" target="_blank" class="demo-panel">
-  <div class="demo-panel-left">
-    <div class="demo-panel-label">Demo</div>
-    <div class="demo-panel-title" style="font-family:'Syne',sans-serif;font-size:clamp(32px,4vw,56px)">Full<br>Dashboard</div>
-  </div>
-  <div class="demo-panel-right">
-    <div class="panel-live">Replay mode</div>
-    <p class="demo-panel-desc">The same UI that runs during live trading with a real partial session replay showing actual signals, orders, and P&L.</p>
-    <div class="demo-panel-arrow">Open Dashboard →</div>
-  </div>
-</a>
-</div>
-
-<!-- ═══ HOW AND WHY ═══ -->
-<section class="why-section work-section">
-  <div class="why-inner">
-
-    <div class="why-header">
-      <div class="why-eyebrow">Background</div>
-      <h2 class="why-title">How and why I 'built' this</h2>
-      <p class="why-subtitle">In my own words, no AI copy</p>
-    </div>
-
-    <div class="why-body-wrap">
-      <!-- Always-visible preview -->
-      <div class="why-preview">
-        <p>When I first learned about stock options, they scared me. "Investing" in them seemed like a good way to burn money quickly, so I vowed I'd never touch them. A few years later, I was shocked and appalled at the rise of 0-days-to-expiration (0DTE) options. As if there wasn't enough market volatility already, it seemed like the massive volume of short-dated options was causing the market to swing even more violently. Then I started tracking the price action on 0DTE SPY options. I could immediately see the appeal.</p>
-      </div>
-
-      <!-- Expandable content -->
-      <div class="why-expanded" id="whyExpanded">
-        <p>0DTE options on SPY whipsaw back and forth on every little price swing. They are torqued up and ready to run, cutting either for or against your P&L with every tick. I was certainly terrified by them, but I also understood their potential to amass (or destroy) capital, so I decided to try my hand at trading them manually. After some mixed results — okay, it was one positive month followed by a down month where I lost all of my first month's profits — I knew that it wasn't for me. The stress of trying to time SPY moves and make trades was too much. But I knew that the potential was still there.</p>
-
-        <p>Of course I'd been inundated with stories of the magic of vibe coding and how it allowed anyone to slop a project together, but I was skeptical. I had used a few AI tools in the past with varying degrees of success — there was no way that I could actually deploy anything vibe-coded to trade my own money… right?</p>
-
-        <p>In late February 2026, after swearing off trading 0DTEs on my own, I decided to enlist Claude to see if it could help me. It's simple, right? SPY goes up → buy calls, SPY goes down → buy puts. It started with a simple prompt: "how can I identify momentum as it starts?" I didn't know about any of the existing infrastructure that could be leveraged to take that simple concept and turn it into a functioning tool.</p>
-
-        <p>Claude (with some help from Gemini) helped me to learn a lot about Charles Schwab's REST API and WebSocket framework, the backend tools to get the plumbing all connected, and also about Flask and web tools to be able to visualize everything as it happens. After realizing that I could get second-by-second SPY and SPY options ticks, and that I could actually place orders nearly instantaneously, I knew that it was an avenue worth pursuing.</p>
-
-        <p>Over the next couple of weeks, I used Claude to help me research, plan out, and build a custom platform to continuously stream market data, analyze the quotes it retrieves, and place orders, all autonomously. It began as a crude tool: a Python script that used a basic strategy and wrote everything to the terminal. That made my eyes bleed, so I prompted my way into creating a dashboard to house all of the live market data I was logging along with trackers for all of the different strategies I wanted to test.</p>
-
-        <p>As I logged these early paper trades, I continued to dig into trading strategies and implemented refinements as I went. At one point, I was running 26 different test variants concurrently during live market hours! I quickly learned that being able to backtest different configurations against the SPY tick data that I had accumulated was a must, so I had Claude help me build that out, which led to discovering that the variant using a Kalman filter was outperforming the rest at detecting SPY momentum early.</p>
-
-        <p>Diving into multiprocessing allowed me to build out a robust simulation tool to sweep over dozens of config tweaks for weeks of SPY tick data at a time, which I then used to fine-tune the parameters the signal algorithm uses. But after deploying, it was apparent that a single parameter set was overfitting to the sample data that I had collected, so I studied up on tuning strategies. Claude helped me cook up a Bayesian lookup table that dynamically adjusts signal parameters in response to varying market conditions. As I accumulate more trade data daily, it feeds back into the table to refine its recommendations for future sessions.</p>
-
-        <p>So where are we now? I'm currently running this tradebot daily with real (albeit small) money trades, and it's showing a lot of promise. The slippage on real fills for my orders is eating into the edge that the tradebot had when it was only creating paper trades, but it is consistently bringing in capital. I'm excited to continue to optimize the bot's performance in hopes that it can continue to scale up.</p>
-
-        <p>This was my first big vibe coding project, and while it isn't yet the infinite money glitch that I had imagined, I'm really proud of what I've accomplished with it. Along the way, I have learned so much about system architecture, testing and debugging, data analysis, and quantitative concepts. But perhaps most importantly, I have gained a deeper appreciation for the power of the tools at my disposal. I now feel much more confident in my ability to leverage AI to learn and to create new things, and I know that's going to be priceless in our ever-accelerating world.</p>
-      </div>
-
-      <!-- Fade + toggle button -->
-      <div class="why-fade" id="whyFade"></div>
-      <button class="why-toggle" id="whyToggle" onclick="toggleWhy()">
-        <span id="whyToggleLabel">Keep reading</span>
-        <svg id="whyToggleIcon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
     </div>
 
   </div>
-</section>
 
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="footer-links">
-    <a href="/">Home</a>
-    <a href="/projects">Projects</a>
-    <a href="/contact">Get in touch →</a>
-  </div>
-  <div class="footer-right">
-    <span>Built with Python · Schwab API</span>
-  </div>
-</footer>
+  <div class="resume-section">
+    <div class="resume-section-label">Active Epic Certifications</div>
 
-<!-- ═══ TWEAKS PANEL ═══ -->
-<div class="tweaks-panel" id="tweaksPanel">
-  <div class="tweaks-title">Tweaks</div>
-  <div class="tweak-row">
-    <div class="tweak-label">Accent color</div>
-    <div class="tweak-swatches">
-      <div class="tweak-swatch active" data-accent="ice" style="background:#60c8ff" title="Ice blue"></div>
-      <div class="tweak-swatch" data-accent="green" style="background:#38c99a" title="Teal"></div>
-      <div class="tweak-swatch" data-accent="amber" style="background:#f0a840" title="Amber"></div>
-      <div class="tweak-swatch" data-accent="violet" style="background:#a064ff" title="Violet"></div>
+    <div class="resume-entry">
+      <div class="entry-meta"></div>
+      <div class="entry-body">
+        <ul class="cert-list">
+          <li>Home Health Revenue Cycle</li>
+          <li>Hospice Revenue Cycle</li>
+          <li>Comfort</li>
+          <li>Dorothy</li>
+          <li>Resolute Hospital Billing Administration</li>
+          <li>Resolute Hospital Billing Expected Reimbursement Contracts Administration</li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div class="tweak-row">
-    <div class="tweak-label">Hero background</div>
-    <div class="tweak-opts">
-      <button class="tweak-btn active" data-hero="blue">Slate</button>
-      <button class="tweak-btn" data-hero="warm">Warm</button>
-      <button class="tweak-btn" data-hero="dark">Dark</button>
-    </div>
-  </div>
-  <div class="tweak-row">
-    <div class="tweak-label">Dashboard tilt</div>
-    <div class="tweak-opts">
-      <button class="tweak-btn" data-tilt="0">None</button>
-      <button class="tweak-btn active" data-tilt="1.5">Subtle</button>
-      <button class="tweak-btn" data-tilt="3">Strong</button>
-    </div>
+
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-/* ── Card 01: live canvas candle chart ─────────────────────── */
-(function(){
-  const canvas = document.getElementById('card1canvas');
-  if(!canvas) return;
+(function() {
 
-  function resize(){
-    const dpr = window.devicePixelRatio||1;
-    canvas.width  = Math.round(canvas.offsetWidth * dpr);
-    canvas.height = Math.round(canvas.offsetHeight * dpr);
-  }
-  resize();
-  window.addEventListener('resize', resize, {passive:true});
-
-  const cx = canvas.getContext('2d');
-  const GREEN = '#38c99a', RED = '#ff4060', GRID = '#1c2230', WICK = '#556070';
-  const CANDLE_TICKS = 15;
-  const TICK_MS = 100;
-  const MAX_CANDLES = 20; // more candles in narrower space = slimmer look
-
-  // Fixed price range 695–705 as requested
-  const PRICE_MIN = 695, PRICE_MAX = 705;
-  let price = 700.0; // start exactly at center
-  let tickCount = 0;
-  let candles = [];
-  let activeCandle = null;
-  let lastDir = 1;
-  let trendStrength = 0; // builds up momentum then reverses
-
-  function newCandle(){
-    const c = { open: price, close: price, high: price, low: price };
-    candles.push(c);
-    if(candles.length > MAX_CANDLES) candles.shift();
-    activeCandle = c;
-    tickCount = 0;
+  /* ── 1. PHOTO: color → grayscale on load ── */
+  var photoWrap = document.querySelector('.resume-photo-wrap');
+  if (photoWrap) {
+    setTimeout(function() { photoWrap.classList.add('desaturated'); }, 80);
   }
 
-  function tick(){
-    if(!activeCandle) newCandle();
-    // Build momentum: trend runs for a while then snaps back
-    trendStrength += (Math.random() - 0.5) * 0.4;
-    trendStrength = Math.max(-2.5, Math.min(2.5, trendStrength));
-    // Mean-revert harder near the edges so it stays in 695–705
-    const distFromCenter = price - 700;
-    const meanPull = -distFromCenter * 0.08;
-    // Bigger per-tick move: ~0.15–0.5 per tick
-    const noise = (Math.random() - 0.48) * 0.5;
-    const change = noise + trendStrength * 0.12 + meanPull;
-    price = Math.max(PRICE_MIN + 0.05, Math.min(PRICE_MAX - 0.05, price + change));
-    activeCandle.close = price;
-    if(price > activeCandle.high) activeCandle.high = price;
-    if(price < activeCandle.low)  activeCandle.low  = price;
-    tickCount++;
-    if(tickCount >= CANDLE_TICKS) newCandle();
-    draw();
-  }
+  /* ── 2. SECTION LABEL: line draw on scroll ── */
+  var sectionLabels = document.querySelectorAll('.resume-section-label');
 
-  function drawTick(){
-    // silent tick for prefill — no draw call
-    if(!activeCandle) newCandle();
-    trendStrength += (Math.random() - 0.5) * 0.3;
-    trendStrength = Math.max(-1.5, Math.min(1.5, trendStrength)); // weaker trend during prefill
-    const distFromCenter = price - 700;
-    const meanPull = -distFromCenter * 0.15; // stronger mean reversion during prefill
-    const noise = (Math.random() - 0.5) * 0.4;
-    const change = noise + trendStrength * 0.08 + meanPull;
-    price = Math.max(PRICE_MIN + 0.1, Math.min(PRICE_MAX - 0.1, price + change));
-    activeCandle.close = price;
-    if(price > activeCandle.high) activeCandle.high = price;
-    if(price < activeCandle.low)  activeCandle.low  = price;
-    tickCount++;
-    if(tickCount >= CANDLE_TICKS) newCandle();
-  }
+  /* ── 3. ENTRIES: staggered fade-in on scroll ── */
+  var entries = document.querySelectorAll('.resume-entry');
 
-  function draw(){
-    const dpr = window.devicePixelRatio||1;
-    cx.setTransform(dpr,0,0,dpr,0,0);
-    const Wl = canvas.width/dpr, Hl = canvas.height/dpr;
-    cx.clearRect(0,0,Wl,Hl);
-
-    // Fixed axis: 695 to 705
-    const pMin = PRICE_MIN, pMax = PRICE_MAX;
-    const AXIS_W = 46; // left margin for y-labels
-    const PAD_R = 16;  // right padding
-    const PAD_T = 14, PAD_B = 14;
-    const chartL = AXIS_W, chartR = Wl - PAD_R;
-    const chartT = PAD_T,  chartB = Hl - PAD_B;
-    const chartW = chartR - chartL, chartH = chartB - chartT;
-    const toY = p => chartT + (1 - (p - pMin)/(pMax - pMin)) * chartH;
-
-    // grid lines + y-axis labels
-    cx.strokeStyle = GRID; cx.lineWidth = 1;
-    cx.fillStyle = '#36445a';
-    cx.font = `9px 'Chivo Mono',monospace`;
-    cx.textAlign = 'right';
-    const steps = [695, 697, 699, 701, 703, 705];
-    steps.forEach(p => {
-      const y = toY(p);
-      cx.beginPath(); cx.moveTo(chartL, y); cx.lineTo(chartR, y); cx.stroke();
-      cx.fillText(p.toString(), AXIS_W - 4, y + 3);
-    });
-
-    if(!candles.length) return;
-
-    // Candle sizing: fill the full chart width evenly, narrow bodies
-    const gap = 5;
-    const totalSlots = MAX_CANDLES;
-    const candleW = chartW / totalSlots;
-    const bodyW = Math.max(3, candleW - gap);
-
-    // Always render from the right edge backward so active candle is rightmost
-    const n = candles.length;
-    candles.forEach((c, i) => {
-      // slot index: newest candle = slot n-1 (rightmost), padded from right
-      const slot = totalSlots - n + i;
-      const cx_ = chartL + slot * candleW + candleW / 2;
-
-      const isBull = c.close >= c.open;
-      const color = isBull ? GREEN : RED;
-      const openY  = toY(c.open),  closeY = toY(c.close);
-      const highY  = toY(c.high),  lowY   = toY(c.low);
-
-      // wick
-      cx.strokeStyle = WICK; cx.lineWidth = 1.5;
-      cx.beginPath(); cx.moveTo(cx_, highY); cx.lineTo(cx_, lowY); cx.stroke();
-
-      // body
-      const bodyTop = Math.min(openY, closeY);
-      const bodyH   = Math.max(2, Math.abs(openY - closeY));
-      cx.fillStyle = color;
-      roundRect(cx, cx_ - bodyW/2, bodyTop, bodyW, bodyH, 1.5);
-      cx.fill();
-    });
-  }
-
-  function roundRect(ctx, x, y, w, h, r){
-    ctx.beginPath();
-    ctx.moveTo(x+r,y);
-    ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
-    ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
-    ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-    ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
-    ctx.closePath();
-  }
-
-  newCandle();
-
-  // Pre-populate with historical candles — price stays near 700 (center) during prefill
-  // so the live chart opens with candles distributed around the middle of the range
-  price = 700.0; trendStrength = 0;
-  const PREFILL_CANDLES = 16;
-  for(let c = 0; c < PREFILL_CANDLES; c++){
-    for(let t = 0; t < CANDLE_TICKS; t++) drawTick();
-  }
-  draw();
-  setInterval(tick, TICK_MS);
-})();
-
-/* ── scroll reveal ─────────────────────────────────────────── */
-const ro = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'),i*55); ro.unobserve(e.target); } });
-},{ threshold:0.1 });
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
-
-/* ── how-it-works carousel ─────────────────────────────────── */
-let _howCurrent = 0;
-const _howTotal  = 5;
-
-function howCarousel(dir) { _howGoTo(_howCurrent + dir); }
-
-(function(){
-  const cards    = Array.from(document.querySelectorAll('.arch-card'));
-  const track    = document.getElementById('howTrack');
-  const counter  = document.getElementById('howCurrent');
-  const progFill = document.getElementById('howProgress');
-  const dotsEl   = document.getElementById('howDots');
-  const prevBtns = () => document.querySelectorAll('#howPrev');
-  const nextBtns = () => document.querySelectorAll('#howNext');
-
-  cards.forEach((_,i) => {
-    const d = document.createElement('button');
-    d.className = 'how-dot' + (i===0?' active':'');
-    d.setAttribute('aria-label','Step '+(i+1));
-    d.addEventListener('click',()=>_howGoTo(i));
-    dotsEl.appendChild(d);
+  /* ── 4. STATS: count-up on scroll ── */
+  var stats = document.querySelectorAll('.stat');
+  stats.forEach(function(el) {
+    var raw = el.textContent.trim();
+    var num = parseFloat(raw);
+    var suffix = raw.replace(String(num), '');
+    el.dataset.target = num;
+    el.dataset.suffix = suffix;
+    el.dataset.animated = 'false';
+    el.textContent = '0' + suffix;
   });
 
-  window._howGoTo = function(n) {
-    cards[_howCurrent].classList.remove('active');
-    dotsEl.children[_howCurrent].classList.remove('active');
-    _howCurrent = Math.max(0, Math.min(_howTotal-1, n));
-    cards[_howCurrent].classList.add('active');
-    dotsEl.children[_howCurrent].classList.add('active');
-    track.style.transform = `translateX(-${_howCurrent * 100}%)`;
-    counter.textContent   = String(_howCurrent+1).padStart(2,'0');
-    progFill.style.width  = ((_howCurrent+1)/_howTotal*100)+'%';
-    prevBtns().forEach(b => b.disabled = _howCurrent === 0);
-    nextBtns().forEach(b => b.disabled = _howCurrent === _howTotal-1);
-    if(_howCurrent === 3) startCard4();
-    if(_howCurrent === 4) startCard5();
-  };
-
-  document.getElementById('howPrev').addEventListener('click', ()=>_howGoTo(_howCurrent-1));
-  document.getElementById('howNext').addEventListener('click', ()=>_howGoTo(_howCurrent+1));
-
-  document.addEventListener('keydown', e=>{
-    const stage = document.getElementById('howStage');
-    if(!stage) return;
-    const r = stage.getBoundingClientRect();
-    if(r.bottom < 0 || r.top > window.innerHeight) return;
-    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();_howGoTo(_howCurrent+1);}
-    if(e.key==='ArrowLeft' ||e.key==='ArrowUp')  {e.preventDefault();_howGoTo(_howCurrent-1);}
-  });
-  let touchX = null;
-  const stage = document.getElementById('howStage');
-  stage.addEventListener('touchstart', e=>{touchX=e.touches[0].clientX;},{passive:true});
-  stage.addEventListener('touchend',   e=>{
-    if(touchX===null) return;
-    const dx = e.changedTouches[0].clientX - touchX;
-    if(Math.abs(dx)>40) _howGoTo(_howCurrent+(dx<0?1:-1));
-    touchX=null;
-  },{passive:true});
-})();
-
-/* ── Card 04: P&L ledger — rows populate one at a time ── */
-let card4Started=false;
-function startCard4(){
-  if(card4Started)return; card4Started=true;
-  const rows=document.getElementById('card4rows');
-  const netEl=document.getElementById('card4net');
-  rows.innerHTML='';
-  netEl.textContent='—'; netEl.setAttribute('fill','#e8edf5');
-
-  const TRADES=[
-    {t:'10:14',c:'SPY 582C',entry:1.62,exit:2.18,pnl:+168,reason:'take_profit'},
-    {t:'10:28',c:'SPY 582P',entry:1.30,exit:1.14,pnl:-48, reason:'trailing_stop'},
-    {t:'10:41',c:'SPY 583C',entry:1.78,exit:2.35,pnl:+171,reason:'take_profit'},
-    {t:'10:58',c:'SPY 583C',entry:1.90,exit:2.52,pnl:+186,reason:'take_profit'},
-    {t:'11:12',c:'SPY 583P',entry:1.55,exit:1.38,pnl:-51, reason:'trailing_stop'},
-  ];
-  const ROW_H=38, ROW_TOP=56;
-  let net=0, idx=0;
-
-  function addRow(){
-    if(idx>=TRADES.length){
-      // pause then replay
-      setTimeout(()=>{ card4Started=false; startCard4(); }, 3000);
-      return;
+  function animateStat(el) {
+    if (el.dataset.animated === 'true') return;
+    el.dataset.animated = 'true';
+    var target = parseFloat(el.dataset.target);
+    var suffix = el.dataset.suffix;
+    var decimals = (String(target).split('.')[1] || '').length;
+    var duration = 900;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      /* ease out cubic */
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = (target * eased).toFixed(decimals);
+      el.textContent = current + suffix;
+      if (progress < 1) requestAnimationFrame(step);
     }
-    const tr=TRADES[idx];
-    const pos=tr.pnl>=0;
-    net+=tr.pnl;
-    const rowY=ROW_TOP+idx*ROW_H;
-
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.style.opacity='0';
-    g.style.animation='rowSlideIn .35s ease both';
-
-    const flash=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    flash.setAttribute('x','40'); flash.setAttribute('y',rowY-16+'');
-    flash.setAttribute('width','720'); flash.setAttribute('height','34'); flash.setAttribute('rx','3');
-    flash.setAttribute('fill',pos?'rgba(56,201,154,.12)':'rgba(255,64,96,.08)');
-    flash.style.animation=(pos?'flashGreen':'flashRed')+' 1.4s ease both';
-    g.appendChild(flash);
-
-    const mkT=(x,txt,fill,fw)=>{
-      const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-      t.setAttribute('x',x+''); t.setAttribute('y',rowY+'');
-      t.setAttribute('font-family',"'Chivo Mono',monospace"); t.setAttribute('font-size','11');
-      t.setAttribute('fill',fill||'#8a9ab0'); if(fw)t.setAttribute('font-weight',fw);
-      t.textContent=txt; return t;
-    };
-    g.appendChild(mkT(60,tr.t,'#556070'));
-    g.appendChild(mkT(170,tr.c,'#e8edf5','700'));
-    g.appendChild(mkT(370,'$'+tr.entry.toFixed(2)));
-    g.appendChild(mkT(460,'$'+tr.exit.toFixed(2)));
-    g.appendChild(mkT(560,(pos?'+':'')+`$${tr.pnl}`,pos?'#38c99a':'#ff4060','700'));
-    g.appendChild(mkT(640,tr.reason.replace('_',' '),'#556070'));
-
-    rows.appendChild(g);
-    // trigger opacity
-    requestAnimationFrame(()=>{ g.style.opacity='1'; });
-
-    // update net P&L
-    netEl.textContent=(net>=0?'+':'')+`$${net}`;
-    netEl.setAttribute('fill',net>0?'#38c99a':net<0?'#ff4060':'#e8edf5');
-    netEl.style.animation='netPop .3s ease';
-    setTimeout(()=>{ netEl.style.animation=''; },350);
-
-    idx++;
-    setTimeout(addRow, 850);
+    requestAnimationFrame(step);
   }
 
-  setTimeout(addRow, 400);
-}
+  if ('IntersectionObserver' in window) {
 
-/* ── Card 05: sim run reveal ─────────────────────────────── */
-const CARD5_CONFIGS=[
-  {name:'A',thresh:'0.028',tp:'30%',wr:'61%',pnl:'+$333',winner:false},
-  {name:'B',thresh:'0.035',tp:'34%',wr:'71%',pnl:'+$438',winner:true},
-  {name:'C',thresh:'0.042',tp:'34%',wr:'67%',pnl:'+$382',winner:false},
-  {name:'D',thresh:'0.051',tp:'28%',wr:'58%',pnl:'+$218',winner:false},
-  {name:'E',thresh:'0.062',tp:'28%',wr:'53%',pnl:'+$124',winner:false},
-];
-let card5Started=false;
-function startCard5(){
-  if(card5Started)return; card5Started=true;
-  const rows=document.getElementById('card5rows');
-  const footerEl=document.getElementById('card5footer');
-  rows.innerHTML=''; footerEl.setAttribute('opacity','0');
-  const rowEls=[];
-  let idx=0;
-
-  function addConfig(){
-    if(idx>=CARD5_CONFIGS.length){
-      // All rows shown — now highlight winner after a pause
-      setTimeout(()=>{
-        const wi=CARD5_CONFIGS.findIndex(c=>c.winner);
-        const el=rowEls[wi];
-        if(el){
-          el.bg.setAttribute('fill','rgba(96,200,255,.08)');
-          el.bg.setAttribute('stroke','rgba(96,200,255,.4)');
-          el.bg.style.transition='fill .4s ease, stroke .4s ease';
-          // Change name color to ice
-          el.nameTxt.setAttribute('fill','#60c8ff');
-          // Change data cols to ice/green
-          el.dataCols.forEach((t,i)=>{
-            t.setAttribute('fill', i===2 ? '#38c99a' : '#90dcff');
-          });
-          // Swap "tested" label to "★ best"
-          el.statusTxt.setAttribute('x','660');
-          el.statusTxt.setAttribute('text-anchor','start');
-          el.statusTxt.textContent='★ best';
-          el.statusTxt.setAttribute('fill','#90dcff');
-          el.statusTxt.style.animation='fadeIn .4s ease both';
+    /* Entries observer — staggered delay */
+    var entryObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          /* find index among all entries for stagger */
+          var idx = Array.prototype.indexOf.call(entries, item.target);
+          setTimeout(function() {
+            item.target.classList.add('visible');
+          }, idx * 60);
+          entryObs.unobserve(item.target);
         }
-        footerEl.setAttribute('opacity','0'); // footer hidden — no sweep runs text
-        setTimeout(()=>{ card5Started=false; startCard5(); }, 4500);
-      }, 600);
-      return;
-    }
+      });
+    }, { threshold: 0.07 });
+    entries.forEach(function(el) { entryObs.observe(el); });
 
-    const cfg=CARD5_CONFIGS[idx];
-    const y=56+idx*44;
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.style.animation='rowReveal .35s ease both';
+    /* Section label line-draw observer */
+    var labelObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          item.target.classList.add('line-drawn');
+          labelObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    sectionLabels.forEach(function(el) { labelObs.observe(el); });
 
-    // Row background — all identical neutral style
-    const bgR=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    bgR.setAttribute('x','40'); bgR.setAttribute('y',y-18+'');
-    bgR.setAttribute('width','720'); bgR.setAttribute('height','36'); bgR.setAttribute('rx','4');
-    bgR.setAttribute('fill','transparent'); bgR.setAttribute('stroke','#1c2230'); bgR.setAttribute('stroke-width','1');
+    /* Stats count-up observer */
+    var statObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          animateStat(item.target);
+          statObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 1.0 });
+    stats.forEach(function(el) { statObs.observe(el); });
 
-    // Config name — all same muted color
-    const nameTxt=document.createElementNS('http://www.w3.org/2000/svg','text');
-    nameTxt.setAttribute('x','60'); nameTxt.setAttribute('y',y+'');
-    nameTxt.setAttribute('font-family',"'Syne',sans-serif"); nameTxt.setAttribute('font-size','14');
-    nameTxt.setAttribute('font-weight','800'); nameTxt.setAttribute('fill','#7888a0');
-    nameTxt.textContent='Config '+cfg.name;
-
-    // Status label — plain "tested" text, left-aligned at x=660 to match STATUS header
-    const statusTxt=document.createElementNS('http://www.w3.org/2000/svg','text');
-    statusTxt.setAttribute('x','660'); statusTxt.setAttribute('y',y+'');
-    statusTxt.setAttribute('font-family',"'Chivo Mono',monospace"); statusTxt.setAttribute('font-size','9');
-    statusTxt.setAttribute('fill','#36445a'); statusTxt.setAttribute('letter-spacing','.12em');
-    statusTxt.setAttribute('text-anchor','start');
-    statusTxt.textContent='tested';
-
-    g.appendChild(bgR); g.appendChild(nameTxt); g.appendChild(statusTxt);
-
-    // Separator line
-    const sep=document.createElementNS('http://www.w3.org/2000/svg','line');
-    sep.setAttribute('x1','40'); sep.setAttribute('y1',y+18+'');
-    sep.setAttribute('x2','760'); sep.setAttribute('y2',y+18+'');
-    sep.setAttribute('stroke','rgba(28,34,48,.8)'); sep.setAttribute('stroke-width','1');
-    rows.appendChild(g);
-    rows.appendChild(sep);
-
-    // After 600ms: fill in data columns (all same neutral color)
-    const dataCols=[];
-    setTimeout(()=>{
-      const mkT=(x,txt,fill,fw)=>{
-        const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-        t.setAttribute('x',x+''); t.setAttribute('y',y+'');
-        t.setAttribute('font-family',"'Chivo Mono',monospace"); t.setAttribute('font-size','11');
-        t.setAttribute('fill',fill||'#7888a0'); if(fw)t.setAttribute('font-weight',fw);
-        t.style.animation='lineFillIn .3s ease both'; t.textContent=txt; return t;
-      };
-      const t1=mkT(200,cfg.thresh); const t2=mkT(340,cfg.wr); const t3=mkT(460,cfg.pnl,'#7888a0','700');
-      g.appendChild(t1); g.appendChild(t2); g.appendChild(t3);
-      dataCols.push(t1,t2,t3);
-      rowEls[idx-1].dataCols=dataCols;
-      setTimeout(addConfig, 500);
-    }, 600);
-
-    rowEls.push({bg:bgR, nameTxt, statusTxt, dataCols:[]});
-    idx++;
+  } else {
+    /* Fallback — no observer support */
+    entries.forEach(function(el) { el.classList.add('visible'); });
+    sectionLabels.forEach(function(el) { el.classList.add('line-drawn'); });
+    stats.forEach(function(el) { animateStat(el); });
   }
-  setTimeout(addConfig, 300);
-}
 
-/* ── nav light in hero zone ────────────────────────────────── */
-const mainNav = document.getElementById('mainNav');
-const heroEl  = document.getElementById('hero');
-function updateNav(){
-  mainNav.classList.toggle('nav-light', heroEl.getBoundingClientRect().bottom > 80);
+})();
+</script>
+
+<script>
+fetch('../content.json')
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    window._txStyle = d.site.transition_style || 'slingshot';
+    document.title = 'Résumé — ' + d.site.title;
+    document.getElementById('navStatus').textContent = d.hero.status;
+    var albumContainer = document.getElementById('navAlbumLinks');
+    if (albumContainer && d.photography && d.photography.length) {
+      var albumHTML = '';
+      d.photography.forEach(function(album) {
+        albumHTML += '<a href="/photography#' + album.id + '">' + album.title + '</a>';
+      });
+      albumContainer.innerHTML = albumHTML;
+    }
+    injectNeonSpill();
+  })
+  .catch(function() { window._txStyle = 'slingshot'; injectNeonSpill(); });
+
+function injectNeonSpill() {
+  var old = document.getElementById('neonSpill');
+  if (old) old.remove();
+  var palette = [[96,200,255],[160,100,255],[255,100,160],[60,220,180],[255,200,60],[100,255,200],[255,140,80],[180,140,255],[80,220,255],[184,118,26]];
+  var _seed = Date.now() % 99991;
+  function rand() { _seed = (_seed * 1664525 + 1013904223) & 0xffffffff; return ((_seed >>> 0) / 0xffffffff); }
+  var spillH = 90, pageW = Math.max(document.body.scrollWidth, window.innerWidth);
+  var spillTop = document.body.scrollHeight - spillH;
+  var NUM = 16, strings = [];
+  for (var i = 0; i < NUM; i++) {
+    var col = palette[i % palette.length];
+    strings.push({ col, baseY: spillH*(0.30+0.55*(i/(NUM-1)))+(rand()-0.5)*6, freq: 0.006+rand()*0.016, amp: 3.5+rand()*6.5, phase: rand()*Math.PI*2, breathRate: 0.08+rand()*0.18, breathDepth: 0.12+rand()*0.22, breathOff: rand()*Math.PI*2, pulseRate: 0.4+rand()*1.2, pulseDepth: 0.15+rand()*0.35, pulseOff: rand()*Math.PI*2, shimmerRate: 0.05+rand()*0.12, shimmerAmt: 0.08+rand()*0.18, shimmerOff: rand()*Math.PI*2, driftRate: 0.004+rand()*0.008, baseAlpha: 0.38+rand()*0.38, lineW: 0.8+rand()*1.2 });
+  }
+  window._spillStrings = strings;
+  window._spillH = spillH;
+  var cv = document.createElement('canvas');
+  cv.id = 'neonSpill';
+  var dpr = window.devicePixelRatio || 1;
+  cv.width  = Math.round(pageW * dpr);
+  cv.height = Math.round(spillH * dpr);
+  cv.style.cssText = ['position:absolute','left:0','top:'+spillTop+'px','width:'+pageW+'px','height:'+spillH+'px','pointer-events:none','z-index:1','opacity:0','transition:opacity 2s ease'].join(';');
+  document.body.appendChild(cv);
+  requestAnimationFrame(function() { requestAnimationFrame(function() { cv.style.opacity = '1'; }); });
+  function repositionSpill() { var t = document.body.scrollHeight - spillH; if (cv.style.top !== t+'px') cv.style.top = t+'px'; }
+  if (window.ResizeObserver) { var ro = new ResizeObserver(repositionSpill); ro.observe(document.body); }
+  [500,1000,2000,4000].forEach(function(ms) { setTimeout(repositionSpill, ms); });
+  var cx = cv.getContext('2d'), spillClock = 0, spillLast = null, fadeIn = 0;
+  function spillDraw(ts) {
+    if (document.hidden) { requestAnimationFrame(spillDraw); return; }
+    var dt = spillLast ? Math.min((ts-spillLast)/1000,0.05) : 0.016;
+    spillLast = ts; spillClock += dt; fadeIn = Math.min(1, spillClock/2.0);
+    window._spillClock = spillClock;
+    cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,pageW,spillH);
+    for (var i = 0; i < NUM; i++) {
+      var s=strings[i],c=s.col;
+      var breath=1+s.breathDepth*Math.sin(spillClock*s.breathRate*Math.PI*2+s.breathOff);
+      var rawP=Math.sin(spillClock*s.pulseRate*Math.PI*2+s.pulseOff);
+      var pulse=s.pulseDepth*Math.max(0,rawP)*Math.max(0,rawP);
+      var alpha=Math.min(0.92,s.baseAlpha*(breath+pulse)*fadeIn);
+      var effAmp=s.amp*breath, drift=spillClock*s.driftRate;
+      cx.beginPath();
+      for (var x=0;x<=pageW;x+=3){var sh=1+s.shimmerAmt*Math.sin(x*0.004+spillClock*s.shimmerRate*Math.PI*2+s.shimmerOff);var y=s.baseY+Math.sin(x*s.freq+s.phase+drift)*effAmp*sh;x===0?cx.moveTo(x,y):cx.lineTo(x,y);}
+      cx.strokeStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha*0.55)+')';cx.lineWidth=s.lineW+1.5+pulse*3;cx.shadowColor='rgba('+c[0]+','+c[1]+','+c[2]+','+(alpha*0.7)+')';cx.shadowBlur=10+pulse*14;cx.stroke();cx.shadowBlur=0;
+      cx.beginPath();
+      for (var x=0;x<=pageW;x+=2){var sh=1+s.shimmerAmt*Math.sin(x*0.004+spillClock*s.shimmerRate*Math.PI*2+s.shimmerOff);var y=s.baseY+Math.sin(x*s.freq+s.phase+drift)*effAmp*sh;x===0?cx.moveTo(x,y):cx.lineTo(x,y);}
+      cx.strokeStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+alpha+')';cx.lineWidth=s.lineW;cx.stroke();
+    }
+    requestAnimationFrame(spillDraw);
+  }
+  requestAnimationFrame(spillDraw);
 }
-updateNav();
-window.addEventListener('scroll', updateNav, { passive:true });
 
 (function() {
   function init() {
@@ -1616,278 +761,7 @@ window.addEventListener('scroll', updateNav, { passive:true });
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();
-
-/* ── tweaks ────────────────────────────────────────────────── */
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "accent": "green",
-  "hero": "blue",
-  "tilt": "0"
-}/*EDITMODE-END*/;
-const accents = {
-  ice:    { ice:'#60c8ff', ice2:'#90dcff' },
-  green:  { ice:'#38c99a', ice2:'#6adec0' },
-  amber:  { ice:'#f0a840', ice2:'#f8c870' },
-  violet: { ice:'#a064ff', ice2:'#c090ff' }
-};
-const heroBgs = {
-  blue: { bg:'#c8d4de', text:'#182636', muted:'rgba(24,38,54,.5)', line:'rgba(24,38,54,.1)' },
-  warm: { bg:'#d8cfc4', text:'#2a1e14', muted:'rgba(42,30,20,.5)', line:'rgba(42,30,20,.1)' },
-  dark: { bg:'#181c24', text:'#e6ecf4', muted:'rgba(230,236,244,.45)', line:'rgba(255,255,255,.1)' }
-};
-function applyTweaks(t) {
-  const a = accents[t.accent] || accents.ice;
-  const h = heroBgs[t.hero]   || heroBgs.blue;
-  document.documentElement.style.setProperty('--ice',  a.ice);
-  document.documentElement.style.setProperty('--ice2', a.ice2);
-  document.documentElement.style.setProperty('--hero-bg',    h.bg);
-  document.documentElement.style.setProperty('--hero-text',  h.text);
-  document.documentElement.style.setProperty('--hero-muted', h.muted);
-  document.documentElement.style.setProperty('--hero-line',  h.line);
-  document.getElementById('miniDash').style.transform = `rotate(${t.tilt}deg)`;
-  // sync button states
-  document.querySelectorAll('[data-accent]').forEach(s => s.classList.toggle('active', s.dataset.accent===t.accent));
-  document.querySelectorAll('[data-hero]').forEach(b => b.classList.toggle('active', b.dataset.hero===t.hero));
-  document.querySelectorAll('[data-tilt]').forEach(b => b.classList.toggle('active', b.dataset.tilt===String(t.tilt)));
-}
-let tweaks = {...TWEAK_DEFAULTS};
-applyTweaks(tweaks);
-document.querySelectorAll('[data-accent]').forEach(s => s.addEventListener('click', () => { tweaks.accent=s.dataset.accent; applyTweaks(tweaks); window.parent.postMessage({type:'__edit_mode_set_keys',edits:tweaks},'*'); }));
-document.querySelectorAll('[data-hero]').forEach(b  => b.addEventListener('click', () => { tweaks.hero=b.dataset.hero;     applyTweaks(tweaks); window.parent.postMessage({type:'__edit_mode_set_keys',edits:tweaks},'*'); }));
-document.querySelectorAll('[data-tilt]').forEach(b  => b.addEventListener('click', () => { tweaks.tilt=b.dataset.tilt;     applyTweaks(tweaks); window.parent.postMessage({type:'__edit_mode_set_keys',edits:tweaks},'*'); }));
-window.addEventListener('message', e => {
-  if(e.data?.type==='__activate_edit_mode')   document.getElementById('tweaksPanel').classList.add('visible');
-  if(e.data?.type==='__deactivate_edit_mode') document.getElementById('tweaksPanel').classList.remove('visible');
-});
-window.parent.postMessage({type:'__edit_mode_available'},'*');
-
-/* ── Why section expand/collapse ───────────────────────────── */
-function toggleWhy(){
-  const expanded = document.getElementById('whyExpanded');
-  const fade     = document.getElementById('whyFade');
-  const toggle   = document.getElementById('whyToggle');
-  const label    = document.getElementById('whyToggleLabel');
-  const isOpen   = expanded.classList.contains('open');
-  expanded.classList.toggle('open', !isOpen);
-  fade.classList.toggle('hidden', !isOpen);
-  toggle.classList.toggle('open', !isOpen);
-  label.textContent = isOpen ? 'Keep reading' : 'Show less';
-}
-
-/* ══════════════════════════════════════════════════════════════
-   MINI DASHBOARD REPLAY ENGINE (unchanged)
-══════════════════════════════════════════════════════════════ */
-const THRESH   = 0.035;
-const BASE_PX  = 581.20;
-const END_PX   = 584.50;
-const N_TICKS  = 210;
-const TICK_MS  = 220;
-
-const EVENTS = {
-  0:   { type:'ticker',  msg:'Day classified: Hi-Vel · Bayesian threshold set to 0.035' },
-  12:  { type:'signal',  dir:'CALL', contract:'SPY 581C', entry:1.45, score:7 },
-  18:  { type:'close',   contract:'SPY 581C', exit:1.82,  pnl:111,  reason:'take_profit' },
-  28:  { type:'signal',  dir:'CALL', contract:'SPY 582C', entry:1.62, score:9 },
-  35:  { type:'blocked', reason:'rsi_gate' },
-  44:  { type:'close',   contract:'SPY 582C', exit:2.18,  pnl:168,  reason:'take_profit' },
-  52:  { type:'signal',  dir:'PUT',  contract:'SPY 582P', entry:1.30, score:5 },
-  58:  { type:'close',   contract:'SPY 582P', exit:1.14,  pnl:-48,  reason:'trailing_stop' },
-  68:  { type:'signal',  dir:'CALL', contract:'SPY 583C', entry:1.78, score:7 },
-  72:  { type:'blocked', reason:'concurrent_limit' },
-  78:  { type:'close',   contract:'SPY 583C', exit:2.35,  pnl:171,  reason:'take_profit' },
-  88:  { type:'signal',  dir:'CALL', contract:'SPY 583C', entry:1.90, score:9 },
-  98:  { type:'close',   contract:'SPY 583C', exit:2.52,  pnl:186,  reason:'take_profit' },
-  110: { type:'signal',  dir:'PUT',  contract:'SPY 583P', entry:1.55, score:5 },
-  116: { type:'close',   contract:'SPY 583P', exit:1.38,  pnl:-51,  reason:'trailing_stop' },
-  128: { type:'signal',  dir:'CALL', contract:'SPY 584C', entry:2.05, score:7 },
-  136: { type:'blocked', reason:'rsi_gate' },
-  144: { type:'close',   contract:'SPY 584C', exit:2.74,  pnl:207,  reason:'take_profit' },
-  155: { type:'signal',  dir:'CALL', contract:'SPY 584C', entry:1.88, score:9 },
-  165: { type:'close',   contract:'SPY 584C', exit:2.46,  pnl:174,  reason:'take_profit' }
-};
-
-function buildTicks() {
-  const ticks=[]; let price=BASE_PX, vwap=BASE_PX, rsi=52;
-  const startSec=10*3600;
-  for(let i=0;i<N_TICKS;i++){
-    const t=i/(N_TICKS-1);
-    price=price*.82+(BASE_PX+(END_PX-BASE_PX)*t)*.18+(Math.random()-.47)*.13;
-    vwap=vwap*.96+price*.04;
-    rsi=Math.min(74,Math.max(36,rsi+(Math.random()-.45)*3));
-    const prev=ticks.length?ticks[ticks.length-1].price:price;
-    const vel=((price-prev)/prev)*100*8+(Math.random()-.44)*.04;
-    const sec=startSec+i*4, h=Math.floor(sec/3600)%24, m=Math.floor((sec%3600)/60), s=sec%60;
-    ticks.push({
-      price:+price.toFixed(2), vwap:+vwap.toFixed(2),
-      rsi:+rsi.toFixed(1), vel:+vel.toFixed(5),
-      time:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
-    });
-  }
-  return ticks;
-}
-
-let ticks=[],idx=0,timer=null,chart=null;
-let openTrades={}, closedTrades=[], realizedPnl=0, blockedCt=0, txnCt=0;
-let velHist=[], pnlMins=[], prevPrice=BASE_PX;
-
-function initChart(){
-  const ctx=document.getElementById('dbVelChart').getContext('2d');
-  chart=new Chart(ctx,{
-    type:'line',
-    data:{ labels:[], datasets:[
-      {label:'+t',data:[],borderColor:'rgba(96,200,255,.28)',borderWidth:1,borderDash:[3,3],pointRadius:0,fill:false},
-      {label:'-t',data:[],borderColor:'rgba(96,200,255,.28)',borderWidth:1,borderDash:[3,3],pointRadius:0,fill:false},
-      {label:'0', data:[],borderColor:'rgba(255,255,255,.06)',borderWidth:1,pointRadius:0,fill:false},
-      {label:'v', data:[],borderWidth:1.5,pointRadius:0,fill:false,tension:.3,
-        segment:{borderColor:ctx=>{const v=ctx.p1.parsed.y;return v>THRESH?'rgba(56,201,154,.9)':v<-THRESH?'rgba(255,64,96,.9)':'rgba(130,160,180,.5)';}}}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,animation:false,
-      scales:{x:{display:false},y:{display:false,min:-.1,max:.1}},
-      plugins:{legend:{display:false},tooltip:{enabled:false}}}
-  });
-}
-
-function startMiniReplay(){
-  ticks=buildTicks();
-  initChart();
-  document.getElementById('dbKpiDay').textContent='HI-VEL';
-  document.getElementById('dbKpiThresh').textContent='0.035';
-  document.getElementById('dbVelThresh').textContent='thresh ±0.035';
-  document.getElementById('dbOrb').style='';
-  document.getElementById('dbHealth').textContent='Feed live · 0 gaps';
-  document.getElementById('dbKpiOpen').textContent='0';
-  timer=setInterval(stepMini,TICK_MS);
-}
-
-function stepMini(){
-  if(idx>=ticks.length){ clearInterval(timer); ticker('Replay complete · session ended'); return; }
-  const tk=ticks[idx], ev=EVENTS[idx];
-
-  const priceEl=document.getElementById('dbPrice');
-  const dir=tk.price>prevPrice?'up':tk.price<prevPrice?'dn':null;
-  priceEl.textContent=tk.price.toFixed(2);
-  if(dir){ priceEl.className='db-price flash-'+dir; setTimeout(()=>priceEl.className='db-price',260); }
-  document.getElementById('dbDelta').textContent=(tk.price-BASE_PX>=0?'+':'')+(tk.price-BASE_PX).toFixed(2);
-  prevPrice=tk.price;
-  document.getElementById('dbTime').textContent=tk.time;
-  document.getElementById('dbVwap').textContent=tk.vwap.toFixed(2);
-  const rsiEl=document.getElementById('dbRsi');
-  rsiEl.textContent=tk.rsi.toFixed(1);
-  rsiEl.className='ind-val '+(tk.rsi>70?'rsi-ob':tk.rsi<30?'rsi-os':'');
-  const roc=idx>=5?((tk.price/ticks[idx-5].price)-1)*100:0;
-  const rocEl=document.getElementById('dbRoc');
-  rocEl.textContent=(roc>=0?'+':'')+roc.toFixed(2)+'%';
-  rocEl.className='ind-val '+(roc>=0?'roc-pos':'roc-neg');
-  const bull=tk.price>tk.vwap;
-  document.getElementById('dbTrend').textContent=bull?'↑ Bull':'↓ Bear';
-  document.getElementById('dbTrend').className='ind-val '+(bull?'up':'dn');
-  document.getElementById('dbRegime').textContent=bull?'Trending Up':'Trending Down';
-  document.getElementById('dbRegime').className='ind-val '+(bull?'up':'dn');
-
-  const vel=tk.vel;
-  velHist.push(vel); if(velHist.length>80)velHist.shift();
-  chart.data.labels=velHist.map((_,i)=>''+i);
-  chart.data.datasets[0].data=velHist.map(()=>THRESH);
-  chart.data.datasets[1].data=velHist.map(()=>-THRESH);
-  chart.data.datasets[2].data=velHist.map(()=>0);
-  chart.data.datasets[3].data=[...velHist];
-  chart.update('none');
-  const vs=(vel>=0?'+':'')+vel.toFixed(4), vc=vel>THRESH?'pos':vel<-THRESH?'neg':'';
-  const velCard=document.getElementById('dbVelCard'); if(velCard){velCard.textContent=vs; velCard.className='vel-live '+vc;}
-  document.getElementById('dbVelLive').textContent=vs; document.getElementById('dbVelLive').className=vc;
-  const bs=Math.min(9.9,Math.max(.1,3+vel*60+(Math.random()-.5)*.5));
-  const brs=Math.min(9.9,Math.max(.1,1.2-vel*30+(Math.random()-.5)*.5));
-  document.getElementById('dbBull').style.width=(bs/10*100)+'%';
-  document.getElementById('dbBear').style.width=(brs/10*100)+'%';
-  document.getElementById('dbBullN').textContent=bs.toFixed(1);
-  document.getElementById('dbBearN').textContent=brs.toFixed(1);
-
-  let unreal=0;
-  Object.values(openTrades).forEach(tr=>{ unreal+=Math.round(((tk.price-tr.spyEntry)*(tr.dir==='CALL'?1:-1))*18); });
-  updatePnl(unreal);
-  if(ev) processEv(ev,tk);
-  idx++;
-}
-
-function processEv(ev,tk){
-  if(ev.type==='ticker'){ ticker(ev.msg); return; }
-  if(ev.type==='signal'){
-    openTrades[ev.contract]={dir:ev.dir,entry:ev.entry,spyEntry:tk.price,time:tk.time,score:ev.score,contract:ev.contract};
-    txnCt++;
-    document.getElementById('dbKpiOpen').textContent=Object.keys(openTrades).length;
-    document.getElementById('dbKpiTxn').textContent=txnCt;
-    document.getElementById('dbVc').classList.add('has-pos');
-    document.getElementById('dbPill').className='sp active'; document.getElementById('dbPill').textContent='Active';
-    renderTrades(); ticker('Signal fired · '+ev.dir+' · '+ev.contract+' · score '+ev.score);
-  }
-  if(ev.type==='close'){
-    const tr=openTrades[ev.contract];
-    if(tr){
-      closedTrades.unshift({...tr,exit:ev.exit,pnl:ev.pnl,reason:ev.reason});
-      delete openTrades[ev.contract];
-      realizedPnl+=ev.pnl; txnCt++;
-      document.getElementById('dbKpiTxn').textContent=txnCt;
-      document.getElementById('dbKpiOpen').textContent=Object.keys(openTrades).length;
-      if(!Object.keys(openTrades).length){
-        document.getElementById('dbVc').classList.remove('has-pos');
-        document.getElementById('dbPill').className='sp standby'; document.getElementById('dbPill').textContent='Standby';
-      }
-      renderTrades();
-      const mk=tk.time.slice(0,5), ex=pnlMins.find(p=>p.t===mk);
-      if(ex)ex.v+=ev.pnl; else pnlMins.push({t:mk,v:ev.pnl});
-      if(pnlMins.length>8)pnlMins=pnlMins.slice(-8);
-      renderPnlLog();
-      ticker('Closed · '+tr.dir+' · '+ev.contract+' · '+(ev.pnl>=0?'+':'')+'$'+ev.pnl+' · '+ev.reason);
-    }
-  }
-  if(ev.type==='blocked'){
-    blockedCt++; document.getElementById('dbKpiBlocked').textContent=blockedCt;
-    ticker('Signal blocked · '+ev.reason);
-  }
-}
-
-function updatePnl(unreal){
-  const net=realizedPnl+unreal, fmt=v=>(v>0?'+$':'$')+Math.abs(v), cls=v=>v>0?'pos':v<0?'neg':'neu';
-  const set=(id,v,extra='')=>{ const el=document.getElementById(id); el.textContent=fmt(v); el.className=(extra||'sb-big')+' '+cls(v); };
-  set('dbNet',net); set('dbUnreal',unreal,'sb-sm'); set('dbReal',realizedPnl,'sb-sm');
-}
-
-function renderTrades(){
-  const tbody=document.getElementById('dbTbody');
-  const all=[...closedTrades];
-  Object.values(openTrades).forEach(tr=>all.unshift({...tr,open:true}));
-  document.getElementById('dbPosCount').textContent=all.length+' trade'+(all.length!==1?'s':'');
-  if(!all.length){ tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:12px;color:var(--dust2);font-style:italic">No trades yet</td></tr>'; return; }
-  tbody.innerHTML=all.slice(0,12).map(tr=>{
-    const c=tr.dir==='CALL';
-    const pCls=tr.open?'':tr.pnl>0?'style="color:var(--green);font-weight:700"':'style="color:var(--red);font-weight:700"';
-    const rCls=!tr.reason?'':tr.reason.includes('profit')?'tp':'ts';
-    return '<tr>'
-      +'<td style="color:var(--dust2);font-size:8px">'+tr.time+'</td>'
-      +'<td><span class="dir-badge '+(c?'call':'put')+'">'+(c?'▲C':'▼P')+'</span></td>'
-      +'<td style="font-size:8px">'+tr.contract+'</td>'
-      +'<td>$'+tr.entry.toFixed(2)+'</td>'
-      +'<td>'+(tr.open?'<span style="color:#90dcff">open</span>':'$'+tr.exit.toFixed(2))+'</td>'
-      +'<td '+pCls+'>'+(tr.open?'—':(tr.pnl>=0?'+':'')+'$'+tr.pnl)+'</td>'
-      +'<td>'+(tr.reason?'<span class="r-tag '+rCls+'">'+tr.reason.replace('_',' ')+'</span>':'—')+'</td>'
-      +'</tr>';
-  }).join('');
-}
-
-function renderPnlLog(){
-  document.getElementById('dbPnlLog').innerHTML=pnlMins.slice().reverse().map(p=>
-    '<div class="pnl-row"><span class="pe-t">'+p.t+'</span><span class="pe-v '+(p.v>=0?'pos':'neg')+'">'+(p.v>=0?'+':'')+'$'+p.v+'</span></div>'
-  ).join('');
-}
-
-function ticker(msg){
-  const el=document.getElementById('dbTickerMsg');
-  el.style.opacity='0'; setTimeout(()=>{ el.textContent=msg; el.style.opacity='1'; },280);
-}
-
-const dashObs=new IntersectionObserver(entries=>{
-  if(entries[0].isIntersecting){ dashObs.disconnect(); setTimeout(startMiniReplay,300); }
-},{threshold:.1});
-dashObs.observe(document.getElementById('miniDash'));
 </script>
+<script src="../transitions.js"></script>
 </body>
 </html>
