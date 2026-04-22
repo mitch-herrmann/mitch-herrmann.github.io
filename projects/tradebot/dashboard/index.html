@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     PAGE: TradeBot Dashboard  (/projects/tradebot/dashboard/)
+     Mitchell Herrmann personal site
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SPY 0DTE TradeBot live dashboard — coming soon.">
+<meta property="og:title" content="Dashboard — SPY TradeBot — Mitchell Herrmann">
+<meta property="og:description" content="Live trading dashboard. Coming soon.">
+<meta property="og:image" content="https://mitchell-herrmann.com/og-preview.jpg">
+<meta property="og:url" content="https://mitchell-herrmann.com/projects/tradebot/dashboard/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dashboard — SPY TradeBot — Mitchell Herrmann">
+<meta name="twitter:description" content="Live trading dashboard. Coming soon.">
+<meta name="twitter:image" content="https://mitchell-herrmann.com/og-preview.jpg">
+<title>Dashboard — SPY TradeBot — Mitchell Herrmann</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='6' fill='%23a8cce0'/%3E%3Cpolyline points='3,30 3,6 12,6 18,16 24,6 33,6 33,30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cline x1='3' y1='30' x2='8' y2='30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='28' y1='30' x2='33' y2='30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpolyline points='13,30 13,20 23,20 23,30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9974c1afc0454d66b612c1fe42ca6c6d"}'></script><!-- End Cloudflare Web Analytics -->
+<style>
+:root {
+  --bg:      #0c0e13;
+  --bg2:     #12151b;
+  --bg3:     #181c24;
+  --line:    #1c2230;
+  --ice:     #60c8ff;
+  --ice2:    #90dcff;
+  --text:    #e6ecf4;
+  --muted:   #7888a0;
+  --dim:     #36445a;
+  --green:   #38c99a;
+  --display: 'Syne', sans-serif;
+  --mono:    'Syne Mono', monospace;
+  --body:    'Chivo Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); min-height: 100vh;
+  overflow-x: hidden; display: flex; flex-direction: column;
+}
+
+/* ── NOISE + GLOW OVERLAYS ── */
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 60%, rgba(96,200,255,.04) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 20% 20%, rgba(96,200,255,.02) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 60px;
+  background: rgba(12,14,19,.94); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-monogram {
+  position: relative; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--display); font-size: 17px; font-weight: 800;
+  color: var(--text); padding: 6px 2px; transition: color .2s;
+}
+.nav-monogram:hover { color: var(--ice2); }
+.nav-monogram-arrow { font-size: 8px; color: var(--dim); transition: transform .25s, color .2s; }
+.nav-monogram.open .nav-monogram-arrow { transform: rotate(180deg); color: var(--muted); }
+.nav-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0;
+  background: rgba(12,14,19,.98); backdrop-filter: blur(24px);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 0; min-width: 240px;
+  opacity: 0; transform: translateY(-8px) scale(.97); pointer-events: none;
+  transition: opacity .2s, transform .22s cubic-bezier(.16,1,.3,1); z-index: 300;
+}
+.nav-monogram.open .nav-dropdown { opacity: 1; transform: none; pointer-events: all; }
+.nav-dropdown a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px; font-family: var(--display); font-size: 15px; font-weight: 700;
+  color: rgba(230,236,244,.22); text-decoration: none;
+  transition: color .16s, background .16s;
+}
+.nav-dropdown a:hover { background: rgba(255,255,255,.03); color: var(--text); }
+.nav-dropdown a:first-child { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.nav-dropdown-num { font-family: var(--body); font-size: 8px; color: var(--dim); letter-spacing: .12em; }
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-links a {
+  padding: 6px 16px; border-radius: 99px; border: 1px solid var(--line);
+  color: var(--dim); font-family: var(--display); font-size: 9px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.nav-links a:hover { color: var(--muted); border-color: var(--dim); background: rgba(255,255,255,.03); }
+
+/* ── MAIN CONTENT ── */
+main {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 120px 48px 80px; position: relative; z-index: 1;
+  min-height: 100vh;
+}
+
+/* ── DASHBOARD WIREFRAME ── */
+.dash-ghost {
+  width: min(820px, 90vw);
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: .28;
+  margin-bottom: 64px;
+  box-shadow: 0 0 80px rgba(96,200,255,.06), 0 24px 64px rgba(0,0,0,.5);
+  pointer-events: none;
+  animation: ghost-breathe 4s ease-in-out infinite;
+}
+@keyframes ghost-breathe {
+  0%, 100% { opacity: .28; }
+  50%       { opacity: .38; }
+}
+
+/* ghost nav bar */
+.ghost-nav {
+  height: 38px; background: var(--bg3);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+}
+.ghost-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); }
+.ghost-dot.lit { background: var(--ice); box-shadow: 0 0 6px var(--ice); animation: ghost-pulse 2s ease-in-out infinite; }
+@keyframes ghost-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.ghost-nav-right { display: flex; gap: 8px; align-items: center; }
+.ghost-pill { height: 16px; border-radius: 99px; background: var(--line); }
+
+/* ghost kpi row */
+.ghost-kpi { display: grid; grid-template-columns: repeat(5,1fr); border-bottom: 1px solid var(--line); }
+.ghost-kpi-cell { padding: 10px 12px; border-right: 1px solid var(--line); }
+.ghost-kpi-cell:last-child { border-right: none; }
+.ghost-label { height: 6px; border-radius: 3px; background: var(--line); margin-bottom: 7px; }
+.ghost-value { height: 18px; border-radius: 3px; background: var(--dim); }
+
+/* ghost chart row */
+.ghost-body { display: grid; grid-template-columns: 1fr 120px; }
+.ghost-chart-area { padding: 14px; border-right: 1px solid var(--line); }
+.ghost-chart-bar-row { display: flex; align-items: flex-end; gap: 3px; height: 72px; margin-bottom: 10px; }
+.ghost-bar { flex: 1; border-radius: 2px 2px 0 0; background: var(--line); }
+.ghost-line-row { height: 40px; position: relative; overflow: hidden; }
+.ghost-line-row::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--dim) 50%, transparent 100%);
+  border-radius: 2px; height: 1px; top: 50%;
+  animation: ghost-scan 3s linear infinite;
+}
+@keyframes ghost-scan { from{transform:translateX(-100%)} to{transform:translateX(100%)} }
+
+/* ghost sidebar */
+.ghost-sidebar { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.ghost-sb-block { background: var(--bg3); border-radius: 6px; padding: 10px; }
+.ghost-sb-num { height: 22px; border-radius: 3px; background: var(--dim); margin-bottom: 5px; }
+.ghost-sb-lbl { height: 6px; border-radius: 3px; background: var(--line); }
+
+/* ghost table */
+.ghost-table { border-top: 1px solid var(--line); }
+.ghost-row { display: flex; gap: 8px; padding: 7px 14px; border-bottom: 1px solid rgba(28,34,48,.6); align-items: center; }
+.ghost-row:last-child { border-bottom: none; }
+.ghost-cell { height: 7px; border-radius: 3px; background: var(--line); flex-shrink: 0; }
+.ghost-cell.green { background: rgba(56,201,154,.25); }
+.ghost-cell.red   { background: rgba(255,64,96,.2); }
+
+/* ── COPY ── */
+.cs-lockup { text-align: center; }
+.cs-eyebrow {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+.cs-eyebrow::before, .cs-eyebrow::after {
+  content: ''; display: inline-block; width: 32px; height: 1px; background: var(--dim); opacity: .6;
+}
+.cs-title {
+  font-family: var(--display); font-size: clamp(36px, 6vw, 72px);
+  font-weight: 800; letter-spacing: -.04em; line-height: .92;
+  color: var(--text); margin-bottom: 20px;
+}
+.cs-title .accent { color: transparent; -webkit-text-stroke: 1.5px var(--ice); }
+.cs-desc {
+  font-family: var(--body); font-size: 13px; line-height: 1.85;
+  color: var(--muted); max-width: 480px; margin: 0 auto 36px;
+}
+.cs-back {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 11px 28px; border-radius: 99px;
+  border: 1px solid rgba(96,200,255,.3);
+  background: rgba(96,200,255,.07);
+  color: var(--ice2); font-family: var(--display); font-size: 9px;
+  font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; transition: background .2s, border-color .2s, box-shadow .2s;
+}
+.cs-back:hover {
+  background: rgba(96,200,255,.14);
+  border-color: rgba(96,200,255,.55);
+  box-shadow: 0 0 20px rgba(96,200,255,.14);
+}
+
+/* ── SCAN LINE ── (subtle animated horizontal rule) */
+.cs-scan {
+  width: min(820px, 90vw); height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--ice) 40%, var(--ice2) 60%, transparent 100%);
+  opacity: 0; margin-bottom: 56px;
+  animation: scan-in 1.2s .4s forwards;
+}
+@keyframes scan-in { to { opacity: .18; } }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  main { padding: 100px 20px 60px; }
+  .ghost-kpi { grid-template-columns: repeat(3,1fr); }
+  .ghost-kpi-cell:nth-child(4),
+  .ghost-kpi-cell:nth-child(5) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
+    <svg width="44" height="28" viewBox="0 0 36 24" fill="none" aria-label="MH" style="display:inline-block;vertical-align:middle">
+      <polyline points="2,21 2,3 10,3 18,14 26,3 34,3 34,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="2" y1="21" x2="7" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="29" y1="21" x2="34" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <polyline points="13,21 13,14 23,14 23,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span class="nav-monogram-arrow">&#9660;</span>
+    <div class="nav-dropdown" id="navDropdown">
+      <a href="/">Home <span class="nav-dropdown-num">00</span></a>
+      <a href="/resume">Resume <span class="nav-dropdown-num">01</span></a>
+      <a href="/photography">Photography <span class="nav-dropdown-num">02</span></a>
+      <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
+      <a href="/contact">Contact <span class="nav-dropdown-num">04</span></a>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="/projects/tradebot/">← TradeBot</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ghosted dashboard wireframe above the copy -->
+  <div class="dash-ghost" aria-hidden="true">
+
+    <!-- nav bar -->
+    <div class="ghost-nav">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="ghost-dot lit"></div>
+        <div class="ghost-pill" style="width:110px"></div>
+      </div>
+      <div class="ghost-nav-right">
+        <div class="ghost-pill" style="width:50px"></div>
+        <div class="ghost-pill" style="width:36px"></div>
+      </div>
+    </div>
+
+    <!-- price strip -->
+    <div style="display:grid;grid-template-columns:1fr auto;padding:12px 16px 10px;border-bottom:1px solid var(--line);gap:12px;align-items:end">
+      <div>
+        <div style="height:36px;width:120px;border-radius:4px;background:var(--dim);margin-bottom:6px"></div>
+        <div style="height:7px;width:90px;border-radius:3px;background:var(--line)"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="height:7px;width:40px;border-radius:3px;background:var(--line);margin-bottom:6px;margin-left:auto"></div>
+        <div style="height:18px;width:70px;border-radius:3px;background:var(--dim);margin-left:auto"></div>
+      </div>
+    </div>
+
+    <!-- kpi row -->
+    <div class="ghost-kpi">
+      <div class="ghost-kpi-cell"><div class="ghost-label" style="width:55%"></div><div class="ghost-value" style="width:45%"></div></div>
+      <div class="ghost-kpi-cell"><div class="ghost-label" style="width:60%"></div><div class="ghost-value" style="width:40%"></div></div>
+      <div class="ghost-kpi-cell"><div class="ghost-label" style="width:50%"></div><div class="ghost-value" style="width:50%;background:rgba(56,201,154,.3)"></div></div>
+      <div class="ghost-kpi-cell"><div class="ghost-label" style="width:65%"></div><div class="ghost-value" style="width:35%"></div></div>
+      <div class="ghost-kpi-cell"><div class="ghost-label" style="width:55%"></div><div class="ghost-value" style="width:45%;background:rgba(255,64,96,.2)"></div></div>
+    </div>
+
+    <!-- main body -->
+    <div class="ghost-body">
+      <div class="ghost-chart-area">
+        <!-- bar chart -->
+        <div class="ghost-chart-bar-row">
+          <div class="ghost-bar" style="height:35%"></div>
+          <div class="ghost-bar" style="height:55%"></div>
+          <div class="ghost-bar" style="height:42%"></div>
+          <div class="ghost-bar" style="height:70%"></div>
+          <div class="ghost-bar" style="height:48%"></div>
+          <div class="ghost-bar" style="height:88%;background:rgba(56,201,154,.25)"></div>
+          <div class="ghost-bar" style="height:62%"></div>
+          <div class="ghost-bar" style="height:45%"></div>
+          <div class="ghost-bar" style="height:72%"></div>
+          <div class="ghost-bar" style="height:50%"></div>
+          <div class="ghost-bar" style="height:30%"></div>
+          <div class="ghost-bar" style="height:65%;background:rgba(255,64,96,.2)"></div>
+          <div class="ghost-bar" style="height:52%"></div>
+          <div class="ghost-bar" style="height:40%"></div>
+          <div class="ghost-bar" style="height:78%"></div>
+          <div class="ghost-bar" style="height:58%"></div>
+          <div class="ghost-bar" style="height:44%"></div>
+          <div class="ghost-bar" style="height:90%;background:rgba(96,200,255,.25)"></div>
+          <div class="ghost-bar" style="height:66%"></div>
+          <div class="ghost-bar" style="height:38%"></div>
+        </div>
+        <!-- velocity line placeholder -->
+        <div class="ghost-line-row"></div>
+      </div>
+
+      <!-- sidebar -->
+      <div class="ghost-sidebar">
+        <div class="ghost-sb-block">
+          <div class="ghost-sb-num" style="width:70%;background:rgba(56,201,154,.25)"></div>
+          <div class="ghost-sb-lbl" style="width:55%"></div>
+        </div>
+        <div class="ghost-sb-block">
+          <div class="ghost-sb-num" style="width:80%"></div>
+          <div class="ghost-sb-lbl" style="width:60%"></div>
+        </div>
+        <div class="ghost-sb-block">
+          <div class="ghost-sb-num" style="width:65%;background:rgba(255,64,96,.2)"></div>
+          <div class="ghost-sb-lbl" style="width:45%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- table rows -->
+    <div class="ghost-table">
+      <div class="ghost-row">
+        <div class="ghost-cell" style="width:40px"></div>
+        <div class="ghost-cell green" style="width:28px"></div>
+        <div class="ghost-cell" style="width:90px"></div>
+        <div class="ghost-cell" style="width:45px"></div>
+        <div class="ghost-cell" style="width:45px"></div>
+        <div class="ghost-cell green" style="width:38px"></div>
+      </div>
+      <div class="ghost-row">
+        <div class="ghost-cell" style="width:40px"></div>
+        <div class="ghost-cell red" style="width:28px"></div>
+        <div class="ghost-cell" style="width:90px"></div>
+        <div class="ghost-cell" style="width:45px"></div>
+        <div class="ghost-cell" style="width:45px"></div>
+        <div class="ghost-cell red" style="width:38px"></div>
+      </div>
+      <div class="ghost-row">
+        <div class="ghost-cell" style="width:40px"></div>
+        <div class="ghost-cell green" style="width:28px"></div>
+        <div class="ghost-cell" style="width:90px"></div>
+        <div class="ghost-cell" style="width:45px"></div>
+        <div class="ghost-cell" style="width:45px;opacity:.4"></div>
+        <div class="ghost-cell" style="width:38px;opacity:.3"></div>
+      </div>
+    </div>
+
+  </div><!-- /.dash-ghost -->
+
+  <div class="cs-scan"></div>
+
+  <div class="cs-lockup">
+    <div class="cs-eyebrow">TradeBot Dashboard</div>
+    <h1 class="cs-title">Coming <span class="accent">Soon</span></h1>
+    <p class="cs-desc">A live demo of the full trading dashboard — with real-time SPY data, signal replay, and P&amp;L tracking — is on its way.</p>
+    <a href="/projects/tradebot/" class="cs-back">← Back to TradeBot</a>
+  </div>
+
+</main>
+
+<script>
+(function() {
+  function init() {
+    var trigger = document.getElementById('navMonogram');
+    var dropdown = document.getElementById('navDropdown');
+    if (!trigger || !dropdown) return;
+    function close() { trigger.classList.remove('open'); trigger.setAttribute('aria-expanded','false'); }
+    function toggle() { trigger.classList.contains('open') ? close() : (trigger.classList.add('open'), trigger.setAttribute('aria-expanded','true')); }
+    trigger.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
+    trigger.addEventListener('keydown', function(e) { if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape')close(); });
+    document.addEventListener('click', function(e) { if(!trigger.contains(e.target)) close(); });
+    document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
+    dropdown.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
+  }
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+})();
+</script>
+<script src="../../../transitions.js"></script>
+</body>
+</html>
