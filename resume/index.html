@@ -218,23 +218,9 @@ nav {
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: center 15%;
-  filter: grayscale(100%) contrast(1.05) brightness(.92);
   display: block;
-  transition: filter .5s ease;
 }
-.resume-photo-wrap:hover img {
-  filter: grayscale(0%) contrast(1.02) brightness(.98);
-}
-/* subtle ice tint overlay */
-.resume-photo-wrap::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: rgba(96,200,255,.06);
-  pointer-events: none;
-  border-radius: 12px;
-  transition: opacity .5s ease;
-}
-.resume-photo-wrap:hover::after { opacity: 0; }
+/* hover color reveal handled by JS-toggled .desaturated class */
 
 .resume-photo-name {
   padding-bottom: 8px;
@@ -275,13 +261,10 @@ nav {
   padding-top: 72px;
 }
 .resume-section-label {
-  font-family: var(--mono); font-size: 9px; letter-spacing: .24em;
-  text-transform: uppercase; color: var(--dim);
+  font-family: var(--display); font-size: 13px; font-weight: 800; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ice2);
   display: flex; align-items: center; gap: 16px;
   margin-bottom: 48px;
-}
-.resume-section-label::after {
-  content: ''; flex: 1; height: 1px; background: var(--line);
 }
 .resume-entry {
   display: grid;
@@ -317,9 +300,10 @@ nav {
   line-height: 1.1; margin-bottom: 20px;
 }
 .entry-role-sub {
-  font-family: var(--display); font-size: 14px; font-weight: 800;
-  letter-spacing: -.02em; color: var(--muted);
-  margin-top: 32px; margin-bottom: 14px; line-height: 1.1;
+  font-family: var(--display); font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800; letter-spacing: -.025em; color: var(--text);
+  line-height: 1.1;
+  margin-top: 32px; margin-bottom: 20px;
   padding-top: 24px; border-top: 1px solid var(--line);
 }
 .entry-bullets {
@@ -342,6 +326,40 @@ nav {
   font-family: var(--body); font-size: 12px; color: var(--muted);
   margin-top: 8px; line-height: 1.7; letter-spacing: .01em;
 }
+
+/* ── SECTION LABEL LINE DRAW ── */
+.resume-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .8s cubic-bezier(.16,1,.3,1);
+}
+.resume-section-label.line-drawn::after {
+  transform: scaleX(1);
+}
+
+/* ── PHOTO LOAD TRANSITION ── */
+.resume-photo-wrap img {
+  filter: grayscale(0%) contrast(1.02) brightness(.98);
+  transition: filter 1.6s ease .3s;
+}
+.resume-photo-wrap.desaturated img {
+  filter: grayscale(100%) contrast(1.05) brightness(.92);
+}
+.resume-photo-wrap:hover img {
+  filter: grayscale(0%) contrast(1.02) brightness(.98) !important;
+  transition: filter .5s ease !important;
+}
+.resume-photo-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(96,200,255,.06);
+  pointer-events: none;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 1.6s ease .3s;
+}
+.resume-photo-wrap.desaturated::after { opacity: 1; }
+.resume-photo-wrap:hover::after { opacity: 0 !important; transition: opacity .5s ease !important; }
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {
@@ -482,7 +500,7 @@ nav {
           <li>Facilitated adoption of new functionality by working with IT staff to configure and demonstrate features.</li>
         </ul>
 
-        <div class="entry-role-sub">Project Manager &nbsp;·&nbsp; June 2014 — Aug. 2018</div>
+        <div class="entry-role-sub">Project Manager<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">June 2014 — Aug. 2018</span></div>
         <ul class="entry-bullets">
           <li>Conducted pre-implementation demonstration sessions for customer leadership to present Epic Home Health and Hospice software functionality and identify organizational goals and requirements.</li>
           <li>Designed and installed custom software configurations to meet client needs in accordance with state and national regulations and industry standards.</li>
@@ -516,23 +534,98 @@ nav {
 </div>
 
 <script>
-/* Scroll-triggered fade-in for resume entries */
 (function() {
+
+  /* ── 1. PHOTO: color → grayscale on load ── */
+  var photoWrap = document.querySelector('.resume-photo-wrap');
+  if (photoWrap) {
+    setTimeout(function() { photoWrap.classList.add('desaturated'); }, 80);
+  }
+
+  /* ── 2. SECTION LABEL: line draw on scroll ── */
+  var sectionLabels = document.querySelectorAll('.resume-section-label');
+
+  /* ── 3. ENTRIES: staggered fade-in on scroll ── */
   var entries = document.querySelectorAll('.resume-entry');
-  if (!entries.length) return;
+
+  /* ── 4. STATS: count-up on scroll ── */
+  var stats = document.querySelectorAll('.stat');
+  stats.forEach(function(el) {
+    var raw = el.textContent.trim();
+    var num = parseFloat(raw);
+    var suffix = raw.replace(String(num), '');
+    el.dataset.target = num;
+    el.dataset.suffix = suffix;
+    el.dataset.animated = 'false';
+    el.textContent = '0' + suffix;
+  });
+
+  function animateStat(el) {
+    if (el.dataset.animated === 'true') return;
+    el.dataset.animated = 'true';
+    var target = parseFloat(el.dataset.target);
+    var suffix = el.dataset.suffix;
+    var decimals = (String(target).split('.')[1] || '').length;
+    var duration = 900;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      /* ease out cubic */
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = (target * eased).toFixed(decimals);
+      el.textContent = current + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
   if ('IntersectionObserver' in window) {
-    var obs = new IntersectionObserver(function(items) {
+
+    /* Entries observer — staggered delay */
+    var entryObs = new IntersectionObserver(function(items) {
       items.forEach(function(item) {
         if (item.isIntersecting) {
-          item.target.classList.add('visible');
-          obs.unobserve(item.target);
+          /* find index among all entries for stagger */
+          var idx = Array.prototype.indexOf.call(entries, item.target);
+          setTimeout(function() {
+            item.target.classList.add('visible');
+          }, idx * 60);
+          entryObs.unobserve(item.target);
         }
       });
-    }, { threshold: 0.08 });
-    entries.forEach(function(el) { obs.observe(el); });
+    }, { threshold: 0.07 });
+    entries.forEach(function(el) { entryObs.observe(el); });
+
+    /* Section label line-draw observer */
+    var labelObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          item.target.classList.add('line-drawn');
+          labelObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    sectionLabels.forEach(function(el) { labelObs.observe(el); });
+
+    /* Stats count-up observer */
+    var statObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          animateStat(item.target);
+          statObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 1.0 });
+    stats.forEach(function(el) { statObs.observe(el); });
+
   } else {
+    /* Fallback — no observer support */
     entries.forEach(function(el) { el.classList.add('visible'); });
+    sectionLabels.forEach(function(el) { el.classList.add('line-drawn'); });
+    stats.forEach(function(el) { animateStat(el); });
   }
+
 })();
 </script>
 
