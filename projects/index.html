@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     PAGE: Projects  (/projects/index.html)
+     PAGE: Resume  (/resume/index.html)
      Mitchell Herrmann personal site
      ============================================================ -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Mitchell Herrmann — selected engineering, finance, and design projects.">
-<meta property="og:title" content="Projects — Mitchell Herrmann">
-<meta property="og:description" content="A selection of the toys and tools that I've built.">
+<meta name="description" content="Mitchell Herrmann — work history, education, and skills.">
+<meta property="og:title" content="Résumé — Mitchell Herrmann">
+<meta property="og:description" content="Work history, education, and skills.">
 <meta property="og:image" content="https://mitchell-herrmann.com/og-preview.jpg">
-<meta property="og:url" content="https://mitchell-herrmann.com/projects/">
+<meta property="og:url" content="https://mitchell-herrmann.com/resume/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Projects — Mitchell Herrmann">
-<meta name="twitter:description" content="A selection of the toys and tools that I've built.">
+<meta name="twitter:title" content="Résumé — Mitchell Herrmann">
+<meta name="twitter:description" content="Work history, education, and skills.">
 <meta name="twitter:image" content="https://mitchell-herrmann.com/og-preview.jpg">
-<title>Projects — Mitchell Herrmann</title>
+<title>Résumé — Mitchell Herrmann</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='6' fill='%23a8cce0'/%3E%3Cpolyline points='3,30 3,6 12,6 18,16 24,6 33,6 33,30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cline x1='3' y1='30' x2='8' y2='30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='28' y1='30' x2='33' y2='30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpolyline points='13,30 13,20 23,20 23,30' stroke='%231a3a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9974c1afc0454d66b612c1fe42ca6c6d"}'></script><!-- End Cloudflare Web Analytics -->
+
 
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -100,7 +101,8 @@ nav {
 .nav-monogram.open .nav-dropdown {
   opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
 }
-.nav-dropdown a {
+.nav-dropdown-main { display: block; }
+.nav-dropdown-main a {
   display: flex; align-items: center; justify-content: space-between;
   padding: 15px 28px;
   font-family: var(--display); font-size: 17px; font-weight: 800;
@@ -110,17 +112,42 @@ nav {
   transition: color .18s ease, border-left-color .18s ease, background .18s ease;
   position: relative;
 }
-.nav-dropdown a:hover { background: rgba(255,255,255,.03); }
-.nav-dropdown a:nth-child(1):hover { color: #60c8ff; border-left-color: #60c8ff; }
-.nav-dropdown a:nth-child(2):hover { color: #ff64a0; border-left-color: #ff64a0; }
-.nav-dropdown a:nth-child(3):hover { color: #a064ff; border-left-color: #a064ff; }
-.nav-dropdown a:nth-child(4):hover { color: #3cdcb4; border-left-color: #3cdcb4; }
-.nav-dropdown a:nth-child(5):hover { color: #ffc83c; border-left-color: #ffc83c; }
-.nav-dropdown a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.nav-dropdown-main > a:hover { background: rgba(255,255,255,.03); }
+.nav-dropdown-main > a:nth-child(1):hover { color: #60c8ff; border-left-color: #60c8ff; }
+.nav-dropdown-main > a:nth-child(2):hover { color: #ff64a0; border-left-color: #ff64a0; }
+.nav-dropdown-main > a:nth-child(3):hover { color: #a064ff; border-left-color: #a064ff; }
+.nav-dropdown-main > a:nth-child(4):hover { color: #3cdcb4; border-left-color: #3cdcb4; }
+.nav-dropdown-main > a:nth-child(5):hover { color: #ffc83c; border-left-color: #ffc83c; }
+.nav-dropdown-main > a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.nav-dropdown-main a.photo-row-active { color: #a064ff !important; border-left-color: #a064ff !important; }
 .nav-dropdown-num {
   font-family: var(--mono); font-size: 8px; color: var(--dim);
   letter-spacing: .14em; font-weight: 400;
 }
+.nav-dropdown-chevron {
+  font-size: 8px; color: var(--dim); margin-left: 4px;
+  transition: transform .25s ease, color .2s; display: inline-block;
+}
+.nav-dropdown-main a.photo-row-active .nav-dropdown-chevron { transform: rotate(90deg); color: #a064ff; }
+.nav-album-list {
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s cubic-bezier(.16,1,.3,1);
+  border-left: 2px solid rgba(160,100,255,.25);
+  margin: 0 28px 0 30px;
+}
+.nav-album-list.open { max-height: 400px; }
+.nav-album-list a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 0 7px 14px;
+  font-family: var(--display); font-size: 12px; font-weight: 800;
+  letter-spacing: -.01em; color: rgba(232,237,245,.3);
+  text-decoration: none; border-left: none;
+  transition: color .15s ease;
+}
+.nav-album-list a::before { content: '›'; font-size: 11px; color: var(--dim); transition: color .15s ease; }
+.nav-album-list a:hover { color: #a064ff; }
+.nav-album-list a:hover::before { color: #a064ff; }
+.nav-album-list-spacer { height: 6px; }
 .nav-links {
   display: flex; gap: 8px; font-family: var(--display); font-size: 9.5px;
   font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
@@ -159,6 +186,7 @@ nav {
   border-bottom: 1px solid var(--line);
   position: relative; z-index: 3;
 }
+
 .page-eyebrow {
   font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
   text-transform: uppercase; color: var(--dim); margin-bottom: 20px;
@@ -171,75 +199,190 @@ nav {
 }
 .page-desc { font-family: var(--body); font-size: 13px; color: var(--muted); line-height: 1.85; max-width: 560px; margin-top: 20px; letter-spacing: .02em; }
 
-/* CONTENT */
-.page-content {
+/* ── PHOTO HEADER ── */
+.resume-photo-header {
   position: relative; z-index: 3;
-  padding: 64px 48px 160px;
+  padding: 48px 48px 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.coming-soon {
-  font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--dim);
+.resume-photo-wrap {
+  flex-shrink: 0;
+  width: 148px; height: 196px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  position: relative;
+}
+.resume-photo-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 8%;
+  display: block;
+}
+/* hover color reveal handled by JS-toggled .desaturated class */
+
+.resume-photo-name {
+  padding-bottom: 8px;
+}
+.resume-photo-name-line1 {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: .88;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--text);
+}
+.resume-photo-name-line2 {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: .92;
+  color: var(--text);
+}
+.resume-photo-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 14px;
 }
 
-/* PROJECT CARDS */
-.project-grid {
+/* ── RESUME LAYOUT ── */
+.resume-wrap {
+  position: relative; z-index: 3;
+  padding: 0 48px 160px;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.resume-section {
+  padding-top: 72px;
+}
+.resume-section-label {
+  font-family: var(--display); font-size: 13px; font-weight: 800; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ice2);
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 48px;
+}
+.resume-entry {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 24px;
+  grid-template-columns: 200px 1fr;
+  gap: 0 48px;
+  padding: 40px 0;
+  border-top: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.16,1,.3,1);
 }
-.project-card {
-  display: flex; flex-direction: column;
-  background: var(--bg2); border: 1px solid var(--line);
-  border-radius: 12px; overflow: hidden; text-decoration: none;
-  color: var(--text); transition: border-color .25s, background .25s, box-shadow .25s;
+.resume-entry.visible {
+  opacity: 1; transform: translateY(0);
 }
-.project-card:hover {
-  border-color: rgba(96,200,255,.35);
-  background: var(--bg3);
-  box-shadow: 0 0 32px rgba(96,200,255,.07), 0 8px 32px rgba(0,0,0,.3);
+.resume-entry:last-child { border-bottom: 1px solid var(--line); }
+.entry-meta { padding-top: 4px; }
+.entry-dates {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
+  color: var(--ice); margin-bottom: 10px; line-height: 1.5;
 }
-.project-card-preview {
-  width: 100%; aspect-ratio: 16/9; overflow: hidden;
-  background: #0c0e13; border-bottom: 1px solid var(--line);
+.entry-org {
+  font-family: var(--display); font-size: 12px; font-weight: 800;
+  letter-spacing: -.01em; color: var(--text); margin-bottom: 4px;
+  line-height: 1.2;
 }
-.project-card-preview-inner {
-  width: 200%; height: 200%;
-  transform: scale(0.5); transform-origin: top left;
-  pointer-events: none; overflow: hidden;
+.entry-location {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .08em;
+  color: var(--dim); margin-top: 8px;
 }
-.project-card-preview-inner iframe {
-  width: 100%; height: 100%; border: none; display: block;
+.entry-role {
+  font-family: var(--display); font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800; letter-spacing: -.025em; color: var(--text);
+  line-height: 1.1; margin-bottom: 20px;
 }
-.project-card-body { padding: 28px 28px 24px; flex: 1; display: flex; flex-direction: column; }
-.project-card-eyebrow {
-  font-family: var(--mono); font-size: 8px; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--dim); margin-bottom: 10px;
+.entry-role-sub {
+  font-family: var(--display); font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800; letter-spacing: -.025em; color: var(--text);
+  line-height: 1.1;
+  margin-top: 32px; margin-bottom: 20px;
+  padding-top: 24px; border-top: 1px solid var(--line);
 }
-.project-card-title {
-  font-family: var(--display); font-size: 22px; font-weight: 800;
-  letter-spacing: -.025em; color: var(--text); margin-bottom: 10px; line-height: 1.1;
+.entry-bullets {
+  list-style: none; display: flex; flex-direction: column; gap: 10px;
 }
-.project-card-desc {
-  font-family: var(--body); font-size: 12px; line-height: 1.75;
-  color: var(--muted); margin-bottom: 20px; flex: 1;
+.entry-bullets li {
+  font-family: var(--body); font-size: 12.5px; line-height: 1.8;
+  color: var(--muted); padding-left: 18px; position: relative;
+  letter-spacing: .01em;
 }
-.project-card-tags {
-  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px;
+.entry-bullets li::before {
+  content: '—'; position: absolute; left: 0;
+  color: var(--dim); font-size: 10px; top: 4px;
 }
-.project-tag {
-  font-family: var(--mono); font-size: 8px; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--dim);
-  padding: 3px 9px; border-radius: 99px; border: 1px solid var(--line);
+.stat {
+  font-family: var(--display); font-weight: 800;
+  color: var(--ice2); letter-spacing: -.01em;
 }
-.project-card-link {
-  font-family: var(--display); font-size: 9px; font-weight: 700;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ice); display: inline-flex; align-items: center; gap: 6px;
-  transition: gap .2s;
+.entry-degree {
+  font-family: var(--body); font-size: 12px; color: var(--muted);
+  margin-top: 8px; line-height: 1.7; letter-spacing: .01em;
 }
-.project-card:hover .project-card-link { gap: 10px; }
 
-/* MOBILE */
+/* ── CERTIFICATIONS ── */
+.cert-list {
+  display: flex; flex-direction: column; gap: 10px; list-style: none;
+}
+.cert-list li {
+  font-family: var(--display); font-size: 14px; font-weight: 800;
+  letter-spacing: -.015em; color: var(--text); line-height: 1.2;
+  padding-left: 18px; position: relative;
+}
+.cert-list li::before {
+  content: '—'; position: absolute; left: 0;
+  color: var(--dim); font-size: 10px; top: 4px;
+  font-family: var(--body); font-weight: 400;
+}
+
+/* ── SECTION LABEL LINE DRAW ── */
+.resume-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .8s cubic-bezier(.16,1,.3,1);
+}
+.resume-section-label.line-drawn::after {
+  transform: scaleX(1);
+}
+
+/* ── PHOTO LOAD TRANSITION ── */
+.resume-photo-wrap img {
+  filter: grayscale(0%) contrast(1.02) brightness(.98);
+  transition: filter 1.6s ease .3s;
+}
+.resume-photo-wrap.desaturated img {
+  filter: grayscale(100%) contrast(1.05) brightness(.92);
+}
+.resume-photo-wrap:hover img {
+  filter: grayscale(0%) contrast(1.02) brightness(.98) !important;
+  transition: filter .5s ease !important;
+}
+.resume-photo-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(96,200,255,.06);
+  pointer-events: none;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 1.6s ease .3s;
+}
+.resume-photo-wrap.desaturated::after { opacity: 1; }
+.resume-photo-wrap:hover::after { opacity: 0 !important; transition: opacity .5s ease !important; }
+
+/* ── MOBILE ── */
 @media (max-width: 768px) {
   nav { padding: 0 20px; backdrop-filter: blur(12px); }
   .nav-links { display: none; }
@@ -247,9 +390,21 @@ nav {
   .nav-page-label { display: inline; }
   .page-header { padding: 88px 20px 40px; }
   .page-title { font-size: clamp(40px, 11vw, 96px); }
-  .page-desc { color: var(--muted); }
-  .page-content { padding: 40px 20px 140px; }
-  .coming-soon { color: var(--muted); }
+  .resume-photo-header {
+    padding: 32px 20px 0;
+    gap: 24px;
+  }
+  .resume-photo-wrap { width: 100px; height: 133px; }
+  .resume-wrap { padding: 0 20px 120px; }
+  .resume-entry {
+    grid-template-columns: 1fr;
+    gap: 16px 0;
+  }
+  .entry-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; padding-top: 0;
+  }
+  .entry-location { margin-top: 0; }
+  .resume-section { padding-top: 48px; }
 }
 </style>
 </head>
@@ -264,19 +419,25 @@ nav {
       <polyline points="13,21 13,14 23,14 23,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
     <span class="nav-monogram-arrow">&#9660;</span>
-    <span class="nav-page-label">Projects</span>
+    <span class="nav-page-label">Résumé</span>
     <div class="nav-dropdown" id="navDropdown">
-      <a href="/">Home <span class="nav-dropdown-num">00</span></a>
-      <a href="/resume">Résumé <span class="nav-dropdown-num">01</span></a>
-      <a href="/photography">Photography <span class="nav-dropdown-num">02</span></a>
-      <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
-      <a href="/contact">Contact <span class="nav-dropdown-num">04</span></a>
+      <div class="nav-dropdown-main">
+        <a href="/">Home <span class="nav-dropdown-num">00</span></a>
+        <a href="/resume" class="active">Résumé</a>
+        <a href="/photography" id="navPhotoRow">Photography <span class="nav-dropdown-num">02</span><span class="nav-dropdown-chevron">&#9654;</span></a>
+        <div class="nav-album-list" id="navAlbumList">
+          <div id="navAlbumLinks"></div>
+        </div>
+        <div class="nav-album-list-spacer"></div>
+        <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
+        <a href="/contact">Contact</a>
+      </div>
     </div>
   </div>
   <div class="nav-links">
-    <a href="/resume">Résumé</a>
+    <a href="/resume" class="active">Résumé</a>
     <a href="/photography">Photography</a>
-    <a href="/projects" class="active">Projects</a>
+    <a href="/projects">Projects</a>
     <a href="/contact">Contact</a>
   </div>
   <div class="nav-status">
@@ -286,52 +447,244 @@ nav {
 </nav>
 
 <div class="page-header">
-  <div class="page-eyebrow">Projects</div>
-  <div class="page-title">Projects</div>
-  <p class="page-desc">Selected work and side projects.</p>
+  <div class="page-eyebrow">Résumé</div>
+  <div class="page-title">Résumé</div>
+  <p class="page-desc">Healthcare IT consulting, system implementation, and revenue cycle optimization.</p>
 </div>
 
-<div class="page-content">
-  <div class="project-grid">
+<div class="resume-photo-header">
+  <div class="resume-photo-wrap">
+    <img src="/resume/mitchell.jpg" alt="Mitchell Herrmann">
+  </div>
+  <div class="resume-photo-name">
+    <div class="resume-photo-name-line1">Mitchell</div>
+    <div class="resume-photo-name-line2">Herrmann</div>
+    <div class="resume-photo-tag">Healthcare IT &nbsp;·&nbsp; Revenue Cycle &nbsp;·&nbsp; Denver, CO</div>
+  </div>
+</div>
 
-    <a href="/projects/tradebot/" class="project-card">
-      <div class="project-card-preview">
-        <div class="project-card-preview-inner">
-          <iframe src="/projects/tradebot/" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+<div class="resume-wrap">
+
+  <!-- ── PROFESSIONAL EXPERIENCE ── -->
+  <div class="resume-section">
+    <div class="resume-section-label">Professional Experience</div>
+
+    <!-- NYC H+H -->
+    <div class="resume-entry">
+      <div class="entry-meta">
+        <div class="entry-dates">Feb. 2020 — Present</div>
+        <div class="entry-org">New York City<br>Health + Hospitals</div>
+        <div class="entry-location">Remote</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">Senior Consultant<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">Home Health Billing</span></div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--dim);margin-bottom:18px;text-transform:uppercase">Contracted through TEKsystems</div>
+        <ul class="entry-bullets">
+          <li>Partner with agency leadership to collaboratively identify and prioritize key Epic enhancement projects, and lead analyst team in data analysis and technical implementation of new features.</li>
+          <li>Develop business intelligence reports to provide operations actionable insights on agency productivity and revenue cycle performance and forecasting.</li>
+          <li>Successfully led multi-IT team discovery, scoping, and implementation efforts for six third-party integrations across multiple technologies including HL7, API, and SFTP.</li>
+          <li>Leveraged operational analytics and software optimizations to streamline revenue collection, resulting in a <span class="stat">50.3%</span> reduction in unbilled revenue and a <span class="stat">20.3%</span> decrease in accounts receivable.</li>
+          <li>Drove a <span class="stat">14%</span> increase in revenue from 2023 to 2024 by analyzing existing payer contracts and presenting potential renegotiation strategies to Business Development leadership.</li>
+          <li>Deployed AI tools to engineer automated reporting pipelines using PowerShell and VBA, eliminating hours of monthly manual work and delivering leadership-ready KPI reports. <a href="https://mitchell-herrmann.com/projects/work-automation/" target="_blank" rel="noopener" style="color:var(--ice);text-decoration:none;border-bottom:1px solid rgba(96,200,255,.3);transition:border-color .2s,color .2s;" onmouseover="this.style.color='var(--ice2)';this.style.borderBottomColor='rgba(144,220,255,.7)'" onmouseout="this.style.color='var(--ice)';this.style.borderBottomColor='rgba(96,200,255,.3)'">View project →</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Baker Tilly -->
+    <div class="resume-entry">
+      <div class="entry-meta">
+        <div class="entry-dates">Oct. 2018 — Jan. 2020</div>
+        <div class="entry-org">Baker Tilly</div>
+        <div class="entry-location">Chicago, IL</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">Senior Consultant<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">Payer Implementation</span></div>
+        <ul class="entry-bullets">
+          <li>Developed and managed the implementation plan for a new Value-Based Care insurance program launch in New Mexico and Oklahoma, coordinating deliverables across multiple teams.</li>
+          <li>Collaborated with BCBS executive leadership to identify and document business needs, translating them into clear technical requirements for development teams.</li>
+          <li>Communicated project progress and barriers to executive stakeholders to escalate delays, mitigate risk, and create actionable resolution plans.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Epic Systems -->
+    <div class="resume-entry">
+      <div class="entry-meta">
+        <div class="entry-dates">June 2014 — Aug. 2018</div>
+        <div class="entry-org">Epic Systems</div>
+        <div class="entry-location">Verona, WI</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">Technical Solutions Engineer<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">Jan. 2018 — Aug. 2018</span></div>
+        <ul class="entry-bullets">
+          <li>Fostered communication between operational leaders, IT analysts, and end users to identify, triage, and resolve a backlog of issues after going live on EpicCare Home Health.</li>
+          <li>Improved user satisfaction by providing guidance to enhance system configuration and optimize workflows.</li>
+          <li>Facilitated adoption of new functionality by working with IT staff to configure and demonstrate features.</li>
+        </ul>
+
+        <div class="entry-role-sub">Project Manager<br><span style="color:var(--muted);font-size:.75em;letter-spacing:0">June 2014 — Aug. 2018</span></div>
+        <ul class="entry-bullets">
+          <li>Conducted pre-implementation demonstration sessions for customer leadership to present Epic Home Health and Hospice software functionality and identify organizational goals and requirements.</li>
+          <li>Designed and installed custom software configurations to meet client needs in accordance with state and national regulations and industry standards.</li>
+          <li>Provided education and support to customer IT teams on all project needs, including technical system configuration and testing, operational decision making, change management, KPI monitoring, and user training.</li>
+          <li>Coordinated with internal development teams to design and optimize new functionality for Epic's Foundation System based on customer feedback.</li>
+          <li>Served as the Epic-wide Hospice Billing success owner, guiding continuous improvement to the module based on evolving industry and client demands.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EDUCATION ── -->
+  <div class="resume-section">
+    <div class="resume-section-label">Education</div>
+
+    <div class="resume-entry edu">
+      <div class="entry-meta">
+        <div class="entry-dates">May 2014</div>
+        <div class="entry-org">University of Wisconsin</div>
+        <div class="entry-location">Madison, WI</div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-role">B.S. Community and<br>Nonprofit Leadership</div>
+        <div class="entry-degree">
+          Minors: Business, Environmental Studies
         </div>
       </div>
-      <div class="project-card-body">
-        <div class="project-card-eyebrow">2026 &mdash; Automated trading</div>
-        <div class="project-card-title">SPY 0DTE TradeBot</div>
-        <p class="project-card-desc">An autonomous intraday options trading system that streams live SPY tick data, detects momentum via a Kalman-filtered velocity signal, and routes orders through the Schwab API, complete with a live trading dashboard.</p>
-        <span class="project-card-link">View Project →</span>
-      </div>
-    </a>
+    </div>
 
-    <a href="/projects/work-automation/" class="project-card">
-      <div class="project-card-preview">
-        <div class="project-card-preview-inner">
-          <iframe src="/projects/work-automation/" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
-        </div>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-label">Active Epic Certifications</div>
+
+    <div class="resume-entry">
+      <div class="entry-meta"></div>
+      <div class="entry-body">
+        <ul class="cert-list">
+          <li>Home Health Revenue Cycle</li>
+          <li>Hospice Revenue Cycle</li>
+          <li>Comfort</li>
+          <li>Dorothy</li>
+          <li>Resolute Hospital Billing Administration</li>
+          <li>Resolute Hospital Billing Expected Reimbursement Contracts Administration</li>
+        </ul>
       </div>
-      <div class="project-card-body">
-        <div class="project-card-eyebrow">2026 &mdash; Reporting automation</div>
-        <div class="project-card-title">Work Automation</div>
-        <p class="project-card-desc">A pair of reporting pipelines that pull source data from a secure server, process and classify it automatically, and produce formatted Excel reports — replacing hours of monthly manual work with a single script run.</p>
-        <span class="project-card-link">View Project →</span>
-      </div>
-    </a>
+    </div>
 
   </div>
 </div>
+
+<script>
+(function() {
+
+  /* ── 1. PHOTO: color → grayscale on load ── */
+  var photoWrap = document.querySelector('.resume-photo-wrap');
+  if (photoWrap) {
+    setTimeout(function() { photoWrap.classList.add('desaturated'); }, 80);
+  }
+
+  /* ── 2. SECTION LABEL: line draw on scroll ── */
+  var sectionLabels = document.querySelectorAll('.resume-section-label');
+
+  /* ── 3. ENTRIES: staggered fade-in on scroll ── */
+  var entries = document.querySelectorAll('.resume-entry');
+
+  /* ── 4. STATS: count-up on scroll ── */
+  var stats = document.querySelectorAll('.stat');
+  stats.forEach(function(el) {
+    var raw = el.textContent.trim();
+    var num = parseFloat(raw);
+    var suffix = raw.replace(String(num), '');
+    el.dataset.target = num;
+    el.dataset.suffix = suffix;
+    el.dataset.animated = 'false';
+    el.textContent = '0' + suffix;
+  });
+
+  function animateStat(el) {
+    if (el.dataset.animated === 'true') return;
+    el.dataset.animated = 'true';
+    var target = parseFloat(el.dataset.target);
+    var suffix = el.dataset.suffix;
+    var decimals = (String(target).split('.')[1] || '').length;
+    var duration = 900;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      /* ease out cubic */
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = (target * eased).toFixed(decimals);
+      el.textContent = current + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  if ('IntersectionObserver' in window) {
+
+    /* Entries observer — staggered delay */
+    var entryObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          /* find index among all entries for stagger */
+          var idx = Array.prototype.indexOf.call(entries, item.target);
+          setTimeout(function() {
+            item.target.classList.add('visible');
+          }, idx * 60);
+          entryObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.07 });
+    entries.forEach(function(el) { entryObs.observe(el); });
+
+    /* Section label line-draw observer */
+    var labelObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          item.target.classList.add('line-drawn');
+          labelObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    sectionLabels.forEach(function(el) { labelObs.observe(el); });
+
+    /* Stats count-up observer */
+    var statObs = new IntersectionObserver(function(items) {
+      items.forEach(function(item) {
+        if (item.isIntersecting) {
+          animateStat(item.target);
+          statObs.unobserve(item.target);
+        }
+      });
+    }, { threshold: 1.0 });
+    stats.forEach(function(el) { statObs.observe(el); });
+
+  } else {
+    /* Fallback — no observer support */
+    entries.forEach(function(el) { el.classList.add('visible'); });
+    sectionLabels.forEach(function(el) { el.classList.add('line-drawn'); });
+    stats.forEach(function(el) { animateStat(el); });
+  }
+
+})();
+</script>
 
 <script>
 fetch('../content.json')
   .then(function(r) { return r.json(); })
   .then(function(d) {
     window._txStyle = d.site.transition_style || 'slingshot';
-    document.title = 'Projects — ' + d.site.title;
+    document.title = 'Résumé — ' + d.site.title;
     document.getElementById('navStatus').textContent = d.hero.status;
+    var albumContainer = document.getElementById('navAlbumLinks');
+    if (albumContainer && d.photography && d.photography.length) {
+      var albumHTML = '';
+      d.photography.forEach(function(album) {
+        albumHTML += '<a href="/photography#' + album.id + '">' + album.title + '</a>';
+      });
+      albumContainer.innerHTML = albumHTML;
+    }
     injectNeonSpill();
   })
   .catch(function() { window._txStyle = 'slingshot'; injectNeonSpill(); });
@@ -390,11 +743,23 @@ function injectNeonSpill() {
 
 (function() {
   function init() {
-    var trigger = document.getElementById('navMonogram');
-    var dropdown = document.getElementById('navDropdown');
+    var trigger   = document.getElementById('navMonogram');
+    var dropdown  = document.getElementById('navDropdown');
+    var photoRow  = document.getElementById('navPhotoRow');
+    var albumList = document.getElementById('navAlbumList');
     if (!trigger || !dropdown) return;
-    function close() { trigger.classList.remove('open'); trigger.setAttribute('aria-expanded','false'); }
+    function close() {
+      trigger.classList.remove('open'); trigger.setAttribute('aria-expanded','false');
+      if (albumList) albumList.classList.remove('open');
+      if (photoRow)  photoRow.classList.remove('photo-row-active');
+    }
     function toggle() { trigger.classList.contains('open') ? close() : (trigger.classList.add('open'), trigger.setAttribute('aria-expanded','true')); }
+    if (photoRow && albumList) {
+      photoRow.addEventListener('mouseenter', function() { albumList.classList.add('open'); photoRow.classList.add('photo-row-active'); });
+      photoRow.addEventListener('mouseleave', function(e) { if (!albumList.contains(e.relatedTarget)) { albumList.classList.remove('open'); photoRow.classList.remove('photo-row-active'); } });
+      albumList.addEventListener('mouseleave', function(e) { if (!photoRow.contains(e.relatedTarget)) { albumList.classList.remove('open'); photoRow.classList.remove('photo-row-active'); } });
+      photoRow.addEventListener('click', function() { close(); });
+    }
     trigger.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
     trigger.addEventListener('keydown', function(e) { if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape')close(); });
     document.addEventListener('click', function(e) { if(!trigger.contains(e.target)) close(); });
