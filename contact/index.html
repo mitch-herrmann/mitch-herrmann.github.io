@@ -222,12 +222,19 @@ nav {
 
 .contact-link-left { display: flex; align-items: center; gap: 28px; }
 
-.contact-link-num {
-  font-family: var(--mono); font-size: 9px; color: var(--dim);
-  letter-spacing: .12em; width: 20px; flex-shrink: 0;
-  transition: color .3s;
+.contact-link-icon {
+  width: 40px; height: 40px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg3);
+  transition: border-color .35s, background .35s, box-shadow .35s;
 }
-.contact-link:hover .contact-link-num { color: var(--link-accent, var(--ice)); }
+.contact-link-icon svg { display: block; transition: stroke .35s; }
+.contact-link:hover .contact-link-icon {
+  border-color: var(--link-accent, var(--ice));
+  background: rgba(96,200,255,.06);
+  box-shadow: 0 0 16px var(--link-glow, rgba(96,200,255,.18));
+}
 
 .contact-link-label {
   font-family: var(--display); font-size: clamp(32px, 4.5vw, 56px);
@@ -258,6 +265,8 @@ nav {
   gap: 18px;
 }
 .contact-link-arrow { font-size: 14px; line-height: 1; }
+
+.contact-link:hover .contact-link-icon svg { stroke: var(--link-accent, var(--ice)); }
 
 /* Per-link accent colours */
 .contact-link[data-link="github"]   { --link-glow: rgba(180,140,255,.35); --link-accent: rgba(180,140,255,.95); }
@@ -308,12 +317,9 @@ nav {
   /* Tighten the left cluster gap on small screens */
   .contact-link-left { gap: 18px; }
 
-  /* Number: size + lift color from --dim to --muted */
-  .contact-link-num {
-    font-size: 8px;
-    letter-spacing: .16em;
-    width: 18px;
-    color: var(--muted);
+  /* Icon box: slightly smaller on mobile */
+  .contact-link-icon {
+    width: 34px; height: 34px; border-radius: 8px;
   }
 
   /* Label: no hover reveal on mobile, so the rest state IS the read state.
@@ -377,9 +383,9 @@ nav {
     </div>
   </div>
   <div class="nav-links">
-    <a href="/resume">Resume <span class="nav-dropdown-num">01</span></a>
-    <a href="/photography">Photography <span class="nav-dropdown-num">02</span></a>
-    <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
+    <a href="/resume">Resume</a>
+    <a href="/photography">Photography</a>
+    <a href="/projects">Projects</a>
     <a href="/contact" class="active">Contact</a>
   </div>
   <div class="nav-status">
@@ -398,7 +404,11 @@ nav {
 
     <a class="contact-link" data-link="github" id="linkGithub" href="#" target="_blank" rel="noopener">
       <div class="contact-link-left">
-        <span class="contact-link-num">01</span>
+        <div class="contact-link-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+        </div>
         <div>
           <div class="contact-link-label">GitHub</div>
           <div class="contact-link-meta" id="metaGithub">—</div>
@@ -411,7 +421,13 @@ nav {
 
     <a class="contact-link" data-link="linkedin" id="linkLinkedin" href="#" target="_blank" rel="noopener">
       <div class="contact-link-left">
-        <span class="contact-link-num">02</span>
+        <div class="contact-link-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+        </div>
         <div>
           <div class="contact-link-label">LinkedIn</div>
           <div class="contact-link-meta" id="metaLinkedin">—</div>
@@ -424,7 +440,12 @@ nav {
 
     <a class="contact-link" data-link="email" id="linkEmail" href="#">
       <div class="contact-link-left">
-        <span class="contact-link-num">03</span>
+        <div class="contact-link-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
         <div>
           <div class="contact-link-label">Email</div>
           <div class="contact-link-meta" id="metaEmail">—</div>
