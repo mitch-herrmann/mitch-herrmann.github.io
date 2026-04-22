@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Automation — Mitchell Herrmann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --hero-bg:    #c8d4de;
+  --hero-text:  #182636;
+  --hero-muted: rgba(24,38,54,.5);
+  --hero-line:  rgba(24,38,54,.1);
+  --bg:         #0c0e13;
+  --bg2:        #12151b;
+  --bg3:        #181c24;
+  --line:       #1c2230;
+  --ice:        #60c8ff;
+  --ice2:       #90dcff;
+  --text:       #e6ecf4;
+  --muted:      #7888a0;
+  --dim:        #36445a;
+  --green:      #38c99a;
+  --display:    'Syne', sans-serif;
+  --mono:       'Chivo Mono', monospace;
+  --body:       'Chivo Mono', monospace;
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); min-height:100vh; overflow-x:hidden; }
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:60px; background:rgba(13,15,20,.94); backdrop-filter:blur(20px); border-bottom:1px solid var(--line); transition:background .3s, border-color .3s; }
+nav.nav-light { background:rgba(180,196,210,.92); border-bottom-color:rgba(24,38,54,.14); }
+nav.nav-light .nav-monogram { color:#182636; }
+nav.nav-light .nav-links a { color:rgba(24,38,54,.45); border-color:rgba(24,38,54,.18); }
+nav.nav-light .nav-links a:hover { color:#182636; border-color:rgba(24,38,54,.4); background:rgba(24,38,54,.06); }
+.nav-monogram { position:relative; cursor:pointer; user-select:none; font-family:var(--display); font-size:18px; font-weight:800; letter-spacing:-.02em; color:var(--text); padding:6px 2px; transition:color .2s; }
+.nav-monogram:hover { color:var(--ice2); }
+.nav-monogram-arrow { display:inline-block; margin-left:5px; font-size:9px; color:var(--dim); transition:transform .25s ease, color .2s; vertical-align:middle; line-height:1; }
+.nav-monogram.open .nav-monogram-arrow { transform:rotate(180deg); color:var(--muted); }
+.nav-dropdown { position:absolute; top:calc(100% + 8px); left:0; background:rgba(13,15,20,.97); backdrop-filter:blur(24px); border:1px solid var(--line); border-radius:10px; padding:8px 0; min-width:260px; opacity:0; transform:translateY(-8px) scale(.97); pointer-events:none; transition:opacity .22s ease, transform .25s cubic-bezier(.16,1,.3,1); z-index:300; }
+.nav-monogram.open .nav-dropdown { opacity:1; transform:translateY(0) scale(1); pointer-events:all; }
+.nav-dropdown a { display:flex; align-items:center; justify-content:space-between; padding:15px 28px; font-family:var(--display); font-size:17px; font-weight:800; letter-spacing:-.02em; color:rgba(232,237,245,.22); text-decoration:none; border-left:2px solid transparent; transition:color .18s, border-left-color .18s, background .18s; }
+.nav-dropdown a:hover { background:rgba(255,255,255,.03); }
+.nav-dropdown a:nth-child(1):hover { color:#60c8ff; border-left-color:#60c8ff; }
+.nav-dropdown a:nth-child(2):hover { color:#ff64a0; border-left-color:#ff64a0; }
+.nav-dropdown a:nth-child(3):hover { color:#a064ff; border-left-color:#a064ff; }
+.nav-dropdown a:nth-child(4):hover { color:#3cdcb4; border-left-color:#3cdcb4; }
+.nav-dropdown a:nth-child(5):hover { color:#ffc83c; border-left-color:#ffc83c; }
+.nav-dropdown a:nth-child(1) { border-bottom:1px solid var(--line); margin-bottom:4px; }
+.nav-dropdown-num { font-family:var(--mono); font-size:8px; color:var(--dim); letter-spacing:.14em; font-weight:400; }
+.nav-links { display:flex; gap:8px; font-family:var(--display); font-size:9.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.nav-links a { padding:6px 16px; border-radius:99px; border:1px solid var(--line); color:var(--dim); text-decoration:none; white-space:nowrap; transition:color .25s, border-color .25s, background .25s; }
+.nav-links:hover a { opacity:.4; }
+.nav-links a:hover { opacity:1!important; color:var(--muted); border-color:var(--dim); }
+@keyframes pill-cycle {
+  0%   { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12),0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
+  28%  { border-color:rgba(255,100,160,.42); box-shadow:inset 0 1px 0 rgba(255,100,160,.12),0 0 14px rgba(255,100,160,.14); background:rgba(255,100,160,.10); }
+  56%  { border-color:rgba(255,200,60,.42);  box-shadow:inset 0 1px 0 rgba(255,200,60,.12),0 0 14px rgba(255,200,60,.14);  background:rgba(255,200,60,.10); }
+  84%  { border-color:rgba(60,220,180,.42);  box-shadow:inset 0 1px 0 rgba(60,220,180,.12),0 0 14px rgba(60,220,180,.14);  background:rgba(60,220,180,.10); }
+  100% { border-color:rgba(96,200,255,.42);  box-shadow:inset 0 1px 0 rgba(96,200,255,.12),0 0 14px rgba(96,200,255,.14);  background:rgba(96,200,255,.10); }
+}
+.nav-links a.active { color:var(--text); animation:pill-cycle 8s linear infinite; }
+.nav-page-label { display:none; font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-left:10px; vertical-align:middle; }
+
+/* HERO */
+.hero { position:relative; min-height:60vh; display:flex; align-items:center; background:var(--hero-bg); overflow:hidden; }
+.hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:180px; background:linear-gradient(to bottom, transparent 0%, rgba(12,14,19,.06) 22%, rgba(12,14,19,.52) 60%, rgba(12,14,19,.94) 88%, #0c0e13 100%); pointer-events:none; z-index:2; }
+.hero-left { padding:96px 56px 96px 56px; position:relative; z-index:4; }
+.hero-right { padding:88px 32px 80px 12px; display:flex; align-items:center; justify-content:center; position:relative; z-index:4; }
+.hero-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--hero-muted); margin-bottom:28px; display:flex; align-items:center; gap:14px; }
+.hero-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:rgba(24,38,54,.3); }
+.hero-name { font-family:var(--display); font-size:clamp(52px,6.5vw,108px); font-weight:800; line-height:.88; letter-spacing:-.04em; margin-bottom:32px; }
+.hero-name .outline { display:block; color:transparent; -webkit-text-stroke:1.5px #182636; }
+.hero-name .filled  { display:block; color:#182636; }
+.hero-tagline { font-family:var(--body); font-size:13px; line-height:1.85; color:rgba(24,38,54,.56); max-width:400px; margin-bottom:36px; }
+.hero-stats { display:flex; gap:28px; padding-top:28px; border-top:1px solid rgba(24,38,54,.1); }
+.hero-stat { font-family:var(--mono); font-size:9px; color:rgba(24,38,54,.42); letter-spacing:.06em; line-height:1.4; }
+.hero-stat strong { font-family:var(--display); font-size:15px; font-weight:800; color:#182636; display:block; letter-spacing:-.02em; margin-bottom:1px; }
+
+/* HERO RIGHT */
+.hero-cards { display:flex; flex-direction:column; gap:16px; width:min(460px,90vw); transform:rotate(1.5deg); }
+.hero-card { background:rgba(20,26,36,.88); border:1px solid rgba(96,200,255,.12); border-radius:10px; padding:20px 24px; backdrop-filter:blur(8px); box-shadow:0 8px 32px rgba(0,0,0,.3); transition:border-color .3s, transform .3s; }
+.hero-card:hover { border-color:rgba(96,200,255,.3); transform:translateX(4px); }
+.hero-card-eye { font-family:var(--mono); font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-bottom:8px; }
+.hero-card-title { font-family:var(--display); font-size:18px; font-weight:800; letter-spacing:-.02em; color:var(--text); margin-bottom:8px; line-height:1.1; }
+.hero-card-desc { font-family:var(--body); font-size:11px; line-height:1.7; color:var(--muted); }
+.hero-card-tags { display:flex; gap:5px; margin-top:12px; }
+.hc-tag { font-family:var(--mono); font-size:7.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); padding:2px 8px; border-radius:99px; border:1px solid var(--line); }
+
+/* WORK SECTIONS */
+.work-section { position:relative; z-index:1; }
+
+/* HOW IT WORKS */
+.how-section { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.how-header-row { padding:72px 56px 48px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; justify-content:space-between; gap:40px; }
+.how-header-left { flex-shrink:0; }
+.how-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+.how-title { font-family:var(--display); font-size:clamp(32px,4vw,52px); font-weight:800; letter-spacing:-.03em; color:var(--text); line-height:1; }
+.how-progress-row { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.how-counter { font-family:var(--mono); font-size:10px; color:var(--dim); letter-spacing:.06em; white-space:nowrap; }
+.how-counter .how-current { font-family:var(--display); font-size:22px; font-weight:800; color:var(--text); letter-spacing:-.03em; line-height:1; display:inline; }
+.how-progress { width:120px; height:2px; background:var(--line); border-radius:99px; overflow:hidden; }
+.how-progress-fill { height:100%; background:var(--ice); border-radius:99px; transition:width .45s cubic-bezier(.25,.46,.45,.94); }
+.how-dots { display:flex; gap:6px; align-items:center; }
+.how-dot { width:5px; height:5px; border-radius:50%; background:var(--line); transition:background .3s, transform .3s; cursor:pointer; border:none; padding:0; }
+.how-dot.active { background:var(--ice); transform:scale(1.3); }
+.how-stage { overflow:hidden; position:relative; }
+.how-track { display:flex; transition:transform .45s cubic-bezier(.25,.46,.45,.94); }
+.arch-card { min-width:100%; display:grid; grid-template-columns:1fr 1fr; }
+.arch-viz { background:#0c0e13; border-right:1px solid var(--line); display:flex; align-items:center; justify-content:center; min-height:320px; padding:32px; }
+.arch-text { padding:56px 56px; display:flex; flex-direction:column; justify-content:center; }
+.arch-text-row { display:grid; grid-template-columns:44px 1fr 44px; gap:0 24px; align-items:start; }
+.arch-num { font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+.arch-title { font-family:var(--display); font-size:clamp(22px,2.5vw,32px); font-weight:800; letter-spacing:-.025em; color:var(--text); margin-bottom:18px; line-height:1.1; }
+.arch-body { font-family:var(--body); font-size:13px; line-height:1.85; color:var(--muted); }
+.how-btn { width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:transparent; color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:border-color .2s, color .2s, background .2s; }
+.how-btn:hover:not(:disabled) { border-color:var(--ice); color:var(--ice); background:rgba(96,200,255,.05); }
+.how-btn:disabled { opacity:.25; cursor:not-allowed; }
+
+/* OPT SECTION */
+.opt-section { border-bottom:1px solid var(--line); }
+.opt-inner { display:grid; grid-template-columns:1fr 1fr; }
+.opt-left  { padding:72px 56px; border-right:1px solid var(--line); }
+.opt-right { padding:72px 56px; display:flex; flex-direction:column; justify-content:center; }
+.opt-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+.opt-title { font-family:var(--display); font-size:clamp(28px,3.8vw,44px); font-weight:800; letter-spacing:-.03em; color:var(--text); margin-bottom:24px; line-height:1.05; }
+.opt-body p { font-family:var(--body); font-size:13px; line-height:1.85; color:var(--muted); margin-bottom:16px; }
+.opt-body p:last-child { margin-bottom:0; }
+
+/* WHY SECTION */
+.why-section { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.why-inner { max-width:780px; margin:0 auto; padding:80px 56px; }
+.why-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+.why-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:var(--dim); opacity:.8; }
+.why-title { font-family:var(--display); font-size:clamp(28px,3.5vw,44px); font-weight:800; letter-spacing:-.03em; color:var(--text); line-height:1.05; margin-bottom:8px; }
+.why-subtitle { font-family:var(--body); font-size:13px; color:var(--muted); margin-bottom:32px; font-style:italic; letter-spacing:.02em; }
+.why-body-wrap { position:relative; }
+.why-preview p, .why-expanded p { font-family:var(--body); font-size:14px; line-height:1.9; color:var(--muted); margin-bottom:22px; text-indent:2em; }
+.why-preview p:last-child, .why-expanded p:last-child { margin-bottom:0; }
+.why-expanded { max-height:0; overflow:hidden; transition:max-height .8s cubic-bezier(.25,.46,.45,.94); }
+.why-expanded.open { max-height:6000px; }
+.why-expanded p:first-child { margin-top:22px; }
+.why-fade { position:absolute; bottom:44px; left:0; right:0; height:72px; background:linear-gradient(to bottom, transparent, var(--bg)); pointer-events:none; transition:opacity .4s ease; }
+.why-fade.hidden { opacity:0; }
+.why-toggle { display:flex; align-items:center; gap:7px; margin-top:24px; background:none; border:none; cursor:pointer; font-family:var(--mono); font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--ice); padding:0; transition:color .2s, gap .25s; }
+.why-toggle:hover { color:var(--ice2); gap:10px; }
+.why-toggle svg { transition:transform .35s cubic-bezier(.25,.46,.45,.94); flex-shrink:0; }
+.why-toggle.open svg { transform:rotate(180deg); }
+
+/* PROJECT DIVIDER */
+.project-divider { border-top:4px solid var(--line); margin:0; }
+.project-label { padding:40px 56px 0; }
+.project-label-inner { display:inline-flex; align-items:center; gap:12px; font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--dim); }
+.project-label-num { font-family:var(--display); font-size:22px; font-weight:800; color:var(--ice); letter-spacing:-.02em; }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* FOOTER */
+footer { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; padding:32px 56px; font-family:var(--mono); font-size:9px; color:var(--dim); border-top:1px solid var(--line); }
+.footer-links { display:flex; gap:32px; }
+.footer-links a { color:var(--dim); text-decoration:none; letter-spacing:.06em; transition:color .2s; }
+.footer-links a:hover { color:var(--text); }
+
+/* VIZ */
+.pipeline-viz { width:100%; max-width:380px; }
+.step-row { display:flex; align-items:center; gap:0; }
+.step-box { background:var(--bg2); border:1px solid var(--line); border-radius:8px; padding:12px 16px; flex:1; }
+.step-box-label { font-family:var(--mono); font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:4px; }
+.step-box-title { font-family:var(--display); font-size:13px; font-weight:800; color:var(--text); }
+.step-connector { width:2px; height:16px; background:var(--line); margin:0 auto; }
+.step-active .step-box { border-color:rgba(96,200,255,.3); background:rgba(96,200,255,.04); }
+.step-active .step-box-label { color:var(--ice); }
+.summary-preview { background:var(--bg2); border:1px solid var(--line); border-radius:10px; overflow:hidden; width:100%; max-width:380px; }
+.sp-header { padding:12px 16px; border-bottom:1px solid var(--line); font-family:var(--display); font-size:11px; font-weight:800; color:var(--text); display:flex; align-items:center; justify-content:space-between; }
+.sp-tag { font-family:var(--mono); font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:var(--ice); padding:2px 7px; border-radius:99px; border:1px solid rgba(96,200,255,.25); background:rgba(96,200,255,.08); }
+.sp-table { width:100%; border-collapse:collapse; }
+.sp-table th { font-family:var(--display); font-size:6px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); padding:8px 12px; border-bottom:1px solid var(--line); text-align:left; }
+.sp-table td { padding:9px 12px; border-bottom:1px solid rgba(28,34,48,.6); font-family:var(--mono); font-size:10px; color:var(--muted); }
+.sp-table tr:last-child td { border-bottom:none; }
+.sp-table .num { font-family:var(--display); font-weight:800; color:var(--text); font-size:13px; }
+.sp-table .pct { color:var(--ice); font-weight:700; }
+
+@media(max-width:720px){
+  nav { padding:0 20px; }
+  .nav-links { display:none; }
+  .nav-page-label { display:inline; }
+  .hero { grid-template-columns:1fr; }
+  .hero-left { padding:88px 24px 32px; }
+  .hero-right { padding:0 20px 56px; }
+  .hero-cards { transform:none; width:100%; }
+  .how-header-row { flex-direction:column; padding:48px 24px 32px; gap:16px; }
+  .arch-card { grid-template-columns:1fr; }
+  .arch-viz { border-right:none; border-bottom:1px solid var(--line); min-height:200px; }
+  .arch-text { padding:32px 24px; }
+  .arch-text-row { gap:0 12px; }
+  .opt-inner { grid-template-columns:1fr; }
+  .opt-left { border-right:none; border-bottom:1px solid var(--line); padding:48px 24px; }
+  .opt-right { padding:48px 24px; }
+  .why-inner { padding:56px 24px; }
+  .why-preview p, .why-expanded p { font-size:13px; text-indent:0; line-height:1.8; }
+  footer { padding:24px; flex-direction:column; gap:16px; align-items:flex-start; }
+  .project-label { padding:32px 24px 0; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
+    <svg width="46" height="30" viewBox="0 0 36 24" fill="none" aria-label="MH" style="display:inline-block;vertical-align:middle;margin-right:2px">
+      <polyline points="2,21 2,3 10,3 18,14 26,3 34,3 34,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="2" y1="21" x2="7" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="29" y1="21" x2="34" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <polyline points="13,21 13,14 23,14 23,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span class="nav-monogram-arrow">&#9660;</span>
+    <span class="nav-page-label">Work Automation</span>
+    <div class="nav-dropdown" id="navDropdown">
+      <a href="/">Home <span class="nav-dropdown-num">00</span></a>
+      <a href="/resume">Résumé <span class="nav-dropdown-num">01</span></a>
+      <a href="/photography">Photography <span class="nav-dropdown-num">02</span></a>
+      <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
+      <a href="/contact">Contact <span class="nav-dropdown-num">04</span></a>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="/projects">← Projects</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Reporting automation</div>
+    <div class="hero-name">
+      <span class="outline">Work</span>
+      <span class="filled">Automation</span>
+    </div>
+    <p class="hero-tagline">A pair of reporting pipelines that replace hours of monthly manual work. Pulls data from a secure server, processes it automatically, and produces clean, formatted Excel reports in under two minutes.</p>
+
+  </div>
+
+</div>
+
+<!-- PROJECT 01 -->
+<div class="project-label reveal">
+  <div class="project-label-inner">
+    <span class="project-label-num">01</span>
+    Billable Visit Report
+  </div>
+</div>
+
+<div class="how-section work-section">
+  <div class="how-header-row">
+    <div class="how-header-left">
+      <div class="how-eyebrow">How it works</div>
+      <h2 class="how-title">From server to spreadsheet</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div class="how-progress-row">
+        <span class="how-counter"><span class="how-current" id="howCurrent1">01</span> <span class="how-total">/ 04</span></span>
+        <div class="how-progress"><div class="how-progress-fill" id="howProgress1" style="width:25%"></div></div>
+      </div>
+      <div class="how-dots" id="howDots1"></div>
+    </div>
+  </div>
+  <div class="how-stage" id="howStage1">
+    <div class="how-track" id="howTrack1">
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div class="pipeline-viz">
+            <div class="step-row"><div class="step-box step-active"><div class="step-box-label">Source</div><div class="step-box-title">SFTP Server</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.4"><div class="step-box-label">Download</div><div class="step-box-title">HARs + Visits CSVs</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector" style="opacity:.3"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.2"><div class="step-box-label">Process</div><div class="step-box-title">Excel Macro</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector" style="opacity:.15"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.1"><div class="step-box-label">Output</div><div class="step-box-title">Dated Report</div></div></div>
+          </div>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" id="howPrev1" disabled aria-label="Previous"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">01 — Data retrieval</div>
+              <div class="arch-title">Connects and downloads automatically</div>
+              <div class="arch-body">A PowerShell script prompts for credentials and connects to the SFTP server, scans the report folder for the source files, and downloads them to a local temp folder. Once downloaded, the originals are moved to an archive folder on the server with a timestamp so the folder stays clean and prior runs are preserved.</div>
+            </div>
+            <div><button class="how-btn" id="howNext1" aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div class="pipeline-viz">
+            <div class="step-row"><div class="step-box" style="opacity:.3"><div class="step-box-label">Source</div><div class="step-box-title">SFTP Server</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector" style="opacity:.3"></div></div>
+            <div class="step-row"><div class="step-box step-active"><div class="step-box-label">Download</div><div class="step-box-title">HARs + Visits CSVs</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.4"><div class="step-box-label">Process</div><div class="step-box-title">Excel Macro</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector" style="opacity:.2"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.1"><div class="step-box-label">Output</div><div class="step-box-title">Dated Report</div></div></div>
+          </div>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" aria-label="Previous" onclick="stepCarousel('1',-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">02 — Import</div>
+              <div class="arch-title">Data loaded into Excel in seconds</div>
+              <div class="arch-body">The script opens a copy of the Excel template and imports both CSVs directly into their respective sheets. The template already contains a VBA macro for formatting, so no setup is needed each run. A new dated file is created each time, so previous reports are never overwritten.</div>
+            </div>
+            <div><button class="how-btn" aria-label="Next" onclick="stepCarousel('1',1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div class="pipeline-viz">
+            <div class="step-row"><div class="step-box" style="opacity:.2"><div class="step-box-label">Source</div><div class="step-box-title">SFTP Server</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector" style="opacity:.2"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.3"><div class="step-box-label">Download</div><div class="step-box-title">HARs + Visits CSVs</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector"></div></div>
+            <div class="step-row"><div class="step-box step-active"><div class="step-box-label">Process</div><div class="step-box-title">Excel Macro</div></div></div>
+            <div style="display:flex;justify-content:center;padding:8px 0;"><div class="step-connector"></div></div>
+            <div class="step-row"><div class="step-box" style="opacity:.3"><div class="step-box-label">Output</div><div class="step-box-title">Dated Report</div></div></div>
+          </div>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" aria-label="Previous" onclick="stepCarousel('1',-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">03 — Data processing</div>
+              <div class="arch-title">Data is cleaned and processed automatically</div>
+              <div class="arch-body">A VBA macro scrubs the imported data and links the separate reports together using a VLOOKUP function. Fields from the HAR data are then combined into their corresponding visits in order to classify them by Payer Group and Program Type.</div>
+            </div>
+            <div><button class="how-btn" aria-label="Next" onclick="stepCarousel('1',1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div class="summary-preview">
+            <div class="sp-header">Home Health Summary <span class="sp-tag">Auto-generated</span></div>
+            <table class="sp-table">
+              <thead><tr><th>Program</th><th>Payer Group</th><th>Accts</th><th>Visits</th><th>V/A</th></tr></thead>
+              <tbody>
+                <tr><td>HH</td><td>Medicare</td><td class="num">142</td><td class="num">1,840</td><td class="pct">13.0</td></tr>
+                <tr><td>HH</td><td>Metroplus Episodic</td><td class="num">89</td><td class="num">967</td><td class="pct">10.9</td></tr>
+                <tr><td>HH</td><td>Healthfirst Episodic</td><td class="num">74</td><td class="num">720</td><td class="pct">9.7</td></tr>
+                <tr><td>HH</td><td>New York Medicaid</td><td class="num">61</td><td class="num">583</td><td class="pct">9.6</td></tr>
+                <tr style="background:rgba(96,200,255,.04);"><td colspan="2" style="color:var(--ice);font-family:var(--display);font-weight:800;font-size:11px;">HH Total</td><td class="num" style="color:var(--ice);">366</td><td class="num" style="color:var(--ice);">4,110</td><td class="pct">11.2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" aria-label="Previous" onclick="stepCarousel('1',-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">04 — Summary output</div>
+              <div class="arch-title">Formatted report, ready to share</div>
+              <div class="arch-body">The macro builds a Summaries sheet broken down by Program Type and Payer Group, showing unique hospital account counts, total visits, visits per account, and individual counts for each of the six clinical disciplines. Program subtotals and a grand total are included automatically.</div>
+            </div>
+            <div><button class="how-btn" disabled aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="why-section work-section reveal">
+  <div class="why-inner">
+    <div class="why-eyebrow">Background</div>
+    <div class="why-title">Why this exists</div>
+    <div class="why-subtitle">The problem it solved</div>
+    <div class="why-body-wrap">
+      <div class="why-preview">
+        <p>Every month, producing this report required manually modifying and running Epic reports, exporting CSV files, pulling the data into Excel, writing formulas, building the summary table, and formatting everything before it was ready to share. Start to finish it could take the better part of an hour, and it was prone to human error.</p>
+      </div>
+      <div class="why-expanded" id="why1expanded">
+        <p>Because the final report requires merging data from multiple different databases, the final summary isn't able to be produced in a single Epic report. The data itself wasn't complicated — it was the repetition that was cumbersome. The same files, the same formulas, the same structure every single month. That kind of work is exactly what automation is for.</p>
+        <p>The solution was a PowerShell script that handles the file retrieval and a VBA macro that handles everything inside Excel. They're designed to work together: the script pulls the files and loads them into a dated copy of the template, then hands off to the macro, which processes the data and builds the summary. The whole process now completes in under two minutes.</p>
+        <p>Now, with one quick PowerShell prompt, I can compile an actionable report that our leadership team uses to analyze our visit utilization metrics. All of the time saved with this tool is freed up for me to complete other tasks.</p>
+      </div>
+      <div class="why-fade" id="why1fade"></div>
+      <button class="why-toggle" id="why1toggle" onclick="toggleWhy('1')">
+        Read more
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT 02 -->
+<div class="project-divider"></div>
+<div class="project-label reveal">
+  <div class="project-label-inner">
+    <span class="project-label-num">02</span>
+    Billing Percentage Report
+  </div>
+</div>
+
+<div class="how-section work-section">
+  <div class="how-header-row">
+    <div class="how-header-left">
+      <div class="how-eyebrow">How it works</div>
+      <h2 class="how-title">Two snapshots, one answer</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div class="how-progress-row">
+        <span class="how-counter"><span class="how-current" id="howCurrent2">01</span> <span class="how-total">/ 03</span></span>
+        <div class="how-progress"><div class="how-progress-fill" id="howProgress2" style="width:33%"></div></div>
+      </div>
+      <div class="how-dots" id="howDots2"></div>
+    </div>
+  </div>
+  <div class="how-stage" id="howStage2">
+    <div class="how-track" id="howTrack2">
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div class="pipeline-viz">
+            <!-- SFTP source -->
+            <div style="display:flex;justify-content:center;margin-bottom:12px;">
+              <div style="background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:10px 20px;display:inline-flex;align-items:center;gap:10px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--ice);box-shadow:0 0 6px rgba(96,200,255,.6);display:inline-block;animation:sftp-pulse 2s ease-in-out infinite;flex-shrink:0;"></span>
+                <span style="font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">SFTP Server</span>
+              </div>
+            </div>
+            <!-- arrow down -->
+            <div style="display:flex;justify-content:center;margin-bottom:12px;">
+              <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><line x1="6" y1="0" x2="6" y2="14" stroke="#36445a" stroke-width="1.5" stroke-linecap="round"/><path d="M2 10l4 6 4-6" stroke="#36445a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <div style="flex:1;background:var(--bg2);border:1px solid rgba(96,200,255,.3);border-radius:8px;padding:12px 14px;">
+                <div style="font-family:var(--mono);font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--ice);margin-bottom:4px;">All Charges</div>
+                <div style="font-family:var(--display);font-size:12px;font-weight:800;color:var(--text);">16th snapshot</div>
+                <div style="font-family:var(--display);font-size:12px;font-weight:800;color:var(--text);margin-top:6px;">23rd snapshot</div>
+              </div>
+              <div style="display:flex;align-items:center;color:var(--dim);font-size:18px;">+</div>
+              <div style="flex:1;background:var(--bg2);border:1px solid rgba(60,201,154,.3);border-radius:8px;padding:12px 14px;">
+                <div style="font-family:var(--mono);font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Billed Charges</div>
+                <div style="font-family:var(--display);font-size:12px;font-weight:800;color:var(--text);">16th snapshot</div>
+                <div style="font-family:var(--display);font-size:12px;font-weight:800;color:var(--text);margin-top:6px;">23rd snapshot</div>
+              </div>
+            </div>
+          </div>
+          <style>@keyframes sftp-pulse { 0%,100%{opacity:1;box-shadow:0 0 6px rgba(96,200,255,.6)} 50%{opacity:.5;box-shadow:0 0 12px rgba(96,200,255,.9)} }</style>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" id="howPrev2" disabled aria-label="Previous"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">01 — Four source files</div>
+              <div class="arch-title">Two dates, two report types</div>
+              <div class="arch-body">The report runs on four CSV files pulled from the server — a full list of all charges and a list of billed charges, each at two points in the billing cycle: the 16th and 23rd of the month. The PowerShell script finds all four files automatically by matching their date-stamped filenames, downloads them, and archives the originals.</div>
+            </div>
+            <div><button class="how-btn" id="howNext2" aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div class="summary-preview" style="max-width:340px;">
+            <div class="sp-header">3.16 All — Billed? column <span class="sp-tag">Auto-generated</span></div>
+            <table class="sp-table">
+              <thead><tr><th>Billed?</th><th>Transaction ID</th><th>Hospital Account</th><th>Primary Plan</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--green);font-weight:700;">Yes</td><td style="font-size:8px;">TXN-00412</td><td>HA-8821</td><td style="font-size:8px;">Medicare</td></tr>
+                <tr><td style="color:var(--green);font-weight:700;">Yes</td><td style="font-size:8px;">TXN-00413</td><td>HA-8822</td><td style="font-size:8px;">Metroplus</td></tr>
+                <tr><td style="color:#ff6080;font-weight:700;">No</td><td style="font-size:8px;">TXN-00414</td><td>HA-8823</td><td style="font-size:8px;">Healthfirst</td></tr>
+                <tr><td style="color:var(--green);font-weight:700;">Yes</td><td style="font-size:8px;">TXN-00415</td><td>HA-8824</td><td style="font-size:8px;">Medicaid</td></tr>
+                <tr><td style="color:#ff6080;font-weight:700;">No</td><td style="font-size:8px;">TXN-00416</td><td>HA-8825</td><td style="font-size:8px;">Medicare</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" aria-label="Previous" onclick="stepCarousel('2',-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">02 — Cross-reference</div>
+              <div class="arch-title">Each charge is checked against the billed list</div>
+              <div class="arch-body">For each All Charges sheet, a VBA macro adds a "Billed?" column and checks whether each transaction ID appears in the corresponding Billed Charges sheet for that date. Results are stored as plain Yes/No values for clean analysis.</div>
+            </div>
+            <div><button class="how-btn" aria-label="Next" onclick="stepCarousel('2',1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-viz">
+          <div style="display:flex;gap:16px;width:100%;max-width:400px;">
+            <div class="summary-preview" style="flex:1;">
+              <div class="sp-header" style="font-size:10px;">3.16 Summary</div>
+              <table class="sp-table">
+                <thead><tr><th>Billed?</th><th>Accts</th><th>%</th></tr></thead>
+                <tbody>
+                  <tr><td style="color:var(--green);">Yes</td><td class="num">591</td><td class="pct">85%</td></tr>
+                  <tr><td style="color:#ff6080;">No</td><td class="num">111</td><td class="pct">15%</td></tr>
+                  <tr style="background:rgba(96,200,255,.04);"><td style="color:var(--ice);font-family:var(--display);font-weight:800;">Total</td><td class="num" style="color:var(--ice);">695</td><td class="pct">100%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="summary-preview" style="flex:1;">
+              <div class="sp-header" style="font-size:10px;">3.23 Summary</div>
+              <table class="sp-table">
+                <thead><tr><th>Billed?</th><th>Accts</th><th>%</th></tr></thead>
+                <tbody>
+                  <tr><td style="color:var(--green);">Yes</td><td class="num">648</td><td class="pct">91%</td></tr>
+                  <tr><td style="color:#ff6080;">No</td><td class="num">64</td><td class="pct">9%</td></tr>
+                  <tr style="background:rgba(96,200,255,.04);"><td style="color:var(--ice);font-family:var(--display);font-weight:800;">Total</td><td class="num" style="color:var(--ice);">712</td><td class="pct">100%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="arch-text">
+          <div class="arch-text-row">
+            <div><button class="how-btn" aria-label="Previous" onclick="stepCarousel('2',-1)"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="arch-text-body">
+              <div class="arch-num">03 — Summary output</div>
+              <div class="arch-title">Side-by-side billing progress at a glance</div>
+              <div class="arch-body">Two summary sheets are generated, one for the 16th and one for the 23rd, each showing a count of distinct hospital accounts that have been billed vs. not billed. Comparing the two snapshots makes it easy to see how much progress was made in the week between runs.</div>
+            </div>
+            <div><button class="how-btn" disabled aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="why-section work-section reveal">
+  <div class="why-inner">
+    <div class="why-eyebrow">Background</div>
+    <div class="why-title">Why this exists</div>
+    <div class="why-subtitle">The problem it solved</div>
+    <div class="why-body-wrap">
+      <div class="why-preview">
+        <p>Billing progress is a Key Performance Indicator that our agency management staff monitors to ensure AR collection isn't falling behind. This is another metric that Epic is not able to report on directly, but the necessary data is extractable. The challenge is that it meant pulling multiple files, cross-referencing them manually, and building a summary from scratch each time.</p>
+      </div>
+      <div class="why-expanded" id="why2expanded">
+        <p>The core question is simple: of all the charges we have, how many have actually been billed? But answering it required matching two different lists against each other and counting unique accounts rather than individual transactions.</p>
+        <p>The report runs at two points in the month so you can see progress. The 16th snapshot captures an early read on the billing cycle; the 23rd shows how much ground was covered in the week after. The side-by-side summary makes that comparison immediate. We can then compare performance month-over-month to verify that we are getting clean claims billed out quickly and not falling behind at any point.</p>
+        <p>The automation handles everything from file retrieval to the final summary. The PowerShell script connects to the server, finds the four files, downloads and archives them, and loads the data into Excel. The macro takes it from there — filtering out excluded plan types, building the cross-reference, and producing the two summary sheets automatically.</p>
+      </div>
+      <div class="why-fade" id="why2fade"></div>
+      <button class="why-toggle" id="why2toggle" onclick="toggleWhy('2')">
+        Read more
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="/projects">← Projects</a>
+    <a href="/resume">Résumé</a>
+    <a href="/contact">Contact</a>
+  </div>
+  <div>mitchell-herrmann.com</div>
+</footer>
+
+<script>
+var nav = document.getElementById('mainNav');
+var hero = document.getElementById('hero');
+function updateNav() {
+  var heroH = hero ? hero.offsetHeight : 0;
+  if (window.scrollY < heroH - 80) { nav.classList.add('nav-light'); }
+  else { nav.classList.remove('nav-light'); }
+}
+updateNav();
+window.addEventListener('scroll', updateNav, { passive: true });
+
+(function() {
+  var trigger = document.getElementById('navMonogram');
+  var dropdown = document.getElementById('navDropdown');
+  if (!trigger || !dropdown) return;
+  function close() { trigger.classList.remove('open'); trigger.setAttribute('aria-expanded','false'); }
+  function toggle() { trigger.classList.contains('open') ? close() : (trigger.classList.add('open'), trigger.setAttribute('aria-expanded','true')); }
+  trigger.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
+  trigger.addEventListener('keydown', function(e) { if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape')close(); });
+  document.addEventListener('click', function(e) { if(!trigger.contains(e.target)) close(); });
+  dropdown.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
+})();
+
+var carousels = { '1': { idx:0, total:4 }, '2': { idx:0, total:3 } };
+
+function stepCarousel(id, dir) {
+  var c = carousels[id];
+  c.idx = Math.max(0, Math.min(c.total - 1, c.idx + dir));
+  updateCarousel(id);
+}
+
+function updateCarousel(id) {
+  var c = carousels[id];
+  var track = document.getElementById('howTrack' + id);
+  var progress = document.getElementById('howProgress' + id);
+  var current = document.getElementById('howCurrent' + id);
+  var dotsEl = document.getElementById('howDots' + id);
+  var prevBtn = document.getElementById('howPrev' + id);
+  var nextBtn = document.getElementById('howNext' + id);
+  if (track) track.style.transform = 'translateX(-' + (c.idx * 100) + '%)';
+  if (progress) progress.style.width = ((c.idx + 1) / c.total * 100) + '%';
+  if (current) current.textContent = String(c.idx + 1).padStart(2, '0');
+  if (prevBtn) prevBtn.disabled = c.idx === 0;
+  if (nextBtn) nextBtn.disabled = c.idx === c.total - 1;
+  if (dotsEl) {
+    dotsEl.innerHTML = '';
+    for (var i = 0; i < c.total; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'how-dot' + (i === c.idx ? ' active' : '');
+      btn.setAttribute('aria-label', 'Step ' + (i + 1));
+      (function(idx) { btn.addEventListener('click', function() { carousels[id].idx = idx; updateCarousel(id); }); })(i);
+      dotsEl.appendChild(btn);
+    }
+  }
+}
+
+document.getElementById('howPrev1').addEventListener('click', function() { stepCarousel('1', -1); });
+document.getElementById('howNext1').addEventListener('click', function() { stepCarousel('1',  1); });
+document.getElementById('howPrev2').addEventListener('click', function() { stepCarousel('2', -1); });
+document.getElementById('howNext2').addEventListener('click', function() { stepCarousel('2',  1); });
+
+updateCarousel('1');
+updateCarousel('2');
+
+function toggleWhy(id) {
+  var expanded = document.getElementById('why' + id + 'expanded');
+  var fade = document.getElementById('why' + id + 'fade');
+  var toggle = document.getElementById('why' + id + 'toggle');
+  var open = expanded.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  if (fade) fade.classList.toggle('hidden', open);
+  toggle.childNodes[0].textContent = open ? 'Read less ' : 'Read more ';
+}
+
+if ('IntersectionObserver' in window) {
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+}
+</script>
+</body>
+</html>

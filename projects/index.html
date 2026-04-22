@@ -24,7 +24,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9974c1afc0454d66b612c1fe42ca6c6d"}'></script><!-- End Cloudflare Web Analytics -->
 
-
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -242,18 +241,13 @@ nav {
 
 /* MOBILE */
 @media (max-width: 768px) {
-  nav {
-    padding: 0 20px;
-    backdrop-filter: blur(12px);
-  }
+  nav { padding: 0 20px; backdrop-filter: blur(12px); }
   .nav-links { display: none; }
   .nav-status { display: none; }
   .nav-page-label { display: inline; }
-
   .page-header { padding: 88px 20px 40px; }
   .page-title { font-size: clamp(40px, 11vw, 96px); }
   .page-desc { color: var(--muted); }
-
   .page-content { padding: 40px 20px 140px; }
   .coming-soon { color: var(--muted); }
 }
@@ -310,6 +304,20 @@ nav {
         <div class="project-card-eyebrow">2026 &mdash; Automated trading</div>
         <div class="project-card-title">SPY 0DTE TradeBot</div>
         <p class="project-card-desc">An autonomous intraday options trading system that streams live SPY tick data, detects momentum via a Kalman-filtered velocity signal, and routes orders through the Schwab API, complete with a live trading dashboard.</p>
+        <span class="project-card-link">View Project →</span>
+      </div>
+    </a>
+
+    <a href="/projects/work-automation/" class="project-card">
+      <div class="project-card-preview">
+        <div class="project-card-preview-inner">
+          <iframe src="/projects/work-automation/" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+        </div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-eyebrow">2026 &mdash; Reporting automation</div>
+        <div class="project-card-title">Work Automation</div>
+        <p class="project-card-desc">A pair of reporting pipelines that pull source data from a secure server, process and classify it automatically, and produce formatted Excel reports — replacing hours of monthly manual work with a single script run.</p>
         <span class="project-card-link">View Project →</span>
       </div>
     </a>
