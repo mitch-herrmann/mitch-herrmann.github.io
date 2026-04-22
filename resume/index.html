@@ -327,6 +327,21 @@ nav {
   margin-top: 8px; line-height: 1.7; letter-spacing: .01em;
 }
 
+/* ── CERTIFICATIONS ── */
+.cert-list {
+  display: flex; flex-direction: column; gap: 10px; list-style: none;
+}
+.cert-list li {
+  font-family: var(--display); font-size: 14px; font-weight: 800;
+  letter-spacing: -.015em; color: var(--text); line-height: 1.2;
+  padding-left: 18px; position: relative;
+}
+.cert-list li::before {
+  content: '—'; position: absolute; left: 0;
+  color: var(--dim); font-size: 10px; top: 4px;
+  font-family: var(--body); font-weight: 400;
+}
+
 /* ── SECTION LABEL LINE DRAW ── */
 .resume-section-label::after {
   content: ''; flex: 1; height: 1px; background: var(--line);
@@ -527,6 +542,25 @@ nav {
         <div class="entry-degree">
           Minors: Business, Environmental Studies
         </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-label">Active Epic Certifications</div>
+
+    <div class="resume-entry">
+      <div class="entry-meta"></div>
+      <div class="entry-body">
+        <ul class="cert-list">
+          <li>Home Health Revenue Cycle</li>
+          <li>Hospice Revenue Cycle</li>
+          <li>Comfort</li>
+          <li>Dorothy</li>
+          <li>Resolute Hospital Billing Administration</li>
+          <li>Resolute Hospital Billing Expected Reimbursement Contracts Administration</li>
+        </ul>
       </div>
     </div>
 
