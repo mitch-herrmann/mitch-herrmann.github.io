@@ -710,9 +710,10 @@ function toggleWhy(id) {
   prevBtn.addEventListener('click', function(){ goTo(idx - 1); });
   nextBtn.addEventListener('click', function(){ goTo(idx + 1); });
   goTo(0);
-  /* Mouse drag */
-  var dragStartX = 0, dragStartIdx = 0, dragging = false;
+  /* Mouse drag (desktop only — suppressed during touch) */
+  var dragStartX = 0, dragStartIdx = 0, dragging = false, isTouch = false;
   track.addEventListener('mousedown', function(e){
+    if (isTouch) return;
     dragStartX = e.clientX; dragStartIdx = idx; dragging = true;
     track.classList.add('dragging');
   });
@@ -726,6 +727,7 @@ function toggleWhy(id) {
   /* Touch swipe */
   var touchStartX = 0, touchStartY = 0, touchStartIdx = 0, touchLocked = false;
   track.addEventListener('touchstart', function(e){
+    isTouch = true;
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchStartIdx = idx;
@@ -740,6 +742,7 @@ function toggleWhy(id) {
   track.addEventListener('touchend', function(e){
     var diff = e.changedTouches[0].clientX - touchStartX;
     if (touchLocked === 'h' && Math.abs(diff) > 40) goTo(diff < 0 ? touchStartIdx + 1 : touchStartIdx - 1);
+    setTimeout(function(){ isTouch = false; }, 400);
   });
 })();
 
