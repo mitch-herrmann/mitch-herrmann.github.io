@@ -96,7 +96,7 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
 .nav-dropdown-main > a[href="/photography"]:hover { color: #a064ff; border-left-color: #a064ff; }
 .nav-dropdown-main > a[href="/projects"]:hover  { color: #ffa040; border-left-color: #ffa040; }
 .nav-dropdown-main > a[href="/contact"]:hover   { color: #60c8ff; border-left-color: #60c8ff; }
-.nav-dropdown-main > a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.nav-dropdown-main > a[href="/"] { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
 .nav-dropdown-main a.photo-row-active { color: #a064ff !important; border-left-color: #a064ff !important; }
 .nav-dropdown-num {
   font-family: var(--mono); font-size: 8px; color: var(--dim);
@@ -163,14 +163,11 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
 
 /* ── HERO ────────────────────────────────────────────── */
 .hero { position: relative; min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; background: var(--hero-bg); overflow: hidden; }
-/* no texture - clean hero */
-/* bottom fade to dark */
 .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to bottom, transparent 0%, rgba(12,14,19,.06) 22%, rgba(12,14,19,.22) 42%, rgba(12,14,19,.52) 60%, rgba(12,14,19,.78) 76%, rgba(12,14,19,.94) 88%, #0c0e13 100%); pointer-events: none; z-index: 2; }
 
 .hero-left { padding: 96px 56px 96px 56px; position: relative; z-index: 4; }
 .hero-right { padding: 88px 32px 80px 12px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 4; }
 
-/* On large/4K screens give the dashboard more room */
 @media(min-width:1600px){
   #miniDash { max-width: min(900px, 44vw); }
   .hero { grid-template-columns: 1fr 1.2fr; }
@@ -308,7 +305,6 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 /* ── HOW IT WORKS — CAROUSEL ─────────────────────────── */
 .how-section { border-bottom: 1px solid var(--line); }
 
-/* header above the carousel */
 .how-header-row {
   padding: 72px 56px 48px;
   border-bottom: 1px solid var(--line);
@@ -322,19 +318,16 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 .how-title { font-family: var(--display); font-size: clamp(32px,4vw,52px); font-weight: 800; letter-spacing: -.03em; color: var(--text); line-height: 1; }
 .how-intro-above { font-family: var(--body); font-size: 13px; line-height: 1.85; color: var(--muted); max-width: 520px; padding-top: 6px; }
 
-/* progress bar in header */
 .how-progress-row { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .how-counter { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .06em; white-space: nowrap; }
 .how-counter .how-current { font-family: var(--display); font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; display: inline; }
 .how-progress { width: 120px; height: 2px; background: var(--line); border-radius: 99px; overflow: hidden; }
 .how-progress-fill { height: 100%; background: var(--ice); border-radius: 99px; transition: width .45s cubic-bezier(.25,.46,.45,.94); }
 
-/* dots */
 .how-dots { display: flex; gap: 6px; align-items: center; }
 .how-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--line); transition: background .3s, transform .3s; cursor: pointer; border: none; padding: 0; }
 .how-dot.active { background: var(--ice); transform: scale(1.3); }
 
-/* carousel stage */
 .how-stage { overflow: hidden; position: relative; }
 .how-track { display: flex; transition: transform .5s cubic-bezier(.25,.46,.45,.94); }
 .arch-card {
@@ -349,7 +342,6 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 }
 .arch-card.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
 
-/* floating viz */
 .arch-viz {
   width: calc(100% - 112px);
   max-width: 600px;
@@ -370,7 +362,6 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 }
 .arch-viz svg { width: 100%; height: 100%; display: block; }
 
-/* text + inline arrows below the viz */
 .arch-text {
   padding: 32px 56px 0;
   display: flex;
@@ -387,7 +378,6 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 .arch-title { font-family: var(--display); font-size: clamp(20px,2.5vw,30px); font-weight: 800; letter-spacing: -.025em; color: var(--text); margin-bottom: 10px; line-height: 1.05; }
 .arch-body { font-family: var(--body); font-size: 13px; line-height: 1.85; color: var(--muted); max-width: 560px; margin: 0 auto; }
 
-/* inline prev/next buttons */
 .how-nav-inline { display: flex; gap: 0; align-items: center; flex-shrink: 0; }
 .how-btn { width: 52px; height: 52px; border-radius: 99px; border: 1px solid rgba(96,136,160,.35); background: rgba(255,255,255,.04); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .2s, color .2s, background .2s; }
 .how-btn:hover { border-color: rgba(96,136,160,.6); color: var(--text); background: rgba(255,255,255,.08); }
@@ -395,12 +385,9 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 .how-btn svg { display: block; }
 
 /* ── VIZ ANIMATIONS ──────────────────────────────────── */
-
 @keyframes lineFillIn { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:translateX(0)} }
 @keyframes fadeIn     { from{opacity:0} to{opacity:1} }
 
-/* ── Card 01: candle chart ── */
-/* Bodies use SVG animate elements for correct grow direction — no CSS transforms needed */
 @keyframes wickFade { 0%{opacity:0} 20%,100%{opacity:1} }
 .w1{animation:wickFade 6s 0s    infinite} .w2{animation:wickFade 6s .55s  infinite}
 .w3{animation:wickFade 6s 1.1s  infinite} .w4{animation:wickFade 6s 1.65s infinite}
@@ -409,13 +396,6 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 @keyframes priceTick { 0%,8%{opacity:0} 15%,90%{opacity:1} 97%,100%{opacity:0} }
 .price-lbl { animation: priceTick 6s .5s infinite; }
 
-/* ── Card 02: full CALL + PUT waveform ── */
-/* Wave total path length ≈1200. Draw duration: 7s LINEAR.
-   x-span: 80→720 = 640px.
-   +THRESH crossing: x=258 → (258-80)/640 = 27.8%
-   −THRESH crossing: x=478 → (478-80)/640 = 62.2%
-   All animations use linear so timing matches wave draw exactly.
-*/
 @keyframes waveDraw2 { 0%{stroke-dashoffset:1200} 100%{stroke-dashoffset:0} }
 .vel-wave2 { stroke-dasharray:1200; stroke-dashoffset:1200; animation:waveDraw2 7s linear infinite; }
 
@@ -432,41 +412,29 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 .call-label    { animation: labelShow    7s linear infinite; opacity:0; }
 .put-label     { animation: putLabelShow 7s linear infinite; opacity:0; }
 
-/* ── Card 03: gate sequence with outer border highlight ── */
 @keyframes gateSignalIn { 0%,5%{opacity:0} 10%,92%{opacity:1} 98%,100%{opacity:0} }
 .gate-sig-in  { animation: gateSignalIn 10s ease infinite; opacity:0; }
 
-/* Each gate lights up sequentially from unlit, holds until end, then all snap off.
-   Total cycle: 10s
-   Gate1 starts lighting at 15% (1.5s), Gate2 at 32% (3.2s), Gate3 at 49% (4.9s)
-   All hold until 88%, then snap dark at 95%.
-*/
 @keyframes gateBorderGreen1 { 0%,14%{stroke:#1c2230} 21%,88%{stroke:rgba(56,201,154,.6)} 95%,100%{stroke:#1c2230} }
 @keyframes gateTextGreen1   { 0%,14%{fill:#7888a0}   21%,88%{fill:#38c99a}             95%,100%{fill:#7888a0} }
 @keyframes gateDotOn1       { 0%,14%{fill:#36445a}   21%,88%{fill:#38c99a}             95%,100%{fill:#36445a} }
-
 @keyframes gateBorderGreen2 { 0%,31%{stroke:#1c2230} 38%,88%{stroke:rgba(56,201,154,.6)} 95%,100%{stroke:#1c2230} }
 @keyframes gateTextGreen2   { 0%,31%{fill:#7888a0}   38%,88%{fill:#38c99a}             95%,100%{fill:#7888a0} }
 @keyframes gateDotOn2       { 0%,31%{fill:#36445a}   38%,88%{fill:#38c99a}             95%,100%{fill:#36445a} }
-
 @keyframes gateBorderGreen3 { 0%,48%{stroke:#1c2230} 55%,88%{stroke:rgba(56,201,154,.6)} 95%,100%{stroke:#1c2230} }
 @keyframes gateTextGreen3   { 0%,48%{fill:#7888a0}   55%,88%{fill:#38c99a}             95%,100%{fill:#7888a0} }
 @keyframes gateDotOn3       { 0%,48%{fill:#36445a}   55%,88%{fill:#38c99a}             95%,100%{fill:#36445a} }
-
 .gb1{animation:gateBorderGreen1 10s ease infinite} .gt1{animation:gateTextGreen1 10s ease infinite} .gd1{animation:gateDotOn1 10s ease infinite}
 .gb2{animation:gateBorderGreen2 10s ease infinite} .gt2{animation:gateTextGreen2 10s ease infinite} .gd2{animation:gateDotOn2 10s ease infinite}
 .gb3{animation:gateBorderGreen3 10s ease infinite} .gt3{animation:gateTextGreen3 10s ease infinite} .gd3{animation:gateDotOn3 10s ease infinite}
 @keyframes orderOut { 0%,65%{opacity:0} 73%,88%{opacity:1} 95%,100%{opacity:0} }
 .gate-order-out { animation: orderOut 10s ease infinite; opacity:0; }
 
-/* ── Card 04: rolling P&L ledger ── */
 @keyframes rowSlideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
 @keyframes flashGreen { 0%{background:rgba(56,201,154,.18)} 60%,100%{background:transparent} }
 @keyframes flashRed   { 0%{background:rgba(255,64,96,.14)}  60%,100%{background:transparent} }
-/* Net P&L counter pulses when updated */
 @keyframes netPop { 0%,100%{transform:scale(1)} 15%{transform:scale(1.08)} }
 
-/* ── Card 05: sim run reveal ── */
 @keyframes rowReveal { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 @keyframes runningPulse { 0%,100%{opacity:.4} 50%{opacity:1} }
 @keyframes winnerPulse  {
@@ -477,8 +445,7 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 .param-bar { animation: barGrow .5s ease both; }
 .param-winner-bg { animation: winnerPulse 2s 1.4s ease-in-out infinite; }
 
-
-/* ── OPTIMIZATION & OBSERVABILITY (merged) ──────────── */
+/* ── OPTIMIZATION ──────────────────────────────────── */
 .opt-section { border-bottom: 1px solid var(--line); }
 .opt-inner { display: grid; grid-template-columns: 1fr 1fr; }
 .opt-left  { padding: 72px 56px; border-right: 1px solid var(--line); }
@@ -488,7 +455,6 @@ canvas#dbVelChart { display: block; width: 100%!important; height: 52px!importan
 .opt-body p { font-family: var(--body); font-size: 13px; line-height: 1.85; color: var(--muted); margin-bottom: 16px; }
 .opt-body p:last-child { margin-bottom: 0; }
 
-/* sweep results table */
 .opt-tbl { width: 100%; border-collapse: collapse; }
 .opt-tbl th { font-family: var(--display); font-size: 7px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; }
 .opt-tbl td { padding: 13px 14px; border-bottom: 1px solid rgba(28,34,48,.7); font-family: var(--mono); font-size: 11px; color: var(--muted); }
@@ -548,67 +514,23 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
 .tweak-swatch.active { border-color: var(--text); }
 .tweak-swatches { display: flex; gap: 8px; align-items: center; }
 
-/* ── HOW AND WHY ─────────────────────────────────────── */
+/* ── WHY ─────────────────────────────────────────────── */
 .why-section { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .why-inner { max-width: 780px; margin: 0 auto; padding: 80px 56px; }
-
 .why-header { margin-bottom: 40px; }
 .why-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
 .why-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--dim); opacity: .8; }
 .why-title { font-family: var(--display); font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -.03em; color: var(--text); line-height: 1.05; }
 .why-subtitle { font-family: var(--body); font-size: 13px; color: var(--muted); margin-top: 10px; font-style: italic; letter-spacing: .02em; }
-
 .why-body-wrap { position: relative; }
-.why-preview p,
-.why-expanded p {
-  font-family: var(--body);
-  font-size: 14px;
-  line-height: 1.9;
-  color: var(--muted);
-  margin-bottom: 22px;
-  text-indent: 2em;
-}
-.why-preview p:last-child,
-.why-expanded p:last-child { margin-bottom: 0; }
-
-/* Ensure first expanded paragraph has top spacing to separate from preview */
+.why-preview p, .why-expanded p { font-family: var(--body); font-size: 14px; line-height: 1.9; color: var(--muted); margin-bottom: 22px; text-indent: 2em; }
+.why-preview p:last-child, .why-expanded p:last-child { margin-bottom: 0; }
 .why-expanded p:first-child { margin-top: 22px; }
-
-.why-expanded {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .8s cubic-bezier(.25,.46,.45,.94);
-}
+.why-expanded { max-height: 0; overflow: hidden; transition: max-height .8s cubic-bezier(.25,.46,.45,.94); }
 .why-expanded.open { max-height: 6000px; }
-
-/* fade overlay that sits above the preview text when collapsed */
-.why-fade {
-  position: absolute;
-  bottom: 44px; /* sits just above the toggle button */
-  left: 0; right: 0;
-  height: 72px;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-  pointer-events: none;
-  transition: opacity .4s ease;
-}
+.why-fade { position: absolute; bottom: 44px; left: 0; right: 0; height: 72px; background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; transition: opacity .4s ease; }
 .why-fade.hidden { opacity: 0; }
-
-.why-toggle {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--ice);
-  padding: 0;
-  transition: color .2s, gap .25s;
-}
+.why-toggle { display: flex; align-items: center; gap: 7px; margin-top: 24px; background: none; border: none; cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--ice); padding: 0; transition: color .2s, gap .25s; }
 .why-toggle:hover { color: var(--ice2); gap: 10px; }
 .why-toggle svg { transition: transform .35s cubic-bezier(.25,.46,.45,.94); flex-shrink: 0; }
 .why-toggle.open svg { transform: rotate(180deg); }
@@ -620,24 +542,27 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
   .nav-links { display: none; }
   .nav-page-label { display: inline; }
 
-  /* Hero — stack columns, fix the giant hardcoded font */
-  .hero { grid-template-columns: 1fr; }
+  /* Hero — stack columns, contain overflow */
+  .hero { grid-template-columns: 1fr; overflow-x: hidden; }
   .hero-left { padding: 88px 24px 32px; }
   .hero-name .name-line-outline {
     font-size: clamp(40px, 11vw, 96px) !important;
     line-height: .92 !important;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .hero-name .name-line-filled {
     font-size: clamp(40px, 11vw, 96px) !important;
+    white-space: nowrap;
+    overflow: hidden;
   }
-  .hero-tagline { font-size: 13px; margin-bottom: 28px; }
+  .hero-tagline { font-size: 12px; margin-bottom: 28px; max-width: 100%; }
   .hero-cta { margin-bottom: 32px; }
   .hero-stats { gap: 18px; flex-wrap: wrap; }
 
-  /* Mini dashboard — unlock fixed dimensions, untilt, fit screen */
-  .hero { overflow-x: hidden; }
-  .hero-right { padding: 0 16px 56px; }
-  #miniDashLink { display: block !important; width: 100%; }
+  /* Mini dashboard — fully contained, no overflow possible */
+  .hero-right { padding: 0 16px 56px; overflow: hidden; }
+  #miniDashLink { display: block !important; width: 100%; max-width: 100%; overflow: hidden; }
   #miniDash {
     width: 100% !important;
     min-width: 0 !important;
@@ -649,7 +574,15 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     overflow-y: auto !important;
     overflow-x: hidden !important;
   }
-  /* Scale down dashboard internals slightly */
+  /*
+   * The table with white-space:nowrap is the main culprit —
+   * override it to fixed layout so cells can't stretch the container.
+   * Also apply max-width:100% to every child so nothing can escape.
+   */
+  #miniDash * { max-width: 100%; box-sizing: border-box; }
+  .db-tbl { table-layout: fixed; width: 100%; }
+  .db-tbl td, .db-tbl th { white-space: normal; overflow: hidden; text-overflow: ellipsis; }
+  /* Scale down dashboard internals */
   .db-price { font-size: 32px !important; }
   .db-kpi { grid-template-columns: repeat(3,1fr); }
   .kpi-cell:nth-child(4), .kpi-cell:nth-child(5) { display: none; }
@@ -680,17 +613,12 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
 
   /* Why section */
   .why-inner { padding: 56px 24px; }
-  .why-preview p, .why-expanded p {
-    font-size: 13px;
-    text-indent: 0;
-    line-height: 1.8;
-  }
+  .why-preview p, .why-expanded p { font-size: 13px; text-indent: 0; line-height: 1.8; }
 
   /* Footer */
   footer { padding: 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
   .footer-right { align-items: flex-start; }
 
-  /* Tweaks panel — keep it accessible but move it so it doesn't block content */
   .tweaks-panel { bottom: 16px; right: 16px; min-width: 180px; }
 }
 </style>
@@ -730,7 +658,6 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
 
 <!-- ═══ HERO ═══ -->
 <div class="hero" id="hero">
-  <!-- left: text -->
   <div class="hero-left">
     <div class="hero-eyebrow">Automated options trading system</div>
     <div class="hero-name">
@@ -739,10 +666,8 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     </div>
     <p class="hero-tagline">From market open to close, it watches every tick, sizes up momentum, and places real risk-minimized options trades without any manual intervention.</p>
     <a href="/projects/tradebot/dashboard/" target="_blank" class="hero-cta">See it in action →</a>
-
   </div>
 
-  <!-- right: live dashboard -->
   <div class="hero-right">
     <a href="/projects/tradebot/dashboard/" target="_blank" id="miniDashLink" style="display:block;text-decoration:none;cursor:pointer;" aria-label="Open full dashboard">
     <div id="miniDash">
@@ -838,18 +763,14 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
 
 <!-- ═══ HOW IT WORKS ═══ -->
 <section class="how-section work-section" id="how">
-
-  <!-- header row above carousel -->
   <div class="how-header-row">
     <div class="how-header-left">
       <div class="how-eyebrow">Architecture</div>
       <h2 class="how-title">How it works</h2>
     </div>
-    <div style="display:flex;align-items:center;gap:20px;">
-    </div>
+    <div style="display:flex;align-items:center;gap:20px;"></div>
   </div>
 
-  <!-- progress + dots above stage -->
   <div style="display:flex;align-items:center;gap:16px;padding:20px 56px 0;">
     <div class="how-progress-row">
       <span class="how-counter"><span class="how-current" id="howCurrent">01</span> <span class="how-total">/ 05</span></span>
@@ -858,7 +779,6 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     <div class="how-dots" id="howDots"></div>
   </div>
 
-  <!-- carousel stage — full width -->
   <div class="how-stage" id="howStage">
     <div class="how-track" id="howTrack">
 
@@ -892,41 +812,31 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
         <div class="arch-viz">
           <svg viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
             <defs>
-              <!-- Clip to above +THRESH (y < 85) -->
               <clipPath id="clipAbove"><rect x="0" y="0" width="800" height="85"/></clipPath>
-              <!-- Clip to below -THRESH (y > 195) -->
               <clipPath id="clipBelow"><rect x="0" y="195" width="800" height="85"/></clipPath>
             </defs>
-            <!-- threshold lines -->
             <line x1="80" y1="85"  x2="720" y2="85"  stroke="rgba(96,200,255,.3)" stroke-width="1.5" stroke-dasharray="6 4"/>
             <line x1="80" y1="195" x2="720" y2="195" stroke="rgba(96,200,255,.3)" stroke-width="1.5" stroke-dasharray="6 4"/>
             <line x1="80" y1="140" x2="720" y2="140" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
             <text x="86" y="79"  font-family="'Chivo Mono',monospace" font-size="9" fill="rgba(96,200,255,.5)" letter-spacing=".1em">+THRESH</text>
             <text x="86" y="213" font-family="'Chivo Mono',monospace" font-size="9" fill="rgba(96,200,255,.5)" letter-spacing=".1em">−THRESH</text>
-            <!-- Layer 1: full neutral wave -->
             <polyline class="vel-wave2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               points="80,138 115,142 148,135 175,140 200,134 222,126 242,112 258,95 270,80 282,70 294,64 306,70 318,82 330,95 342,110 355,124 368,135 384,140 400,142 415,146 430,152 444,160 456,170 467,182 478,196 489,208 500,218 510,210 518,200 526,190 536,180 548,168 562,154 578,142 594,138 614,140 638,140 665,139 695,140 720,140"
               stroke="rgba(130,160,180,.4)"/>
-            <!-- Layer 2: green wave, clipped to above +THRESH (y<85) -->
             <polyline class="vel-wave2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
               points="80,138 115,142 148,135 175,140 200,134 222,126 242,112 258,95 270,80 282,70 294,64 306,70 318,82 330,95 342,110 355,124 368,135 384,140 400,142 415,146 430,152 444,160 456,170 467,182 478,196 489,208 500,218 510,210 518,200 526,190 536,180 548,168 562,154 578,142 594,138 614,140 638,140 665,139 695,140 720,140"
               stroke="#38c99a" clip-path="url(#clipAbove)"/>
-            <!-- Layer 3: red wave, clipped to below -THRESH (y>195) -->
             <polyline class="vel-wave2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
               points="80,138 115,142 148,135 175,140 200,134 222,126 242,112 258,95 270,80 282,70 294,64 306,70 318,82 330,95 342,110 355,124 368,135 384,140 400,142 415,146 430,152 444,160 456,170 467,182 478,196 489,208 500,218 510,210 518,200 526,190 536,180 548,168 562,154 578,142 594,138 614,140 638,140 665,139 695,140 720,140"
               stroke="#ff4060" clip-path="url(#clipBelow)"/>
-            <!-- CALL signal dot + ring fires AT +thresh crossing x=258,y=85 -->
             <circle class="sig-call-dot" cx="258" cy="85" r="0" fill="#38c99a"/>
             <circle class="sig-call-ring" cx="258" cy="85"/>
-            <!-- CALL label — sits above the wave peak (peak is y≈64, label above that) -->
             <g class="call-label">
               <rect x="252" y="18" width="88" height="22" rx="5" fill="rgba(56,201,154,.14)" stroke="rgba(56,201,154,.35)" stroke-width="1"/>
               <text x="296" y="33" font-family="'Syne',sans-serif" font-size="10" font-weight="800" fill="#38c99a" text-anchor="middle" letter-spacing=".08em">▲ CALL</text>
             </g>
-            <!-- PUT signal dot + ring fires AT −thresh crossing x=478,y=195 -->
             <circle class="sig-put-dot" cx="478" cy="195" r="0" fill="#ff4060"/>
             <circle class="sig-put-ring" cx="478" cy="195"/>
-            <!-- PUT label — sits below the wave trough (trough is y≈218, label below that) -->
             <g class="put-label">
               <rect x="434" y="236" width="88" height="22" rx="5" fill="rgba(255,64,96,.14)" stroke="rgba(255,64,96,.35)" stroke-width="1"/>
               <text x="478" y="251" font-family="'Syne',sans-serif" font-size="10" font-weight="800" fill="#ff4060" text-anchor="middle" letter-spacing=".08em">▼ PUT</text>
@@ -955,31 +865,26 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
       <div class="arch-card">
         <div class="arch-viz">
           <svg viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <!-- signal in pill — lights up first, ungated -->
             <g class="gate-sig-in">
               <rect x="310" y="16" width="180" height="26" rx="13" fill="rgba(96,200,255,.1)" stroke="rgba(96,200,255,.3)" stroke-width="1"/>
               <text x="400" y="33" font-family="'Syne',sans-serif" font-size="10" font-weight="700" fill="#90dcff" letter-spacing=".1em" text-anchor="middle">▲ SIGNAL IN</text>
             </g>
             <line x1="400" y1="42" x2="400" y2="60" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- Gate 1: RSI -->
             <rect class="gb1" x="160" y="60" width="480" height="44" rx="7" stroke="#1c2230" stroke-width="1.5" fill="#0c0e13"/>
             <circle class="gd1" cx="196" cy="82" r="5" fill="#36445a"/>
             <text class="gt1" x="214" y="87" font-family="'Syne',sans-serif" font-size="11" font-weight="700" fill="#7888a0">RSI gate</text>
             <text x="380" y="87" font-family="'Chivo Mono',monospace" font-size="10" fill="#556070">RSI 54.2 — within range</text>
             <line x1="400" y1="104" x2="400" y2="120" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- Gate 2: Regime -->
             <rect class="gb2" x="160" y="120" width="480" height="44" rx="7" stroke="#1c2230" stroke-width="1.5" fill="#0c0e13"/>
             <circle class="gd2" cx="196" cy="142" r="5" fill="#36445a"/>
             <text class="gt2" x="214" y="147" font-family="'Syne',sans-serif" font-size="11" font-weight="700" fill="#7888a0">Regime gate</text>
             <text x="380" y="147" font-family="'Chivo Mono',monospace" font-size="10" fill="#556070">bull trend — confirmed</text>
             <line x1="400" y1="164" x2="400" y2="180" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- Gate 3: Position cap -->
             <rect class="gb3" x="160" y="180" width="480" height="44" rx="7" stroke="#1c2230" stroke-width="1.5" fill="#0c0e13"/>
             <circle class="gd3" cx="196" cy="202" r="5" fill="#36445a"/>
             <text class="gt3" x="214" y="207" font-family="'Syne',sans-serif" font-size="11" font-weight="700" fill="#7888a0">Position cap</text>
             <text x="380" y="207" font-family="'Chivo Mono',monospace" font-size="10" fill="#556070">0 of 2 slots used</text>
             <line x1="400" y1="224" x2="400" y2="240" stroke="#1c2230" stroke-width="1.5" stroke-dasharray="3 2"/>
-            <!-- order out -->
             <g class="gate-order-out">
               <rect x="310" y="240" width="180" height="26" rx="13" fill="rgba(56,201,154,.1)" stroke="rgba(56,201,154,.3)" stroke-width="1"/>
               <text x="400" y="257" font-family="'Syne',sans-serif" font-size="10" font-weight="700" fill="#38c99a" letter-spacing=".1em" text-anchor="middle">ORDER ↓</text>
@@ -1003,11 +908,10 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
         </div>
       </div>
 
-      <!-- CARD 04: rolling P&L ledger -->
+      <!-- CARD 04 -->
       <div class="arch-card">
         <div class="arch-viz" id="card4viz">
           <svg id="card4svg" viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <!-- headers -->
             <text x="60"  y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">TIME</text>
             <text x="170" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">CONTRACT</text>
             <text x="370" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">ENTRY</text>
@@ -1015,10 +919,8 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
             <text x="560" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">P&amp;L</text>
             <text x="640" y="28" font-family="'Chivo Mono',monospace" font-size="8" fill="#36445a" letter-spacing=".1em">REASON</text>
             <line x1="40" y1="36" x2="760" y2="36" stroke="#1c2230" stroke-width="1"/>
-            <!-- clip rows so they never overflow the footer line -->
             <defs><clipPath id="rowClip"><rect x="0" y="36" width="800" height="196"/></clipPath></defs>
             <g id="card4rows" clip-path="url(#rowClip)"></g>
-            <!-- fixed footer zone — always visible -->
             <rect x="0" y="235" width="800" height="45" fill="#0c0e13"/>
             <line x1="40" y1="236" x2="760" y2="236" stroke="#1c2230" stroke-width="1"/>
             <text x="60" y="258" font-family="'Syne',sans-serif" font-size="9" font-weight="700" fill="#556070" letter-spacing=".12em">SESSION NET</text>
@@ -1042,7 +944,7 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
         </div>
       </div>
 
-      <!-- CARD 05: sim run reveal leaderboard -->
+      <!-- CARD 05 -->
       <div class="arch-card">
         <div class="arch-viz" id="card5viz">
           <svg id="card5svg" viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
@@ -1064,7 +966,7 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
             <div class="arch-text-body">
               <div class="arch-num">05 — Simulation &amp; optimization</div>
               <div class="arch-title">Every session makes the next one smarter</div>
-              <div class="arch-body">After each session, trade data is fed into a Bayesian table to optimize live parameter configurations for future sessions. </div>
+              <div class="arch-body">After each session, trade data is fed into a Bayesian table to optimize live parameter configurations for future sessions.</div>
             </div>
             <div class="how-nav-inline">
               <button class="how-btn" id="howNext" disabled aria-label="Next"><svg width="20" height="20" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -1073,11 +975,9 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
         </div>
       </div>
 
-    </div><!-- /.how-track -->
-  </div><!-- /.how-stage -->
-
+    </div>
+  </div>
 </section>
-
 
 <!-- ═══ FULL DASHBOARD LINK ═══ -->
 <div class="demo-panel-wrap work-section" id="demo">
@@ -1097,48 +997,32 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
 <!-- ═══ HOW AND WHY ═══ -->
 <section class="why-section work-section">
   <div class="why-inner">
-
     <div class="why-header">
       <div class="why-eyebrow">Background</div>
       <h2 class="why-title">How and why I 'built' this</h2>
       <p class="why-subtitle">In my own words, no AI copy</p>
     </div>
-
     <div class="why-body-wrap">
-      <!-- Always-visible preview -->
       <div class="why-preview">
         <p>When I first learned about stock options, they scared me. "Investing" in them seemed like a good way to burn money quickly, so I vowed I'd never touch them. A few years later, I was shocked and appalled at the rise of 0-days-to-expiration (0DTE) options. As if there wasn't enough market volatility already, it seemed like the massive volume of short-dated options was causing the market to swing even more violently. Then I started tracking the price action on 0DTE SPY options. I could immediately see the appeal.</p>
       </div>
-
-      <!-- Expandable content -->
       <div class="why-expanded" id="whyExpanded">
         <p>0DTE options on SPY whipsaw back and forth on every little price swing. They are torqued up and ready to run, cutting either for or against your P&L with every tick. I was certainly terrified by them, but I also understood their potential to amass (or destroy) capital, so I decided to try my hand at trading them manually. After some mixed results — okay, it was one positive month followed by a down month where I lost all of my first month's profits — I knew that it wasn't for me. The stress of trying to time SPY moves and make trades was too much. But I knew that the potential was still there.</p>
-
         <p>Of course I'd been inundated with stories of the magic of vibe coding and how it allowed anyone to slop a project together, but I was skeptical. I had used a few AI tools in the past with varying degrees of success — there was no way that I could actually deploy anything vibe-coded to trade my own money… right?</p>
-
         <p>In late February 2026, after swearing off trading 0DTEs on my own, I decided to enlist Claude to see if it could help me. It's simple, right? SPY goes up → buy calls, SPY goes down → buy puts. It started with a simple prompt: "how can I identify momentum as it starts?" I didn't know about any of the existing infrastructure that could be leveraged to take that simple concept and turn it into a functioning tool.</p>
-
         <p>Claude (with some help from Gemini) helped me to learn a lot about Charles Schwab's REST API and WebSocket framework, the backend tools to get the plumbing all connected, and also about Flask and web tools to be able to visualize everything as it happens. After realizing that I could get second-by-second SPY and SPY options ticks, and that I could actually place orders nearly instantaneously, I knew that it was an avenue worth pursuing.</p>
-
         <p>Over the next couple of weeks, I used Claude to help me research, plan out, and build a custom platform to continuously stream market data, analyze the quotes it retrieves, and place orders, all autonomously. It began as a crude tool: a Python script that used a basic strategy and wrote everything to the terminal. That made my eyes bleed, so I prompted my way into creating a dashboard to house all of the live market data I was logging along with trackers for all of the different strategies I wanted to test.</p>
-
         <p>As I logged these early paper trades, I continued to dig into trading strategies and implemented refinements as I went. At one point, I was running 26 different test variants concurrently during live market hours! I quickly learned that being able to backtest different configurations against the SPY tick data that I had accumulated was a must, so I had Claude help me build that out, which led to discovering that the variant using a Kalman filter was outperforming the rest at detecting SPY momentum early.</p>
-
         <p>Diving into multiprocessing allowed me to build out a robust simulation tool to sweep over dozens of config tweaks for weeks of SPY tick data at a time, which I then used to fine-tune the parameters the signal algorithm uses. But after deploying, it was apparent that a single parameter set was overfitting to the sample data that I had collected, so I studied up on tuning strategies. Claude helped me cook up a Bayesian lookup table that dynamically adjusts signal parameters in response to varying market conditions. As I accumulate more trade data daily, it feeds back into the table to refine its recommendations for future sessions.</p>
-
         <p>So where are we now? I'm currently running this tradebot daily with real (albeit small) money trades, and it's showing a lot of promise. The slippage on real fills for my orders is eating into the edge that the tradebot had when it was only creating paper trades, but it is consistently bringing in capital. I'm excited to continue to optimize the bot's performance in hopes that it can continue to scale up.</p>
-
         <p>This was my first big vibe coding project, and while it isn't yet the infinite money glitch that I had imagined, I'm really proud of what I've accomplished with it. Along the way, I have learned so much about system architecture, testing and debugging, data analysis, and quantitative concepts. But perhaps most importantly, I have gained a deeper appreciation for the power of the tools at my disposal. I now feel much more confident in my ability to leverage AI to learn and to create new things, and I know that's going to be priceless in our ever-accelerating world.</p>
       </div>
-
-      <!-- Fade + toggle button -->
       <div class="why-fade" id="whyFade"></div>
       <button class="why-toggle" id="whyToggle" onclick="toggleWhy()">
         <span id="whyToggleLabel">Keep reading</span>
         <svg id="whyToggleIcon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
-
   </div>
 </section>
 
@@ -1190,7 +1074,6 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
 (function(){
   const canvas = document.getElementById('card1canvas');
   if(!canvas) return;
-
   function resize(){
     const dpr = window.devicePixelRatio||1;
     canvas.width  = Math.round(canvas.offsetWidth * dpr);
@@ -1198,22 +1081,17 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
   }
   resize();
   window.addEventListener('resize', resize, {passive:true});
-
   const cx = canvas.getContext('2d');
   const GREEN = '#38c99a', RED = '#ff4060', GRID = '#1c2230', WICK = '#556070';
   const CANDLE_TICKS = 15;
   const TICK_MS = 100;
-  const MAX_CANDLES = 20; // more candles in narrower space = slimmer look
-
-  // Fixed price range 695–705 as requested
+  const MAX_CANDLES = 20;
   const PRICE_MIN = 695, PRICE_MAX = 705;
-  let price = 700.0; // start exactly at center
+  let price = 700.0;
   let tickCount = 0;
   let candles = [];
   let activeCandle = null;
-  let lastDir = 1;
-  let trendStrength = 0; // builds up momentum then reverses
-
+  let trendStrength = 0;
   function newCandle(){
     const c = { open: price, close: price, high: price, low: price };
     candles.push(c);
@@ -1221,16 +1099,12 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     activeCandle = c;
     tickCount = 0;
   }
-
   function tick(){
     if(!activeCandle) newCandle();
-    // Build momentum: trend runs for a while then snaps back
     trendStrength += (Math.random() - 0.5) * 0.4;
     trendStrength = Math.max(-2.5, Math.min(2.5, trendStrength));
-    // Mean-revert harder near the edges so it stays in 695–705
     const distFromCenter = price - 700;
     const meanPull = -distFromCenter * 0.08;
-    // Bigger per-tick move: ~0.15–0.5 per tick
     const noise = (Math.random() - 0.48) * 0.5;
     const change = noise + trendStrength * 0.12 + meanPull;
     price = Math.max(PRICE_MIN + 0.05, Math.min(PRICE_MAX - 0.05, price + change));
@@ -1241,14 +1115,12 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     if(tickCount >= CANDLE_TICKS) newCandle();
     draw();
   }
-
   function drawTick(){
-    // silent tick for prefill — no draw call
     if(!activeCandle) newCandle();
     trendStrength += (Math.random() - 0.5) * 0.3;
-    trendStrength = Math.max(-1.5, Math.min(1.5, trendStrength)); // weaker trend during prefill
+    trendStrength = Math.max(-1.5, Math.min(1.5, trendStrength));
     const distFromCenter = price - 700;
-    const meanPull = -distFromCenter * 0.15; // stronger mean reversion during prefill
+    const meanPull = -distFromCenter * 0.15;
     const noise = (Math.random() - 0.5) * 0.4;
     const change = noise + trendStrength * 0.08 + meanPull;
     price = Math.max(PRICE_MIN + 0.1, Math.min(PRICE_MAX - 0.1, price + change));
@@ -1258,24 +1130,17 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     tickCount++;
     if(tickCount >= CANDLE_TICKS) newCandle();
   }
-
   function draw(){
     const dpr = window.devicePixelRatio||1;
     cx.setTransform(dpr,0,0,dpr,0,0);
     const Wl = canvas.width/dpr, Hl = canvas.height/dpr;
     cx.clearRect(0,0,Wl,Hl);
-
-    // Fixed axis: 695 to 705
     const pMin = PRICE_MIN, pMax = PRICE_MAX;
-    const AXIS_W = 46; // left margin for y-labels
-    const PAD_R = 16;  // right padding
-    const PAD_T = 14, PAD_B = 14;
+    const AXIS_W = 46, PAD_R = 16, PAD_T = 14, PAD_B = 14;
     const chartL = AXIS_W, chartR = Wl - PAD_R;
     const chartT = PAD_T,  chartB = Hl - PAD_B;
     const chartW = chartR - chartL, chartH = chartB - chartT;
     const toY = p => chartT + (1 - (p - pMin)/(pMax - pMin)) * chartH;
-
-    // grid lines + y-axis labels
     cx.strokeStyle = GRID; cx.lineWidth = 1;
     cx.fillStyle = '#36445a';
     cx.font = `9px 'Chivo Mono',monospace`;
@@ -1286,32 +1151,21 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
       cx.beginPath(); cx.moveTo(chartL, y); cx.lineTo(chartR, y); cx.stroke();
       cx.fillText(p.toString(), AXIS_W - 4, y + 3);
     });
-
     if(!candles.length) return;
-
-    // Candle sizing: fill the full chart width evenly, narrow bodies
     const gap = 5;
     const totalSlots = MAX_CANDLES;
     const candleW = chartW / totalSlots;
     const bodyW = Math.max(3, candleW - gap);
-
-    // Always render from the right edge backward so active candle is rightmost
     const n = candles.length;
     candles.forEach((c, i) => {
-      // slot index: newest candle = slot n-1 (rightmost), padded from right
       const slot = totalSlots - n + i;
       const cx_ = chartL + slot * candleW + candleW / 2;
-
       const isBull = c.close >= c.open;
       const color = isBull ? GREEN : RED;
       const openY  = toY(c.open),  closeY = toY(c.close);
       const highY  = toY(c.high),  lowY   = toY(c.low);
-
-      // wick
       cx.strokeStyle = WICK; cx.lineWidth = 1.5;
       cx.beginPath(); cx.moveTo(cx_, highY); cx.lineTo(cx_, lowY); cx.stroke();
-
-      // body
       const bodyTop = Math.min(openY, closeY);
       const bodyH   = Math.max(2, Math.abs(openY - closeY));
       cx.fillStyle = color;
@@ -1319,7 +1173,6 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
       cx.fill();
     });
   }
-
   function roundRect(ctx, x, y, w, h, r){
     ctx.beginPath();
     ctx.moveTo(x+r,y);
@@ -1329,11 +1182,7 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
     ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
     ctx.closePath();
   }
-
   newCandle();
-
-  // Pre-populate with historical candles — price stays near 700 (center) during prefill
-  // so the live chart opens with candles distributed around the middle of the range
   price = 700.0; trendStrength = 0;
   const PREFILL_CANDLES = 16;
   for(let c = 0; c < PREFILL_CANDLES; c++){
@@ -1352,7 +1201,6 @@ document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 /* ── how-it-works carousel ─────────────────────────────────── */
 let _howCurrent = 0;
 const _howTotal  = 5;
-
 function howCarousel(dir) { _howGoTo(_howCurrent + dir); }
 
 (function(){
@@ -1409,7 +1257,7 @@ function howCarousel(dir) { _howGoTo(_howCurrent + dir); }
   },{passive:true});
 })();
 
-/* ── Card 04: P&L ledger — rows populate one at a time ── */
+/* ── Card 04: P&L ledger ── */
 let card4Started=false;
 function startCard4(){
   if(card4Started)return; card4Started=true;
@@ -1417,7 +1265,6 @@ function startCard4(){
   const netEl=document.getElementById('card4net');
   rows.innerHTML='';
   netEl.textContent='—'; netEl.setAttribute('fill','#e8edf5');
-
   const TRADES=[
     {t:'10:14',c:'SPY 582C',entry:1.62,exit:2.18,pnl:+168,reason:'take_profit'},
     {t:'10:28',c:'SPY 582P',entry:1.30,exit:1.14,pnl:-48, reason:'trailing_stop'},
@@ -1427,29 +1274,21 @@ function startCard4(){
   ];
   const ROW_H=38, ROW_TOP=56;
   let net=0, idx=0;
-
   function addRow(){
-    if(idx>=TRADES.length){
-      // pause then replay
-      setTimeout(()=>{ card4Started=false; startCard4(); }, 3000);
-      return;
-    }
+    if(idx>=TRADES.length){ setTimeout(()=>{ card4Started=false; startCard4(); }, 3000); return; }
     const tr=TRADES[idx];
     const pos=tr.pnl>=0;
     net+=tr.pnl;
     const rowY=ROW_TOP+idx*ROW_H;
-
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.style.opacity='0';
     g.style.animation='rowSlideIn .35s ease both';
-
     const flash=document.createElementNS('http://www.w3.org/2000/svg','rect');
     flash.setAttribute('x','40'); flash.setAttribute('y',rowY-16+'');
     flash.setAttribute('width','720'); flash.setAttribute('height','34'); flash.setAttribute('rx','3');
     flash.setAttribute('fill',pos?'rgba(56,201,154,.12)':'rgba(255,64,96,.08)');
     flash.style.animation=(pos?'flashGreen':'flashRed')+' 1.4s ease both';
     g.appendChild(flash);
-
     const mkT=(x,txt,fill,fw)=>{
       const t=document.createElementNS('http://www.w3.org/2000/svg','text');
       t.setAttribute('x',x+''); t.setAttribute('y',rowY+'');
@@ -1463,25 +1302,19 @@ function startCard4(){
     g.appendChild(mkT(460,'$'+tr.exit.toFixed(2)));
     g.appendChild(mkT(560,(pos?'+':'')+`$${tr.pnl}`,pos?'#38c99a':'#ff4060','700'));
     g.appendChild(mkT(640,tr.reason.replace('_',' '),'#556070'));
-
     rows.appendChild(g);
-    // trigger opacity
     requestAnimationFrame(()=>{ g.style.opacity='1'; });
-
-    // update net P&L
     netEl.textContent=(net>=0?'+':'')+`$${net}`;
     netEl.setAttribute('fill',net>0?'#38c99a':net<0?'#ff4060':'#e8edf5');
     netEl.style.animation='netPop .3s ease';
     setTimeout(()=>{ netEl.style.animation=''; },350);
-
     idx++;
     setTimeout(addRow, 850);
   }
-
   setTimeout(addRow, 400);
 }
 
-/* ── Card 05: sim run reveal ─────────────────────────────── */
+/* ── Card 05: sim run reveal ── */
 const CARD5_CONFIGS=[
   {name:'A',thresh:'0.028',tp:'30%',wr:'61%',pnl:'+$333',winner:false},
   {name:'B',thresh:'0.035',tp:'34%',wr:'71%',pnl:'+$438',winner:true},
@@ -1497,10 +1330,8 @@ function startCard5(){
   rows.innerHTML=''; footerEl.setAttribute('opacity','0');
   const rowEls=[];
   let idx=0;
-
   function addConfig(){
     if(idx>=CARD5_CONFIGS.length){
-      // All rows shown — now highlight winner after a pause
       setTimeout(()=>{
         const wi=CARD5_CONFIGS.findIndex(c=>c.winner);
         const el=rowEls[wi];
@@ -1508,62 +1339,45 @@ function startCard5(){
           el.bg.setAttribute('fill','rgba(96,200,255,.08)');
           el.bg.setAttribute('stroke','rgba(96,200,255,.4)');
           el.bg.style.transition='fill .4s ease, stroke .4s ease';
-          // Change name color to ice
           el.nameTxt.setAttribute('fill','#60c8ff');
-          // Change data cols to ice/green
-          el.dataCols.forEach((t,i)=>{
-            t.setAttribute('fill', i===2 ? '#38c99a' : '#90dcff');
-          });
-          // Swap "tested" label to "★ best"
+          el.dataCols.forEach((t,i)=>{ t.setAttribute('fill', i===2 ? '#38c99a' : '#90dcff'); });
           el.statusTxt.setAttribute('x','660');
           el.statusTxt.setAttribute('text-anchor','start');
           el.statusTxt.textContent='★ best';
           el.statusTxt.setAttribute('fill','#90dcff');
           el.statusTxt.style.animation='fadeIn .4s ease both';
         }
-        footerEl.setAttribute('opacity','0'); // footer hidden — no sweep runs text
+        footerEl.setAttribute('opacity','0');
         setTimeout(()=>{ card5Started=false; startCard5(); }, 4500);
       }, 600);
       return;
     }
-
     const cfg=CARD5_CONFIGS[idx];
     const y=56+idx*44;
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.style.animation='rowReveal .35s ease both';
-
-    // Row background — all identical neutral style
     const bgR=document.createElementNS('http://www.w3.org/2000/svg','rect');
     bgR.setAttribute('x','40'); bgR.setAttribute('y',y-18+'');
     bgR.setAttribute('width','720'); bgR.setAttribute('height','36'); bgR.setAttribute('rx','4');
     bgR.setAttribute('fill','transparent'); bgR.setAttribute('stroke','#1c2230'); bgR.setAttribute('stroke-width','1');
-
-    // Config name — all same muted color
     const nameTxt=document.createElementNS('http://www.w3.org/2000/svg','text');
     nameTxt.setAttribute('x','60'); nameTxt.setAttribute('y',y+'');
     nameTxt.setAttribute('font-family',"'Syne',sans-serif"); nameTxt.setAttribute('font-size','14');
     nameTxt.setAttribute('font-weight','800'); nameTxt.setAttribute('fill','#7888a0');
     nameTxt.textContent='Config '+cfg.name;
-
-    // Status label — plain "tested" text, left-aligned at x=660 to match STATUS header
     const statusTxt=document.createElementNS('http://www.w3.org/2000/svg','text');
     statusTxt.setAttribute('x','660'); statusTxt.setAttribute('y',y+'');
     statusTxt.setAttribute('font-family',"'Chivo Mono',monospace"); statusTxt.setAttribute('font-size','9');
     statusTxt.setAttribute('fill','#36445a'); statusTxt.setAttribute('letter-spacing','.12em');
     statusTxt.setAttribute('text-anchor','start');
     statusTxt.textContent='tested';
-
     g.appendChild(bgR); g.appendChild(nameTxt); g.appendChild(statusTxt);
-
-    // Separator line
     const sep=document.createElementNS('http://www.w3.org/2000/svg','line');
     sep.setAttribute('x1','40'); sep.setAttribute('y1',y+18+'');
     sep.setAttribute('x2','760'); sep.setAttribute('y2',y+18+'');
     sep.setAttribute('stroke','rgba(28,34,48,.8)'); sep.setAttribute('stroke-width','1');
     rows.appendChild(g);
     rows.appendChild(sep);
-
-    // After 600ms: fill in data columns (all same neutral color)
     const dataCols=[];
     setTimeout(()=>{
       const mkT=(x,txt,fill,fw)=>{
@@ -1579,14 +1393,13 @@ function startCard5(){
       rowEls[idx-1].dataCols=dataCols;
       setTimeout(addConfig, 500);
     }, 600);
-
     rowEls.push({bg:bgR, nameTxt, statusTxt, dataCols:[]});
     idx++;
   }
   setTimeout(addConfig, 300);
 }
 
-/* ── nav light in hero zone ────────────────────────────────── */
+/* ── nav light in hero zone ─────────────────────────────────── */
 const mainNav = document.getElementById('mainNav');
 const heroEl  = document.getElementById('hero');
 function updateNav(){
@@ -1623,7 +1436,7 @@ window.addEventListener('scroll', updateNav, { passive:true });
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();
 
-/* ── tweaks ────────────────────────────────────────────────── */
+/* ── tweaks ─────────────────────────────────────────────────── */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "green",
   "hero": "blue",
@@ -1649,8 +1462,9 @@ function applyTweaks(t) {
   document.documentElement.style.setProperty('--hero-text',  h.text);
   document.documentElement.style.setProperty('--hero-muted', h.muted);
   document.documentElement.style.setProperty('--hero-line',  h.line);
-  document.getElementById('miniDash').style.transform = `rotate(${t.tilt}deg)`;
-  // sync button states
+  const dash = document.getElementById('miniDash');
+  // On mobile, never apply tilt — the transform:none from media query handles it
+  if(window.innerWidth > 720) dash.style.transform = `rotate(${t.tilt}deg)`;
   document.querySelectorAll('[data-accent]').forEach(s => s.classList.toggle('active', s.dataset.accent===t.accent));
   document.querySelectorAll('[data-hero]').forEach(b => b.classList.toggle('active', b.dataset.hero===t.hero));
   document.querySelectorAll('[data-tilt]').forEach(b => b.classList.toggle('active', b.dataset.tilt===String(t.tilt)));
@@ -1666,7 +1480,7 @@ window.addEventListener('message', e => {
 });
 window.parent.postMessage({type:'__edit_mode_available'},'*');
 
-/* ── Why section expand/collapse ───────────────────────────── */
+/* ── Why section ─────────────────────────────────────────────── */
 function toggleWhy(){
   const expanded = document.getElementById('whyExpanded');
   const fade     = document.getElementById('whyFade');
@@ -1680,7 +1494,7 @@ function toggleWhy(){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MINI DASHBOARD REPLAY ENGINE (unchanged)
+   MINI DASHBOARD REPLAY ENGINE
 ══════════════════════════════════════════════════════════════ */
 const THRESH   = 0.035;
 const BASE_PX  = 581.20;
@@ -1767,7 +1581,6 @@ function startMiniReplay(){
 function stepMini(){
   if(idx>=ticks.length){ clearInterval(timer); ticker('Replay complete · session ended'); return; }
   const tk=ticks[idx], ev=EVENTS[idx];
-
   const priceEl=document.getElementById('dbPrice');
   const dir=tk.price>prevPrice?'up':tk.price<prevPrice?'dn':null;
   priceEl.textContent=tk.price.toFixed(2);
@@ -1788,7 +1601,6 @@ function stepMini(){
   document.getElementById('dbTrend').className='ind-val '+(bull?'up':'dn');
   document.getElementById('dbRegime').textContent=bull?'Trending Up':'Trending Down';
   document.getElementById('dbRegime').className='ind-val '+(bull?'up':'dn');
-
   const vel=tk.vel;
   velHist.push(vel); if(velHist.length>80)velHist.shift();
   chart.data.labels=velHist.map((_,i)=>''+i);
@@ -1806,7 +1618,6 @@ function stepMini(){
   document.getElementById('dbBear').style.width=(brs/10*100)+'%';
   document.getElementById('dbBullN').textContent=bs.toFixed(1);
   document.getElementById('dbBearN').textContent=brs.toFixed(1);
-
   let unreal=0;
   Object.values(openTrades).forEach(tr=>{ unreal+=Math.round(((tk.price-tr.spyEntry)*(tr.dir==='CALL'?1:-1))*18); });
   updatePnl(unreal);
