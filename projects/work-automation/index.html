@@ -52,7 +52,7 @@ nav.nav-light .nav-links a:hover { color:#182636; border-color:rgba(24,38,54,.4)
 .nav-dropdown a[href="/photography"]:hover { color:#a064ff; border-left-color:#a064ff; }
 .nav-dropdown a[href="/projects"]:hover  { color:#ffa040; border-left-color:#ffa040; }
 .nav-dropdown a[href="/contact"]:hover   { color:#60c8ff; border-left-color:#60c8ff; }
-.nav-dropdown a:nth-child(1) { border-bottom:1px solid var(--line); margin-bottom:4px; }
+.nav-dropdown a[href="/"] { border-bottom:1px solid var(--line); margin-bottom:4px; }
 .nav-dropdown-num { font-family:var(--mono); font-size:8px; color:var(--dim); letter-spacing:.14em; font-weight:400; }
 .nav-links { display:flex; gap:8px; font-family:var(--display); font-size:9.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
 .nav-links a { padding:6px 16px; border-radius:99px; border:1px solid var(--line); color:var(--dim); text-decoration:none; white-space:nowrap; transition:color .25s, border-color .25s, background .25s; }
@@ -192,12 +192,27 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
   nav { padding:0 20px; }
   .nav-links { display:none; }
   .nav-page-label { display:inline; }
-  .hero { grid-template-columns:1fr; }
+
+  /* Hero — fix clipping title and tagline */
+  .hero { overflow-x:hidden; }
   .hero-left { padding:88px 24px 32px; }
+  .hero-name {
+    font-size: clamp(36px, 11vw, 52px);
+  }
+  .hero-name .outline,
+  .hero-name .filled {
+    font-size: clamp(36px, 11vw, 52px) !important;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .hero-tagline {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
   .hero-right { padding:0 20px 56px; }
   .hero-cards { transform:none; width:100%; }
-  .hero-name { font-size: clamp(36px, 11vw, 52px); }
-  .hero-name .outline, .hero-name .filled { font-size: clamp(36px, 11vw, 52px) !important; }
   .how-header-row { flex-direction:column; padding:48px 24px 32px; gap:16px; }
   .arch-card { grid-template-columns:1fr; }
   .arch-viz { border-right:none; border-bottom:1px solid var(--line); min-height:200px; }
@@ -247,9 +262,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
       <span class="filled">Automation</span>
     </div>
     <p class="hero-tagline">A pair of reporting pipelines that replace hours of monthly manual work. Pulls data from a secure server, processes it automatically, and produces clean, formatted Excel reports in under two minutes.</p>
-
   </div>
-
 </div>
 
 <!-- PROJECT 01 -->
@@ -437,14 +450,12 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
       <div class="arch-card">
         <div class="arch-viz">
           <div class="pipeline-viz">
-            <!-- SFTP source -->
             <div style="display:flex;justify-content:center;margin-bottom:12px;">
               <div style="background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:10px 20px;display:inline-flex;align-items:center;gap:10px;">
                 <span style="width:6px;height:6px;border-radius:50%;background:var(--ice);box-shadow:0 0 6px rgba(96,200,255,.6);display:inline-block;animation:sftp-pulse 2s ease-in-out infinite;flex-shrink:0;"></span>
                 <span style="font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">SFTP Server</span>
               </div>
             </div>
-            <!-- arrow down -->
             <div style="display:flex;justify-content:center;margin-bottom:12px;">
               <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><line x1="6" y1="0" x2="6" y2="14" stroke="#36445a" stroke-width="1.5" stroke-linecap="round"/><path d="M2 10l4 6 4-6" stroke="#36445a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
