@@ -260,53 +260,57 @@ nav {
   margin-top: 24px;
   position: relative;
   display: inline-block;
+  isolation: isolate;
+  z-index: 10;
 }
 .resume-download-btn {
-  display: inline-flex; align-items: center; gap: 9px;
-  font-family: var(--display); font-size: 9.5px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--display); font-size: 11px; font-weight: 700;
   letter-spacing: .14em; text-transform: uppercase;
-  color: var(--dim); background: transparent;
-  border: 1px solid var(--line); border-radius: 99px;
-  padding: 8px 18px; cursor: pointer;
+  color: var(--text); background: transparent;
+  border: 1px solid rgba(232,237,245,.2); border-radius: 99px;
+  padding: 11px 22px; cursor: pointer;
   transition: color .25s, border-color .25s, background .25s, box-shadow .25s;
   white-space: nowrap;
 }
 .resume-download-btn svg { flex-shrink: 0; transition: transform .25s; }
 .resume-download-btn:hover {
-  color: var(--ice2); border-color: rgba(96,200,255,.4);
+  color: var(--ice2); border-color: rgba(96,200,255,.5);
   background: rgba(96,200,255,.07);
-  box-shadow: 0 0 18px rgba(96,200,255,.1);
+  box-shadow: 0 0 22px rgba(96,200,255,.15);
 }
 .resume-download-btn:hover svg { transform: translateY(2px); }
 .resume-download-btn.open {
-  color: var(--ice2); border-color: rgba(96,200,255,.4);
+  color: var(--ice2); border-color: rgba(96,200,255,.5);
   background: rgba(96,200,255,.07);
+  box-shadow: 0 0 22px rgba(96,200,255,.15);
 }
 .resume-dl-dropdown {
-  position: absolute; top: calc(100% + 8px); left: 0;
-  background: rgba(13,15,20,.97); backdrop-filter: blur(24px);
-  border: 1px solid var(--line); border-radius: 10px;
-  padding: 6px 0; min-width: 180px;
-  opacity: 0; transform: translateY(-6px) scale(.97); pointer-events: none;
+  position: absolute; bottom: calc(100% + 10px); top: auto; left: 0;
+  background: #1a1e26; backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,.1); border-radius: 12px;
+  padding: 8px 0; min-width: 220px;
+  opacity: 0; transform: translateY(6px) scale(.97); pointer-events: none;
   transition: opacity .2s ease, transform .22s cubic-bezier(.16,1,.3,1);
-  z-index: 100;
+  z-index: 400;
+  box-shadow: 0 -8px 48px rgba(0,0,0,.8);
 }
 .resume-dl-dropdown.open {
   opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
 }
 .resume-dl-dropdown a {
-  display: flex; align-items: center; gap: 10px;
-  padding: 11px 18px;
-  font-family: var(--mono); font-size: 9px; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--muted); text-decoration: none;
+  display: flex; align-items: center; gap: 13px;
+  padding: 14px 22px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text); text-decoration: none;
   border-left: 2px solid transparent;
   transition: color .15s, border-left-color .15s, background .15s;
 }
 .resume-dl-dropdown a:hover {
   color: var(--ice2); border-left-color: var(--ice);
-  background: rgba(96,200,255,.05);
+  background: rgba(96,200,255,.07);
 }
-.resume-dl-dropdown a svg { color: var(--dim); flex-shrink: 0; transition: color .15s; }
+.resume-dl-dropdown a svg { color: var(--muted); flex-shrink: 0; width: 16px; height: 16px; transition: color .15s; }
 .resume-dl-dropdown a:hover svg { color: var(--ice); }
 
 /* ── RESUME LAYOUT ── */
@@ -523,12 +527,12 @@ nav {
         <svg width="9" height="9" viewBox="0 0 9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:2px;transition:transform .25s"><path d="M1.5 3l3 3 3-3"/></svg>
       </button>
       <div class="resume-dl-dropdown" id="dlDropdown">
-        <a href="/resume/Mitchell%20Herrmann%20Resume.pdf" download>
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="1" width="9" height="11" rx="1.5"/><path d="M4.5 4.5h4M4.5 6.5h4M4.5 8.5h2"/></svg>
+        <a href="/resume/Mitchell%20Herrmann%20Resume.pdf">
+          <svg width="16" height="16" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="1" width="9" height="11" rx="1.5"/><path d="M4.5 4.5h4M4.5 6.5h4M4.5 8.5h2"/></svg>
           PDF
         </a>
-        <a href="/resume/Mitchell%20Herrmann%20Resume.docx" download>
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="1" width="9" height="11" rx="1.5"/><path d="M4 4.5h5M4 6.5h5M4 8.5h3"/></svg>
+        <a href="/resume/Mitchell%20Herrmann%20Resume.docx">
+          <svg width="16" height="16" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="1" width="9" height="11" rx="1.5"/><path d="M4 4.5h5M4 6.5h5M4 8.5h3"/></svg>
           Word (.docx)
         </a>
       </div>
