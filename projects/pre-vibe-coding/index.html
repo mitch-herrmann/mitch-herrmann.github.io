@@ -27,7 +27,7 @@
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { background:var(--bg); color:var(--text); font-family:var(--mono); min-height:100vh; overflow-x:hidden; }
-body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; }
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E"); pointer-events:none; z-index:2; }
 
 /* NAV */
 nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:60px; background:rgba(13,15,20,.98); backdrop-filter:blur(20px); border-bottom:1px solid var(--line); transition:background .3s, border-color .3s; isolation:isolate; -webkit-transform:translateZ(0); transform:translateZ(0); }
@@ -91,6 +91,8 @@ nav.nav-light .nav-links a.active { color:#182636; border-color:rgba(24,38,54,.3
 .hero-name .outline { display:block; color:transparent; -webkit-text-stroke:1.5px #182636; }
 .hero-name .filled  { display:block; color:#182636; }
 .hero-tagline { font-family:var(--mono); font-size:13px; line-height:1.85; color:rgba(24,38,54,.56); max-width:400px; }
+.hero-gh-link { color:rgba(24,38,54,.45); text-decoration:none; white-space:nowrap; border-bottom:1px solid rgba(24,38,54,.2); transition:color .2s, border-color .2s; }
+.hero-gh-link:hover { color:rgba(24,38,54,.8); border-color:rgba(24,38,54,.5); }
 
 /* TWEET CAROUSEL */
 .tweet-carousel-wrap { width:min(400px,90vw); }
@@ -327,6 +329,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
       A fully autonomous hourly Google Cloud routine that uses three APIs to scrape top Reuters headlines,
       generate an AI image with DALL&middot;E and write hashtags via ChatGPT,
       and posts the whole thing to Twitter. These are a few of its actual Tweets.
+      <a href="https://github.com/mitch-herrmann/Dall-e-tweet-bot" target="_blank" rel="noopener noreferrer" class="hero-gh-link">View on GitHub &#8599;</a>
     </p>
   </div>
   <div class="hero-right">
@@ -440,6 +443,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
       A simple tool for verifying NYS OPRA enrollment status for a list of provider NPIs.
       Reads from a CSV, queries the eMedNY site via Selenium, and saves results
       to two output files &mdash; enrolled and not enrolled.
+      <a href="https://github.com/mitch-herrmann/New-York-OPRA-Enrollment-Checker" target="_blank" rel="noopener noreferrer" class="hero-gh-link">View on GitHub &#8599;</a>
     </p>
   </div>
   <div class="hero-right">
@@ -541,6 +545,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
       A Python routine that uses the OpenSky Network API to identify flights
       passing over a lat/lon bounding box, then scrapes SpotterLead for flight
       details &mdash; airline, aircraft model, registration, and origin.
+      <a href="https://github.com/mitch-herrmann/flight-tracker" target="_blank" rel="noopener noreferrer" class="hero-gh-link">View on GitHub &#8599;</a>
     </p>
   </div>
   <div class="hero-right">
@@ -705,18 +710,28 @@ function toggleWhy(id) {
   prevBtn.addEventListener('click', function(){ goTo(idx - 1); });
   nextBtn.addEventListener('click', function(){ goTo(idx + 1); });
   goTo(0);
-  var startX = 0, startIdx = 0, moved = false;
-  track.addEventListener('mousedown', function(e){ startX = e.clientX; startIdx = idx; moved = false; track.classList.add('dragging'); });
-  document.addEventListener('mousemove', function(e){ if(track.classList.contains('dragging')) moved = true; });
-  document.addEventListener('mouseup', function(e){
-    if (!track.classList.contains('dragging')) return;
-    track.classList.remove('dragging');
-    if (moved && Math.abs(e.clientX - startX) > 40) goTo(e.clientX < startX ? startIdx + 1 : startIdx - 1);
+  /* Mouse drag */
+  var dragStartX = 0, dragStartIdx = 0, dragging = false;
+  track.addEventListener('mousedown', function(e){
+    dragStartX = e.clientX; dragStartIdx = idx; dragging = true;
+    track.classList.add('dragging');
   });
-  track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; startIdx = idx; }, { passive:true });
+  document.addEventListener('mouseup', function(e){
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('dragging');
+    var diff = e.clientX - dragStartX;
+    if (Math.abs(diff) > 40) goTo(diff < 0 ? dragStartIdx + 1 : dragStartIdx - 1);
+  });
+  /* Touch swipe */
+  var touchStartX = 0, touchStartIdx = 0;
+  track.addEventListener('touchstart', function(e){
+    touchStartX = e.touches[0].clientX;
+    touchStartIdx = idx;
+  }, { passive:true });
   track.addEventListener('touchend', function(e){
-    var diff = e.changedTouches[0].clientX - startX;
-    if (Math.abs(diff) > 40) goTo(diff < 0 ? startIdx + 1 : startIdx - 1);
+    var diff = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diff) > 40) goTo(diff < 0 ? touchStartIdx + 1 : touchStartIdx - 1);
   });
 })();
 
