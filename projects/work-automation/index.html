@@ -71,14 +71,14 @@ nav.nav-light .nav-links a:hover { color:#182636; border-color:rgba(24,38,54,.4)
 /* HERO */
 .hero { position:relative; min-height:100vh; display:flex; align-items:center; background:var(--hero-bg); overflow:hidden; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:180px; background:linear-gradient(to bottom, transparent 0%, rgba(12,14,19,.06) 22%, rgba(12,14,19,.52) 60%, rgba(12,14,19,.94) 88%, #0c0e13 100%); pointer-events:none; z-index:2; }
-.hero-left { padding:96px 56px 96px 56px; position:relative; z-index:4; }
+.hero-left { padding:96px 56px 96px 56px; position:relative; z-index:4; max-width:900px; margin:0 auto; text-align:left; }
 .hero-right { padding:88px 32px 80px 12px; display:flex; align-items:center; justify-content:center; position:relative; z-index:4; }
 .hero-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--hero-muted); margin-bottom:28px; display:flex; align-items:center; gap:14px; }
 .hero-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:rgba(24,38,54,.3); }
 .hero-name { font-family:var(--display); font-size:clamp(52px,6.5vw,108px); font-weight:800; line-height:.88; letter-spacing:-.04em; margin-bottom:32px; }
 .hero-name .outline { display:block; color:transparent; -webkit-text-stroke:1.5px #182636; }
 .hero-name .filled  { display:block; color:#182636; }
-.hero-tagline { font-family:var(--body); font-size:13px; line-height:1.85; color:rgba(24,38,54,.56); max-width:400px; margin-bottom:36px; }
+.hero-tagline { font-family:var(--body); font-size:13px; line-height:1.85; color:rgba(24,38,54,.56); max-width:520px; margin-bottom:36px; }
 .hero-stats { display:flex; gap:28px; padding-top:28px; border-top:1px solid rgba(24,38,54,.1); }
 .hero-stat { font-family:var(--mono); font-size:9px; color:rgba(24,38,54,.42); letter-spacing:.06em; line-height:1.4; }
 .hero-stat strong { font-family:var(--display); font-size:15px; font-weight:800; color:#182636; display:block; letter-spacing:-.02em; margin-bottom:1px; }
@@ -200,16 +200,15 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
 
   /* Hero — fix clipping title and tagline */
   .hero { overflow-x:hidden; }
-  .hero-left { padding:88px 24px 32px; }
+  .hero-left { padding:88px 24px 48px; text-align:left; }
   .hero-name {
     font-size: clamp(36px, 11vw, 52px);
   }
   .hero-name .outline,
   .hero-name .filled {
-    font-size: clamp(36px, 11vw, 52px) !important;
     display: block;
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: normal;
+    word-break: break-word;
   }
   .hero-tagline {
     max-width: 100%;
