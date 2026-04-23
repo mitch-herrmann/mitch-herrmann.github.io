@@ -103,7 +103,7 @@ nav.nav-light .nav-links a.active { color:#182636; border-color:rgba(24,38,54,.3
 .tweet-handle-name { font-family:var(--display); font-size:13px; font-weight:800; color:#182636; letter-spacing:-.01em; }
 .tweet-handle-at { font-family:var(--mono); font-size:10px; color:var(--hero-muted); }
 .tweet-carousel-viewport { overflow:hidden; border-radius:16px; box-shadow:0 24px 64px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.08); }
-.tweet-carousel-track { display:flex; transition:transform .4s cubic-bezier(.25,.46,.45,.94); will-change:transform; cursor:grab; user-select:none; }
+.tweet-carousel-track { display:flex; transition:transform .4s cubic-bezier(.25,.46,.45,.94); will-change:transform; cursor:grab; user-select:none; touch-action:pan-y; }
 .tweet-carousel-track.dragging { transition:none; cursor:grabbing; }
 .tweet-slide { min-width:100%; }
 .tweet-slide img { display:block; width:100%; pointer-events:none; }
