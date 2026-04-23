@@ -42,11 +42,14 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 48px; height: 60px;
-  background: rgba(13,15,20,.94); backdrop-filter: blur(20px);
+  background: rgba(13,15,20,.98); backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--line);
   transition: background .3s, border-color .3s;
+  isolation: isolate;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
-nav.nav-light { background: rgba(180,196,210,.92); border-bottom-color: rgba(24,38,54,.14); }
+nav.nav-light { background: rgba(180,196,210,.97); border-bottom-color: rgba(24,38,54,.14); }
 nav.nav-light .nav-monogram { color: #182636; }
 nav.nav-light .nav-monogram:hover { color: #0d1820; }
 nav.nav-light .nav-monogram-arrow { color: rgba(24,38,54,.4); }
@@ -88,11 +91,11 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
   position: relative;
 }
 .nav-dropdown-main > a:hover { background: rgba(255,255,255,.03); }
-.nav-dropdown-main > a:nth-child(1):hover { color: #60c8ff; border-left-color: #60c8ff; }
-.nav-dropdown-main > a:nth-child(2):hover { color: #ff64a0; border-left-color: #ff64a0; }
-.nav-dropdown-main > a:nth-child(3):hover { color: #a064ff; border-left-color: #a064ff; }
-.nav-dropdown-main > a:nth-child(4):hover { color: #3cdcb4; border-left-color: #3cdcb4; }
-.nav-dropdown-main > a:nth-child(5):hover { color: #ffc83c; border-left-color: #ffc83c; }
+.nav-dropdown-main > a[href="/"]:hover          { color: #60c8ff; border-left-color: #60c8ff; }
+.nav-dropdown-main > a[href="/resume"]:hover    { color: #ff64a0; border-left-color: #ff64a0; }
+.nav-dropdown-main > a[href="/photography"]:hover { color: #a064ff; border-left-color: #a064ff; }
+.nav-dropdown-main > a[href="/projects"]:hover  { color: #ffa040; border-left-color: #ffa040; }
+.nav-dropdown-main > a[href="/contact"]:hover   { color: #60c8ff; border-left-color: #60c8ff; }
 .nav-dropdown-main > a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
 .nav-dropdown-main a.photo-row-active { color: #a064ff !important; border-left-color: #a064ff !important; }
 .nav-dropdown-num {
@@ -106,11 +109,12 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
 .nav-dropdown-main a.photo-row-active .nav-dropdown-chevron { transform: rotate(90deg); color: #a064ff; }
 .nav-album-list {
   max-height: 0; overflow: hidden;
-  transition: max-height .3s cubic-bezier(.16,1,.3,1);
+  transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s ease;
   border-left: 2px solid rgba(160,100,255,.25);
   margin: 0 28px 0 30px;
+  opacity: 0;
 }
-.nav-album-list.open { max-height: 400px; }
+.nav-album-list.open { max-height: 400px; opacity: 1; transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s ease .05s; }
 .nav-album-list a {
   display: flex; align-items: center; gap: 8px;
   padding: 7px 0 7px 14px;
@@ -180,7 +184,7 @@ nav.nav-light .nav-links a.nav-cta { color: #182636; border-color: rgba(24,38,54
 .hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: rgba(24,38,54,.3); }
 
 .hero-name { font-family: var(--display); font-size: clamp(52px,6.5vw,108px); font-weight: 800; line-height: .88; letter-spacing: -.04em; margin-bottom: 32px; }
-.hero-name .name-line-outline { display: block; color: transparent; -webkit-text-stroke: 1.5px #182636; }
+.hero-name .name-line-outline { display: block; color: transparent; -webkit-text-stroke: 1.5px #182636; font-size: 160px; }
 .hero-name .name-line-filled  { display: block; color: #182636; }
 
 .hero-tagline { font-family: var(--body); font-size: 13px; line-height: 1.85; color: rgba(24,38,54,.56); max-width: 400px; margin-bottom: 36px; }
@@ -670,7 +674,7 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
   .demo-panel { grid-template-columns: 1fr; }
   .demo-panel-left { border-right: none; border-bottom: 1px solid var(--line); padding: 40px 24px 28px; }
   .demo-panel-right { padding: 28px 24px 40px; }
-  .demo-panel-title { font-size: clamp(36px,10vw,64px) !important; }
+  .demo-panel-title { font-size: clamp(32px,9vw,56px) !important; overflow: hidden; word-break: break-word; }
 
   /* Why section */
   .why-inner { padding: 56px 24px; }
@@ -728,7 +732,7 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
   <div class="hero-left">
     <div class="hero-eyebrow">Automated options trading system</div>
     <div class="hero-name">
-      <span class="name-line-outline" style="font-family:'Chivo Mono',monospace;font-size:160px;font-weight:800;line-height:0.88">SPY 0DTE</span>
+      <span class="name-line-outline" style="font-family:'Chivo Mono',monospace;font-weight:800;line-height:0.88">SPY 0DTE</span>
       <span class="name-line-filled">TradeBot</span>
     </div>
     <p class="hero-tagline">From market open to close, it watches every tick, sizes up momentum, and places real risk-minimized options trades without any manual intervention.</p>
