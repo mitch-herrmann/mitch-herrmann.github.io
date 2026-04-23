@@ -724,14 +724,22 @@ function toggleWhy(id) {
     if (Math.abs(diff) > 40) goTo(diff < 0 ? dragStartIdx + 1 : dragStartIdx - 1);
   });
   /* Touch swipe */
-  var touchStartX = 0, touchStartIdx = 0;
+  var touchStartX = 0, touchStartY = 0, touchStartIdx = 0, touchLocked = false;
   track.addEventListener('touchstart', function(e){
     touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
     touchStartIdx = idx;
+    touchLocked = false;
   }, { passive:true });
+  track.addEventListener('touchmove', function(e){
+    var dx = Math.abs(e.touches[0].clientX - touchStartX);
+    var dy = Math.abs(e.touches[0].clientY - touchStartY);
+    if (!touchLocked) touchLocked = dx > dy ? 'h' : 'v';
+    if (touchLocked === 'h') e.preventDefault();
+  }, { passive:false });
   track.addEventListener('touchend', function(e){
     var diff = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(diff) > 40) goTo(diff < 0 ? touchStartIdx + 1 : touchStartIdx - 1);
+    if (touchLocked === 'h' && Math.abs(diff) > 40) goTo(diff < 0 ? touchStartIdx + 1 : touchStartIdx - 1);
   });
 })();
 
