@@ -624,28 +624,30 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
   .hero { grid-template-columns: 1fr; }
   .hero-left { padding: 88px 24px 32px; }
   .hero-name .name-line-outline {
-    font-size: clamp(48px, 14vw, 120px) !important;
+    font-size: clamp(40px, 11vw, 96px) !important;
     line-height: .92 !important;
   }
   .hero-name .name-line-filled {
-    font-size: clamp(48px, 14vw, 120px) !important;
+    font-size: clamp(40px, 11vw, 96px) !important;
   }
   .hero-tagline { font-size: 13px; margin-bottom: 28px; }
   .hero-cta { margin-bottom: 32px; }
   .hero-stats { gap: 18px; flex-wrap: wrap; }
 
   /* Mini dashboard — unlock fixed dimensions, untilt, fit screen */
-  .hero-right { padding: 0 20px 56px; }
-  #miniDashLink { display: block !important; }
+  .hero { overflow-x: hidden; }
+  .hero-right { padding: 0 16px 56px; }
+  #miniDashLink { display: block !important; width: 100%; }
   #miniDash {
     width: 100% !important;
-    min-width: unset !important;
+    min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
     min-height: unset !important;
     max-height: 420px !important;
     transform: none !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
   /* Scale down dashboard internals slightly */
   .db-price { font-size: 32px !important; }
@@ -674,7 +676,7 @@ footer { position: relative; z-index: 1; display: flex; align-items: center; jus
   .demo-panel { grid-template-columns: 1fr; }
   .demo-panel-left { border-right: none; border-bottom: 1px solid var(--line); padding: 40px 24px 28px; }
   .demo-panel-right { padding: 28px 24px 40px; }
-  .demo-panel-title { font-size: clamp(32px,9vw,56px) !important; overflow: hidden; word-break: break-word; }
+  .demo-panel-title { font-size: clamp(24px,7vw,44px) !important; overflow: hidden; white-space: nowrap; }
 
   /* Why section */
   .why-inner { padding: 56px 24px; }
