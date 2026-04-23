@@ -74,8 +74,9 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 48px; height: 60px;
-  background: rgba(13,15,20,.94); backdrop-filter: blur(20px);
+  background: rgba(13,15,20,.98); backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--line);
+  isolation: isolate; -webkit-transform: translateZ(0); transform: translateZ(0);
 }
 .nav-monogram {
   position: relative; cursor: pointer; user-select: none;
@@ -111,11 +112,11 @@ nav {
   position: relative;
 }
 .nav-dropdown a:hover { background: rgba(255,255,255,.03); }
-.nav-dropdown a:nth-child(1):hover { color: #60c8ff; border-left-color: #60c8ff; }
-.nav-dropdown a:nth-child(2):hover { color: #ff64a0; border-left-color: #ff64a0; }
-.nav-dropdown a:nth-child(3):hover { color: #a064ff; border-left-color: #a064ff; }
-.nav-dropdown a:nth-child(4):hover { color: #3cdcb4; border-left-color: #3cdcb4; }
-.nav-dropdown a:nth-child(5):hover { color: #ffc83c; border-left-color: #ffc83c; }
+.nav-dropdown a[href="/"]:hover            { color: #60c8ff; border-left-color: #60c8ff; }
+.nav-dropdown a[href="/resume"]:hover      { color: #ff64a0; border-left-color: #ff64a0; }
+.nav-dropdown a[href="/photography"]:hover { color: #a064ff; border-left-color: #a064ff; }
+.nav-dropdown a[href="/projects"]:hover    { color: #ffa040; border-left-color: #ffa040; }
+.nav-dropdown a[href="/contact"]:hover     { color: #60c8ff; border-left-color: #60c8ff; }
 .nav-dropdown a:nth-child(1) { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
 .nav-dropdown-num {
   font-family: var(--mono); font-size: 8px; color: var(--dim);
