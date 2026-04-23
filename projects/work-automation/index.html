@@ -69,7 +69,7 @@ nav.nav-light .nav-links a:hover { color:#182636; border-color:rgba(24,38,54,.4)
 .nav-page-label { display:none; font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-left:10px; vertical-align:middle; }
 
 /* HERO */
-.hero { position:relative; min-height:60vh; display:flex; align-items:center; background:var(--hero-bg); overflow:hidden; }
+.hero { position:relative; min-height:100vh; display:flex; align-items:center; background:var(--hero-bg); overflow:hidden; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:180px; background:linear-gradient(to bottom, transparent 0%, rgba(12,14,19,.06) 22%, rgba(12,14,19,.52) 60%, rgba(12,14,19,.94) 88%, #0c0e13 100%); pointer-events:none; z-index:2; }
 .hero-left { padding:96px 56px 96px 56px; position:relative; z-index:4; }
 .hero-right { padding:88px 32px 80px 12px; display:flex; align-items:center; justify-content:center; position:relative; z-index:4; }
@@ -172,13 +172,13 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
 /* VIZ */
 .pipeline-viz { width:100%; max-width:380px; }
 .step-row { display:flex; align-items:center; gap:0; }
-.step-box { background:var(--bg2); border:1px solid var(--line); border-radius:8px; padding:12px 16px; flex:1; }
+.step-box { background:#1a2030; border:1px solid rgba(96,200,255,.18); border-radius:8px; padding:12px 16px; flex:1; }
 .step-box-label { font-family:var(--mono); font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:4px; }
 .step-box-title { font-family:var(--display); font-size:13px; font-weight:800; color:var(--text); }
-.step-connector { width:2px; height:16px; background:var(--line); margin:0 auto; }
-.step-active .step-box { border-color:rgba(96,200,255,.3); background:rgba(96,200,255,.04); }
+.step-connector { width:2px; height:16px; background:rgba(96,200,255,.15); margin:0 auto; }
+.step-active .step-box { border-color:rgba(96,200,255,.5); background:rgba(96,200,255,.1); }
 .step-active .step-box-label { color:var(--ice); }
-.summary-preview { background:var(--bg2); border:1px solid var(--line); border-radius:10px; overflow:hidden; width:100%; max-width:380px; }
+.summary-preview { background:#1a2030; border:1px solid rgba(96,200,255,.18); border-radius:10px; overflow:hidden; width:100%; max-width:380px; }
 .sp-header { padding:12px 16px; border-bottom:1px solid var(--line); font-family:var(--display); font-size:11px; font-weight:800; color:var(--text); display:flex; align-items:center; justify-content:space-between; }
 .sp-tag { font-family:var(--mono); font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:var(--ice); padding:2px 7px; border-radius:99px; border:1px solid rgba(96,200,255,.25); background:rgba(96,200,255,.08); }
 .sp-table { width:100%; border-collapse:collapse; }
@@ -187,6 +187,11 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
 .sp-table tr:last-child td { border-bottom:none; }
 .sp-table .num { font-family:var(--display); font-weight:800; color:var(--text); font-size:13px; }
 .sp-table .pct { color:var(--ice); font-weight:700; }
+
+/* Report 2: flip viz to right on desktop */
+.arch-card--flip { direction:rtl; }
+.arch-card--flip > * { direction:ltr; }
+.arch-card--flip .arch-viz { border-right:none; border-left:1px solid var(--line); }
 
 @media(max-width:720px){
   nav { padding:0 20px; }
@@ -447,7 +452,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
   <div class="how-stage" id="howStage2">
     <div class="how-track" id="howTrack2">
 
-      <div class="arch-card">
+      <div class="arch-card arch-card--flip">
         <div class="arch-viz">
           <div class="pipeline-viz">
             <div style="display:flex;justify-content:center;margin-bottom:12px;">
@@ -488,7 +493,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
         </div>
       </div>
 
-      <div class="arch-card">
+      <div class="arch-card arch-card--flip">
         <div class="arch-viz">
           <div class="summary-preview" style="max-width:340px;">
             <div class="sp-header">3.16 All — Billed? column <span class="sp-tag">Auto-generated</span></div>
@@ -517,7 +522,7 @@ footer { position:relative; z-index:1; display:flex; align-items:center; justify
         </div>
       </div>
 
-      <div class="arch-card">
+      <div class="arch-card arch-card--flip">
         <div class="arch-viz">
           <div style="display:flex;gap:16px;width:100%;max-width:400px;">
             <div class="summary-preview" style="flex:1;">

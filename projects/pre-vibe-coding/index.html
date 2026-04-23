@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Vibe-Coding Projects — Mitchell Herrmann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Chivo+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --hero-bg:    #c8d4de;
+  --hero-muted: rgba(24,38,54,.5);
+  --bg:         #0c0e13;
+  --bg2:        #12151b;
+  --bg3:        #181c24;
+  --line:       #1c2230;
+  --ice:        #60c8ff;
+  --ice2:       #90dcff;
+  --text:       #e6ecf4;
+  --muted:      #7888a0;
+  --dim:        #36445a;
+  --green:      #38c99a;
+  --display:    'Syne', sans-serif;
+  --mono:       'Chivo Mono', monospace;
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--mono); min-height:100vh; overflow-x:hidden; }
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:60px; background:rgba(13,15,20,.98); backdrop-filter:blur(20px); border-bottom:1px solid var(--line); transition:background .3s, border-color .3s; isolation:isolate; -webkit-transform:translateZ(0); transform:translateZ(0); }
+nav.nav-light { background:rgba(180,196,210,.97); border-bottom-color:rgba(24,38,54,.14); }
+nav.nav-light .nav-monogram { color:#182636; }
+nav.nav-light .nav-links a { color:rgba(24,38,54,.45); border-color:rgba(24,38,54,.18); }
+nav.nav-light .nav-links a:hover { color:#182636; border-color:rgba(24,38,54,.4); background:rgba(24,38,54,.06); }
+.nav-monogram { position:relative; cursor:pointer; user-select:none; font-family:var(--display); font-size:18px; font-weight:800; letter-spacing:-.02em; color:var(--text); padding:6px 2px; transition:color .2s; }
+.nav-monogram:hover { color:var(--ice2); }
+.nav-monogram-arrow { display:inline-block; margin-left:5px; font-size:9px; color:var(--dim); transition:transform .25s ease, color .2s; vertical-align:middle; line-height:1; }
+.nav-monogram.open .nav-monogram-arrow { transform:rotate(180deg); color:var(--muted); }
+.nav-dropdown { position:absolute; top:calc(100% + 8px); left:0; background:rgba(13,15,20,.97); backdrop-filter:blur(24px); border:1px solid var(--line); border-radius:10px; padding:8px 0; min-width:260px; opacity:0; transform:translateY(-8px) scale(.97); pointer-events:none; transition:opacity .22s ease, transform .25s cubic-bezier(.16,1,.3,1); z-index:300; }
+.nav-monogram.open .nav-dropdown { opacity:1; transform:translateY(0) scale(1); pointer-events:all; }
+.nav-dropdown a { display:flex; align-items:center; justify-content:space-between; padding:15px 28px; font-family:var(--display); font-size:17px; font-weight:800; letter-spacing:-.02em; color:rgba(232,237,245,.22); text-decoration:none; border-left:2px solid transparent; transition:color .18s, border-left-color .18s, background .18s; }
+.nav-dropdown a:hover { background:rgba(255,255,255,.03); }
+.nav-dropdown a[href="/"]:hover          { color:#60c8ff; border-left-color:#60c8ff; }
+.nav-dropdown a[href="/resume"]:hover    { color:#ff64a0; border-left-color:#ff64a0; }
+.nav-dropdown a[href="/photography"]:hover { color:#a064ff; border-left-color:#a064ff; }
+.nav-dropdown a[href="/projects"]:hover  { color:#ffa040; border-left-color:#ffa040; }
+.nav-dropdown a[href="/contact"]:hover   { color:#60c8ff; border-left-color:#60c8ff; }
+.nav-dropdown a:nth-child(1) { border-bottom:1px solid var(--line); margin-bottom:4px; }
+.nav-dropdown-num { font-family:var(--mono); font-size:8px; color:var(--dim); letter-spacing:.14em; font-weight:400; }
+.nav-links { display:flex; gap:8px; font-family:var(--display); font-size:9.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.nav-links a { padding:6px 16px; border-radius:99px; border:1px solid var(--line); color:var(--dim); text-decoration:none; white-space:nowrap; transition:color .25s, border-color .25s, background .25s; }
+.nav-links:hover a { opacity:.4; }
+.nav-links a:hover { opacity:1!important; color:var(--muted); border-color:var(--dim); }
+.nav-links a.active { color:var(--text); border-color:rgba(96,200,255,.36); background:rgba(96,200,255,.08); }
+nav.nav-light .nav-links a.active { color:#182636; border-color:rgba(24,38,54,.32); background:rgba(24,38,54,.07); }
+.nav-page-label { display:none; font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-left:10px; vertical-align:middle; }
+
+/* INTRO — full viewport height */
+.intro-section { background:var(--hero-bg); padding:0 56px; position:relative; overflow:hidden; min-height:100vh; display:flex; align-items:center; }
+.intro-section::after { content:''; position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(to bottom, transparent, #0c0e13); pointer-events:none; }
+.intro-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+.intro-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--hero-muted); margin-bottom:28px; display:flex; align-items:center; gap:14px; }
+.intro-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:rgba(24,38,54,.3); }
+.intro-heading { font-family:var(--display); font-size:clamp(40px,5.5vw,88px); font-weight:800; line-height:.88; letter-spacing:-.04em; margin-bottom:32px; }
+.intro-heading .filled { display:block; color:#182636; }
+.intro-heading .outline { display:block; color:transparent; -webkit-text-stroke:1.5px #182636; }
+.intro-body { font-family:var(--mono); font-size:13px; line-height:1.9; color:rgba(24,38,54,.56); max-width:420px; }
+.intro-right { display:flex; flex-direction:column; gap:0; padding-top:12px; }
+.proj-link { display:flex; align-items:center; justify-content:space-between; padding:22px 0; border-bottom:1px solid rgba(24,38,54,.1); text-decoration:none; gap:16px; }
+.proj-link:first-child { border-top:1px solid rgba(24,38,54,.1); }
+.proj-link-left { display:flex; align-items:center; gap:18px; }
+.proj-link-num { font-family:var(--display); font-size:13px; font-weight:800; color:rgba(24,38,54,.25); letter-spacing:-.02em; min-width:24px; }
+.proj-link-title { font-family:var(--display); font-size:20px; font-weight:800; letter-spacing:-.02em; color:#182636; line-height:1.1; }
+.proj-link-sub { font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--hero-muted); margin-top:3px; }
+.proj-link-arrow { color:rgba(24,38,54,.3); flex-shrink:0; transition:transform .22s; }
+.proj-link { transition:opacity .2s, transform .22s; }
+.proj-link:hover { opacity:.65; transform:translateX(3px); }
+.proj-link:hover .proj-link-arrow { transform:translateX(4px); }
+
+/* SHARED HERO */
+.hero { position:relative; min-height:56vh; display:flex; align-items:center; background:var(--hero-bg); overflow:hidden; }
+.hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:180px; background:linear-gradient(to bottom, transparent 0%, rgba(12,14,19,.06) 22%, rgba(12,14,19,.52) 60%, rgba(12,14,19,.94) 88%, #0c0e13 100%); pointer-events:none; z-index:2; }
+.hero-left { padding:72px 56px 80px; position:relative; z-index:4; }
+.hero-right { padding:56px 48px 72px 12px; display:flex; align-items:center; justify-content:center; position:relative; z-index:4; flex:1; }
+.hero-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--hero-muted); margin-bottom:28px; display:flex; align-items:center; gap:14px; }
+.hero-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:rgba(24,38,54,.3); }
+.hero-name { font-family:var(--display); font-size:clamp(44px,6vw,92px); font-weight:800; line-height:.88; letter-spacing:-.04em; margin-bottom:32px; }
+.hero-name .outline { display:block; color:transparent; -webkit-text-stroke:1.5px #182636; }
+.hero-name .filled  { display:block; color:#182636; }
+.hero-tagline { font-family:var(--mono); font-size:13px; line-height:1.85; color:rgba(24,38,54,.56); max-width:400px; }
+
+/* TWEET CAROUSEL */
+.tweet-carousel-wrap { width:min(400px,90vw); }
+.tweet-carousel-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; border-radius:8px; transition:opacity .2s; }
+.tweet-carousel-header:hover { opacity:.75; }
+.tweet-avatar { width:40px; height:40px; border-radius:50%; overflow:hidden; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+.tweet-avatar img { width:100%; height:100%; object-fit:cover; }
+.tweet-handle-name { font-family:var(--display); font-size:13px; font-weight:800; color:#182636; letter-spacing:-.01em; }
+.tweet-handle-at { font-family:var(--mono); font-size:10px; color:var(--hero-muted); }
+.tweet-carousel-viewport { overflow:hidden; border-radius:16px; box-shadow:0 24px 64px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.08); }
+.tweet-carousel-track { display:flex; transition:transform .4s cubic-bezier(.25,.46,.45,.94); will-change:transform; cursor:grab; user-select:none; }
+.tweet-carousel-track.dragging { transition:none; cursor:grabbing; }
+.tweet-slide { min-width:100%; }
+.tweet-slide img { display:block; width:100%; pointer-events:none; }
+.tweet-carousel-footer { display:flex; align-items:center; justify-content:space-between; margin-top:14px; }
+.tweet-dots { display:flex; gap:6px; }
+.tweet-dot { width:6px; height:6px; border-radius:50%; background:rgba(24,38,54,.2); border:none; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
+.tweet-dot.active { background:#182636; transform:scale(1.25); }
+.tweet-arrows { display:flex; gap:6px; }
+.tweet-arrow { width:32px; height:32px; border-radius:50%; border:1px solid rgba(24,38,54,.18); background:rgba(24,38,54,.04); color:#182636; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s, border-color .2s; }
+.tweet-arrow:hover:not(:disabled) { background:rgba(24,38,54,.1); border-color:rgba(24,38,54,.3); }
+.tweet-arrow:disabled { opacity:.25; cursor:not-allowed; }
+
+/* HOW IT WORKS */
+.how-section { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.how-header-row { padding:72px 56px 48px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; justify-content:space-between; gap:40px; }
+.how-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+.how-title { font-family:var(--display); font-size:clamp(28px,4vw,52px); font-weight:800; letter-spacing:-.03em; color:var(--text); line-height:1; }
+.how-steps { display:grid; grid-template-columns:repeat(4,1fr); }
+.how-steps.three { grid-template-columns:repeat(3,1fr); }
+.how-step { padding:40px 36px; border-right:1px solid var(--line); }
+.how-step:last-child { border-right:none; }
+.step-num { font-family:var(--mono); font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-bottom:20px; }
+.step-title { font-family:var(--display); font-size:17px; font-weight:800; letter-spacing:-.02em; color:var(--text); margin-bottom:10px; }
+.step-body { font-family:var(--mono); font-size:11px; line-height:1.8; color:var(--muted); }
+.step-tag { display:inline-block; font-family:var(--mono); font-size:7.5px; letter-spacing:.1em; text-transform:uppercase; padding:2px 8px; border-radius:99px; border:1px solid var(--line); color:var(--dim); margin-top:16px; }
+
+/* WHY / BACKGROUND */
+.why-section { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.why-inner { max-width:780px; margin:0 auto; padding:80px 56px; }
+.why-eyebrow { font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+.why-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:var(--dim); opacity:.8; }
+.why-title { font-family:var(--display); font-size:clamp(26px,3.5vw,44px); font-weight:800; letter-spacing:-.03em; color:var(--text); line-height:1.05; margin-bottom:8px; }
+.why-subtitle { font-family:var(--mono); font-size:13px; color:var(--muted); margin-bottom:32px; font-style:italic; letter-spacing:.02em; }
+.why-body-wrap { position:relative; }
+.why-preview p, .why-expanded p { font-family:var(--mono); font-size:14px; line-height:1.9; color:var(--muted); margin-bottom:22px; text-indent:2em; }
+.why-preview p:last-child, .why-expanded p:last-child { margin-bottom:0; }
+.why-expanded { max-height:0; overflow:hidden; transition:max-height .8s cubic-bezier(.25,.46,.45,.94); }
+.why-expanded.open { max-height:6000px; }
+.why-expanded p:first-child { margin-top:22px; }
+.why-fade { position:absolute; bottom:44px; left:0; right:0; height:72px; background:linear-gradient(to bottom, transparent, var(--bg)); pointer-events:none; transition:opacity .4s ease; }
+.why-fade.hidden { opacity:0; }
+.why-toggle { display:flex; align-items:center; gap:7px; margin-top:24px; background:none; border:none; cursor:pointer; font-family:var(--mono); font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--ice); padding:0; transition:color .2s, gap .25s; }
+.why-toggle:hover { color:var(--ice2); gap:10px; }
+.why-toggle svg { transition:transform .35s cubic-bezier(.25,.46,.45,.94); flex-shrink:0; }
+.why-toggle.open svg { transform:rotate(180deg); }
+
+/* PROJECT DIVIDER */
+.project-divider { border-top:4px solid var(--line); }
+.project-label { padding:36px 56px 0; }
+.project-label-inner { display:inline-flex; align-items:center; gap:12px; font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--dim); }
+.project-label-num { font-family:var(--display); font-size:22px; font-weight:800; color:var(--ice); letter-spacing:-.02em; }
+
+/* CONSOLE / OUTPUT CARDS */
+.console-card { width:min(400px,90vw); background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:28px 32px; box-shadow:0 24px 64px rgba(0,0,0,.4); font-family:var(--mono); }
+.console-label { font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-bottom:16px; }
+.console-body { font-size:11.5px; line-height:2.1; color:#c9d7e8; }
+.output-card { width:min(380px,90vw); background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:28px 32px; box-shadow:0 24px 64px rgba(0,0,0,.4); }
+
+/* ANIMATIONS */
+.reveal { opacity:0; transform:translateY(18px); transition:opacity .55s ease, transform .55s ease; }
+.reveal.in { opacity:1; transform:none; }
+.reveal-d1 { transition-delay:.08s; }
+.reveal-d2 { transition-delay:.16s; }
+.reveal-d3 { transition-delay:.24s; }
+.reveal-d4 { transition-delay:.32s; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:none; }
+}
+.intro-eyebrow  { animation:fadeUp .6s ease both; animation-delay:.1s; }
+.intro-heading  { animation:fadeUp .7s ease both; animation-delay:.2s; }
+.intro-body     { animation:fadeUp .7s ease both; animation-delay:.32s; }
+.proj-link      { animation:fadeUp .6s ease both; }
+.proj-link:nth-child(1) { animation-delay:.38s; }
+.proj-link:nth-child(2) { animation-delay:.48s; }
+.proj-link:nth-child(3) { animation-delay:.58s; }
+.hero-eyebrow { animation:fadeUp .6s ease both; animation-delay:.05s; }
+.hero-name    { animation:fadeUp .7s ease both; animation-delay:.15s; }
+.hero-tagline { animation:fadeUp .65s ease both; animation-delay:.28s; }
+.hero-eyebrow, .hero-name, .hero-tagline { animation-play-state:paused; }
+.hero.visible .hero-eyebrow,
+.hero.visible .hero-name,
+.hero.visible .hero-tagline { animation-play-state:running; }
+
+/* FOOTER */
+footer { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; padding:32px 56px; font-family:var(--mono); font-size:9px; color:var(--dim); border-top:1px solid var(--line); }
+.footer-links { display:flex; gap:32px; }
+.footer-links a { color:var(--dim); text-decoration:none; letter-spacing:.06em; transition:color .2s; }
+.footer-links a:hover { color:var(--text); }
+
+/* MOBILE */
+@media(max-width:900px){
+  nav { padding:0 20px; }
+  .nav-links { gap:5px; }
+  .nav-links a { padding:5px 11px; font-size:8.5px; }
+  .intro-section { padding:0 24px; min-height:100vh; }
+  .intro-inner { grid-template-columns:1fr; gap:36px; }
+  .intro-heading { font-size:clamp(36px,11vw,56px); }
+  .hero { flex-direction:column; min-height:auto; }
+  .hero-left { padding:64px 24px 28px; }
+  .hero-right { padding:0 24px 60px; justify-content:flex-start; width:100%; }
+  .tweet-carousel-wrap, .console-card, .output-card { width:100%; }
+  .how-header-row { padding:48px 24px 32px; flex-direction:column; gap:16px; }
+  .how-steps { grid-template-columns:1fr; }
+  .how-steps.three { grid-template-columns:1fr; }
+  .how-step { border-right:none; border-bottom:1px solid var(--line); padding:32px 24px; }
+  .how-step:last-child { border-bottom:none; }
+  .why-inner { padding:56px 24px; }
+  .why-preview p, .why-expanded p { font-size:13px; text-indent:0; line-height:1.8; }
+  .project-label { padding:28px 24px 0; }
+  footer { flex-direction:column; gap:14px; padding:24px; align-items:flex-start; }
+}
+@media(max-width:480px){
+  .nav-links { display:none; }
+  .nav-page-label { display:inline; }
+  .intro-section { padding:0 20px; min-height:100vh; }
+  .hero-left { padding:56px 20px 24px; }
+  .hero-right { padding:0 20px 52px; }
+  .how-header-row { padding:40px 20px 28px; }
+  .how-step { padding:28px 20px; }
+  .why-inner { padding:48px 20px; }
+  .project-label { padding:24px 20px 0; }
+  footer { padding:20px; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-monogram" id="navMonogram" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
+    <svg width="46" height="30" viewBox="0 0 36 24" fill="none" aria-label="MH" style="display:inline-block;vertical-align:middle;margin-right:2px">
+      <polyline points="2,21 2,3 10,3 18,14 26,3 34,3 34,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="2" y1="21" x2="7" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="29" y1="21" x2="34" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <polyline points="13,21 13,14 23,14 23,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span class="nav-monogram-arrow">&#9660;</span>
+    <span class="nav-page-label">Projects</span>
+    <div class="nav-dropdown" id="navDropdown">
+      <a href="/">Home <span class="nav-dropdown-num">00</span></a>
+      <a href="/resume">R&eacute;sum&eacute; <span class="nav-dropdown-num">01</span></a>
+      <a href="/photography">Photography <span class="nav-dropdown-num">02</span></a>
+      <a href="/projects">Projects <span class="nav-dropdown-num">03</span></a>
+      <a href="/contact">Contact <span class="nav-dropdown-num">04</span></a>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="/projects">&#8592; Projects</a>
+    <a href="#dalle" class="active">Tweet Bot</a>
+    <a href="#opra">Web Crawler</a>
+    <a href="#flights">Flight Tracker</a>
+  </div>
+</nav>
+
+<!-- INTRO -->
+<section class="intro-section" id="top">
+  <div class="intro-inner">
+    <div class="intro-left">
+      <div class="intro-eyebrow">Mitchell Herrmann &middot; Projects</div>
+      <h1 class="intro-heading">
+        <span class="filled">Pre</span>
+        <span class="filled">Vibe-</span>
+        <span class="outline">Coding</span>
+      </h1>
+      <p class="intro-body">
+        A few Python scripts that I wrote by hand before AI-assisted coding was a viable option. These fun projects all started with a concrete problem (or just a curiosity) and ended with something that actually ran.
+      </p>
+    </div>
+    <div class="intro-right">
+      <a href="#dalle" class="proj-link">
+        <div class="proj-link-left">
+          <div class="proj-link-num">01</div>
+          <div>
+            <div class="proj-link-title">DALL&middot;E Tweet Bot</div>
+            <div class="proj-link-sub">Python &middot; Twitter API &middot; OpenAI &middot; GCP</div>
+          </div>
+        </div>
+        <svg class="proj-link-arrow" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#opra" class="proj-link">
+        <div class="proj-link-left">
+          <div class="proj-link-num">02</div>
+          <div>
+            <div class="proj-link-title">OPRA Enrollment Checker</div>
+            <div class="proj-link-sub">Python &middot; Selenium &middot; pandas</div>
+          </div>
+        </div>
+        <svg class="proj-link-arrow" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#flights" class="proj-link">
+        <div class="proj-link-left">
+          <div class="proj-link-num">03</div>
+          <div>
+            <div class="proj-link-title">LGA Flight Tracker</div>
+            <div class="proj-link-sub">Python &middot; OpenSky API &middot; BeautifulSoup</div>
+          </div>
+        </div>
+        <svg class="proj-link-arrow" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 01 — DALL·E Bot -->
+<div class="project-divider"></div>
+<div class="project-label">
+  <div class="project-label-inner">
+    <span class="project-label-num">01</span>
+    Personal Project &middot; Python &middot; Twitter API &middot; OpenAI &middot; GCP
+  </div>
+</div>
+
+<section class="hero" id="dalle">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Personal Project &middot; 2023</div>
+    <h1 class="hero-name">
+      <span class="filled">DALL&middot;E</span>
+      <span class="outline">Tweet</span>
+      <span class="outline">Bot</span>
+    </h1>
+    <p class="hero-tagline">
+      A fully autonomous hourly Google Cloud routine that uses three APIs to scrape top Reuters headlines,
+      generate an AI image with DALL&middot;E and write hashtags via ChatGPT,
+      and posts the whole thing to Twitter. These are a few of its actual Tweets.
+    </p>
+  </div>
+  <div class="hero-right">
+    <div class="tweet-carousel-wrap">
+      <a href="https://x.com/the_Dall_E_News" target="_blank" rel="noopener noreferrer" style="text-decoration:none;" class="tweet-carousel-header">
+        <div class="tweet-avatar">
+          <img src="images/avatar.jpg" alt="@the_Dall_E_News avatar">
+        </div>
+        <div>
+          <div class="tweet-handle-name">DALL&middot;E Daily News</div>
+          <div class="tweet-handle-at">@the_Dall_E_News</div>
+        </div>
+      </a>
+      <div class="tweet-carousel-viewport">
+        <div class="tweet-carousel-track" id="carouselTrack">
+          <div class="tweet-slide"><img src="images/tweet-jokic.jpeg" alt="Tweet: NBA Roundup: Nuggets best Blazers on Nikola Jokic's triple-double"></div>
+          <div class="tweet-slide"><img src="images/tweet-musk.jpeg" alt="Tweet: Grilling Musk — use CEO's tweets, thin skin against him"></div>
+          <div class="tweet-slide"><img src="images/tweet-awark.jpeg" alt="Tweet: Academy Awarks"></div>
+          <div class="tweet-slide"><img src="images/tweet-netteflix.jpeg" alt="Tweet: Netteflix outage"></div>
+        </div>
+      </div>
+      <div class="tweet-carousel-footer">
+        <div class="tweet-dots" id="carouselDots"></div>
+        <div class="tweet-arrows">
+          <button class="tweet-arrow" id="carouselPrev" aria-label="Previous tweet">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="tweet-arrow" id="carouselNext" aria-label="Next tweet">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="how-header-row">
+    <div>
+      <div class="how-eyebrow">How it works</div>
+      <div class="how-title">Four steps, zero humans</div>
+    </div>
+    <div style="font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--muted);max-width:340px;">
+
+    </div>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal reveal-d1">
+      <div class="step-num">01 &mdash; Fetch</div>
+      <div class="step-title">Get today's headlines</div>
+      <div class="step-body">Queries NewsAPI for the day's top Reuters articles. Iterates through results, sanitising flagged terms before passing the title forward.</div>
+      <div class="step-tag">NewsAPI</div>
+    </div>
+    <div class="how-step reveal reveal-d2">
+      <div class="step-num">02 &mdash; Generate</div>
+      <div class="step-title">Create the image</div>
+      <div class="step-body">Sends the article headline as a prompt to DALL&middot;E. Saves the 1024&times;1024 result to <code style="color:var(--ice);font-size:10px;">/tmp</code> and uploads it via Tweepy's media API.</div>
+      <div class="step-tag">DALL&middot;E API</div>
+    </div>
+    <div class="how-step reveal reveal-d3">
+      <div class="step-num">03 &mdash; Write</div>
+      <div class="step-title">Pick the hashtags</div>
+      <div class="step-body">Asks GPT-3 for the best three hashtags for the headline, appended alongside hard-coded <span style="color:var(--ice);">#dalle</span> and <span style="color:var(--ice);">#openai</span>.</div>
+      <div class="step-tag">GPT-3</div>
+    </div>
+    <div class="how-step reveal reveal-d4">
+      <div class="step-num">04 &mdash; Post</div>
+      <div class="step-title">Tweet it</div>
+      <div class="step-body">Tweepy's OAuth1 handler fires the status update &mdash; headline, hashtags, article URL, and the DALL&middot;E image &mdash; to <a href="https://x.com/the_Dall_E_News" style="color:var(--ice);text-decoration:none;">@the_Dall_E_News</a>.</div>
+      <div class="step-tag">Twitter API v1</div>
+    </div>
+  </div>
+</section>
+
+<section class="why-section">
+  <div class="why-inner">
+    <div class="why-eyebrow">Background</div>
+    <div class="why-title">A learning project that actually shipped</div>
+    <div class="why-subtitle"></div>
+    <div class="why-body-wrap">
+      <div class="why-preview">
+        <p>When DALL&middot;E first dropped, the images it created were often hilariously bad, and I thought it'd be interesting to imagine a world in which AI interprets and portrays the news in its own whimsical way. The goal was simple: learn how to chain a few APIs together to create an AI newsroom.</p>
+      </div>
+      <div class="why-expanded" id="why1expanded">
+        <p>The account ran under <a href="https://x.com/the_Dall_E_News" style="color:var(--ice);">@the_Dall_E_News</a> for a couple of months. Every hour on the hour, a Google Cloud chron job kicked off, posting 24 tweets a day without any manual input... until the free OpenAI credits ran out.</p>
+      </div>
+      <div class="why-fade" id="why1fade"></div>
+      <button class="why-toggle" id="why1toggle" onclick="toggleWhy('1')">Read more <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 02 — OPRA -->
+<div class="project-divider"></div>
+<div class="project-label">
+  <div class="project-label-inner">
+    <span class="project-label-num">02</span>
+    Work Script &middot; Python &middot; Selenium
+  </div>
+</div>
+
+<section class="hero" id="opra">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Work Project &middot; Python</div>
+    <h1 class="hero-name">
+      <span class="filled">OPRA</span>
+      <span class="outline">Enrollment</span>
+      <span class="outline">Checker</span>
+    </h1>
+    <p class="hero-tagline">
+      A simple tool for verifying NYS OPRA enrollment status for a list of provider NPIs.
+      Reads from a CSV, queries the eMedNY site via Selenium, and saves results
+      to two output files &mdash; enrolled and not enrolled.
+    </p>
+  </div>
+  <div class="hero-right">
+    <div class="output-card">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;">Output files</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:rgba(56,201,154,.06);border:1px solid rgba(56,201,154,.2);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:3px;">Enrolled</div>
+            <div style="font-family:var(--display);font-weight:800;font-size:15px;color:var(--text);">passed_NPIs.csv</div>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v10M4 8l5 5 5-5" stroke="#38c99a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 16h14" stroke="#38c99a" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div style="background:rgba(255,100,100,.05);border:1px solid rgba(255,100,100,.18);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#ff8080;margin-bottom:3px;">Not enrolled</div>
+            <div style="font-family:var(--display);font-weight:800;font-size:15px;color:var(--text);">failed_NPIs.txt</div>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v10M4 8l5 5 5-5" stroke="#ff8080" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 16h14" stroke="#ff8080" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:14px 18px;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:3px;">Input</div>
+          <div style="font-family:var(--display);font-weight:800;font-size:15px;color:var(--text);">NPIs.csv</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="how-header-row">
+    <div>
+      <div class="how-eyebrow">How it works</div>
+      <div class="how-title">Read, query, save</div>
+    </div>
+    <div style="font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--muted);max-width:340px;">
+      Loops through a list of NPIs, queries the eMedNY OPRA site for each one, and sorts results into two output files.
+    </div>
+  </div>
+  <div class="how-steps three">
+    <div class="how-step reveal reveal-d1">
+      <div class="step-num">01 &mdash; Input</div>
+      <div class="step-title">Read the NPI list</div>
+      <div class="step-body">Reads provider NPIs from a local <code style="color:var(--ice);font-size:10px;">NPIs.csv</code> using pandas. The column name is configurable to match your file.</div>
+      <div class="step-tag">pandas</div>
+    </div>
+    <div class="how-step reveal reveal-d2">
+      <div class="step-num">02 &mdash; Query</div>
+      <div class="step-title">Check OPRA enrollment</div>
+      <div class="step-body">A Selenium Chrome driver opens the <a href="https://www.emedny.org/info/opra.aspx" style="color:var(--ice);text-decoration:none;">eMedNY OPRA page</a>, submits each NPI, and waits up to 6 seconds for results. Timeouts are flagged as not enrolled.</div>
+      <div class="step-tag">Selenium</div>
+    </div>
+    <div class="how-step reveal reveal-d3">
+      <div class="step-num">03 &mdash; Save</div>
+      <div class="step-title">Export the results</div>
+      <div class="step-body">Enrolled NPIs &mdash; with license number, profession code, and name &mdash; go to <code style="color:var(--ice);font-size:10px;">passed_NPIs.csv</code>. The rest go to <code style="color:var(--ice);font-size:10px;">failed_NPIs.txt</code>.</div>
+      <div class="step-tag">pandas &middot; CSV</div>
+    </div>
+  </div>
+</section>
+
+<section class="why-section">
+  <div class="why-inner">
+    <div class="why-eyebrow">Context</div>
+    <div class="why-title">A practical work tool</div>
+    <div class="why-subtitle"></div>
+    <div class="why-body-wrap">
+      <div class="why-preview">
+        <p>Verifying OPRA enrollment required staff to open the eMedNY portal and enter each NPI by hand. This script automates the entire loop in order to check hundreds of providers at once. Selenium drives Chrome directly against the site, no API required.</p>
+      </div>
+      <div class="why-expanded" id="why2expanded">
+        <p>For each NPI, the driver submits the form and waits up to 6 seconds for the results table. If it times out, the NPI is written to a separate file so nothing gets lost.</p>
+        <p>The final output captures NPI, license number, profession code, and provider name for every enrolled match, and gives a list of providers who are not enrolled for staff to follow up on.</p>
+      </div>
+      <div class="why-fade" id="why2fade"></div>
+      <button class="why-toggle" id="why2toggle" onclick="toggleWhy('2')">Read more <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 03 — Flight Tracker -->
+<div class="project-divider"></div>
+<div class="project-label">
+  <div class="project-label-inner">
+    <span class="project-label-num">03</span>
+    Personal Project &middot; Python &middot; OpenSky API
+  </div>
+</div>
+
+<section class="hero" id="flights">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Personal Project &middot; 2024</div>
+    <h1 class="hero-name">
+      <span class="filled">LGA</span>
+      <span class="outline">Flight</span>
+      <span class="outline">Tracker</span>
+    </h1>
+    <p class="hero-tagline">
+      A Python routine that uses the OpenSky Network API to identify flights
+      passing over a lat/lon bounding box, then scrapes SpotterLead for flight
+      details &mdash; airline, aircraft model, registration, and origin.
+    </p>
+  </div>
+  <div class="hero-right">
+    <div class="console-card">
+      <div class="console-label">Console output</div>
+      <div class="console-body">
+        <span style="color:var(--dim);">$</span> python flight_tracker.py<br>
+        <span style="color:var(--ice);">Callsign:</span> AAL1842<br>
+        <span style="color:var(--green);">Aircraft Model:</span> Airbus A321neo<br>
+        <span style="color:var(--green);">Registration:</span> N430AN<br>
+        <span style="color:var(--green);">Airline:</span> American Airlines<br>
+        <span style="color:var(--green);">Departing Airport:</span> MIA - Miami Intl<br>
+        <span style="color:var(--dim);font-size:10px;">&#8194;&#8194;&#8194;</span><br>
+        <span style="color:var(--ice);">Callsign:</span> DAL408<br>
+        <span style="color:var(--green);">Aircraft Model:</span> Boeing 737-900ER<br>
+        <span style="color:var(--green);">Registration:</span> N827DN<br>
+        <span style="color:var(--green);">Airline:</span> Delta Air Lines<br>
+        <span style="color:var(--green);">Departing Airport:</span> ATL - Hartsfield-Jackson<br>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="how-header-row">
+    <div>
+      <div class="how-eyebrow">How it works</div>
+      <div class="how-title">Spot, look up, repeat</div>
+    </div>
+    <div style="font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--muted);max-width:340px;">
+
+    </div>
+  </div>
+  <div class="how-steps three">
+    <div class="how-step reveal reveal-d1">
+      <div class="step-num">01 &mdash; Poll</div>
+      <div class="step-title">Query the airspace</div>
+      <div class="step-body">Calls the OpenSky Network API with a lat/lon bounding box over the LGA approach path. Returns the callsign of any aircraft currently in the zone.</div>
+      <div class="step-tag">OpenSky API</div>
+    </div>
+    <div class="how-step reveal reveal-d2">
+      <div class="step-num">02 &mdash; Scrape</div>
+      <div class="step-title">Look up the flight</div>
+      <div class="step-body">Uses the callsign to scrape <a href="https://en.spotterlead.net" style="color:var(--ice);text-decoration:none;">SpotterLead</a> with a rotating user-agent. Parses embedded <code style="color:var(--ice);font-size:10px;">ld+json</code> data for model, registration, airline, and origin airport.</div>
+      <div class="step-tag">BeautifulSoup</div>
+    </div>
+    <div class="how-step reveal reveal-d3">
+      <div class="step-num">03 &mdash; Loop</div>
+      <div class="step-title">Keep watching</div>
+      <div class="step-body">Runs continuously, polling every 10 seconds. Deduplicates against the last-seen callsign so the same flight doesn't print twice. Handles empty zones and errors gracefully.</div>
+      <div class="step-tag">while loop</div>
+    </div>
+  </div>
+</section>
+
+<section class="why-section">
+  <div class="why-inner">
+    <div class="why-eyebrow">Background</div>
+    <div class="why-title">Built from a window seat</div>
+    <div class="why-subtitle"></div>
+    <div class="why-body-wrap">
+      <div class="why-preview">
+        <p>My Brooklyn apartment had a clear line of sight to the LGA approach path. After observing the constant stream of planes passing by every day, I thought it'd be cool to know more about the flights. The OpenSky Network offers a free API with real-time state vectors, including aircraft callsigns, which allowed me to look up more info about the flight.</p>
+      </div>
+      <div class="why-expanded" id="why3expanded">
+        <p>The bounding box coordinates were pulled from Google Maps, drawn to cover the stretch of Prospect Park that planes fly over. OpenSky returns state vectors for any aircraft in the box, and the script grabs the plane's callsign and passes it forward to SpotterLead.</p>
+        <p>SpotterLead doesn't have a public API, so the flight detail lookup is a scrape. The rotating user-agent list was added after early requests started getting blocked. The structured <code style="color:var(--ice);font-size:13px;">ld+json</code> data turned out to be cleaner to parse than the HTML itself.</p>
+      </div>
+      <div class="why-fade" id="why3fade"></div>
+      <button class="why-toggle" id="why3toggle" onclick="toggleWhy('3')">Read more <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="/projects">&#8592; Projects</a>
+    <a href="https://x.com/the_Dall_E_News" target="_blank">@the_Dall_E_News &#8599;</a>
+  </div>
+  <div>mitchell-herrmann.com</div>
+</footer>
+
+<script>
+/* NAV: scroll light/dark */
+var nav = document.getElementById('mainNav');
+var introEl = document.getElementById('top');
+function updateNav() {
+  var h = introEl ? introEl.offsetHeight - 80 : 200;
+  nav.classList.toggle('nav-light', window.scrollY < h);
+}
+updateNav();
+window.addEventListener('scroll', updateNav, { passive:true });
+
+/* NAV: active pill tracks scroll */
+var sections = [
+  { id:'dalle',   link: document.querySelector('.nav-links a[href="#dalle"]') },
+  { id:'opra',    link: document.querySelector('.nav-links a[href="#opra"]') },
+  { id:'flights', link: document.querySelector('.nav-links a[href="#flights"]') }
+];
+function updateActiveLink() {
+  var scrollMid = window.scrollY + window.innerHeight / 2;
+  var active = null;
+  sections.forEach(function(s) {
+    var el = document.getElementById(s.id);
+    if (el && el.offsetTop <= scrollMid) active = s;
+  });
+  sections.forEach(function(s) {
+    if (s.link) s.link.classList.toggle('active', s === active);
+  });
+}
+window.addEventListener('scroll', updateActiveLink, { passive:true });
+updateActiveLink();
+
+/* NAV: dropdown */
+(function() {
+  var trigger  = document.getElementById('navMonogram');
+  var dropdown = document.getElementById('navDropdown');
+  if (!trigger || !dropdown) return;
+  function close() { trigger.classList.remove('open'); trigger.setAttribute('aria-expanded','false'); }
+  function toggle() { trigger.classList.contains('open') ? close() : (trigger.classList.add('open'), trigger.setAttribute('aria-expanded','true')); }
+  trigger.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
+  trigger.addEventListener('keydown', function(e) { if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape')close(); });
+  document.addEventListener('click', function(e) { if(!trigger.contains(e.target)) close(); });
+  dropdown.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', close); });
+})();
+
+/* Read-more toggles */
+function toggleWhy(id) {
+  var exp    = document.getElementById('why' + id + 'expanded');
+  var fade   = document.getElementById('why' + id + 'fade');
+  var toggle = document.getElementById('why' + id + 'toggle');
+  var open   = exp.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  if (fade) fade.classList.toggle('hidden', open);
+  toggle.childNodes[0].textContent = open ? 'Read less ' : 'Read more ';
+}
+
+/* Tweet carousel */
+(function() {
+  var track   = document.getElementById('carouselTrack');
+  var dotsEl  = document.getElementById('carouselDots');
+  var prevBtn = document.getElementById('carouselPrev');
+  var nextBtn = document.getElementById('carouselNext');
+  if (!track) return;
+  var slides = track.querySelectorAll('.tweet-slide');
+  var total  = slides.length;
+  var idx    = 0;
+  for (var i = 0; i < total; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'tweet-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Tweet ' + (i + 1));
+    (function(n){ dot.addEventListener('click', function(){ goTo(n); }); })(i);
+    dotsEl.appendChild(dot);
+  }
+  function goTo(n) {
+    idx = Math.max(0, Math.min(total - 1, n));
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    dotsEl.querySelectorAll('.tweet-dot').forEach(function(d, i){ d.classList.toggle('active', i === idx); });
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === total - 1;
+  }
+  prevBtn.addEventListener('click', function(){ goTo(idx - 1); });
+  nextBtn.addEventListener('click', function(){ goTo(idx + 1); });
+  goTo(0);
+  var startX = 0, startIdx = 0, moved = false;
+  track.addEventListener('mousedown', function(e){ startX = e.clientX; startIdx = idx; moved = false; track.classList.add('dragging'); });
+  document.addEventListener('mousemove', function(e){ if(track.classList.contains('dragging')) moved = true; });
+  document.addEventListener('mouseup', function(e){
+    if (!track.classList.contains('dragging')) return;
+    track.classList.remove('dragging');
+    if (moved && Math.abs(e.clientX - startX) > 40) goTo(e.clientX < startX ? startIdx + 1 : startIdx - 1);
+  });
+  track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; startIdx = idx; }, { passive:true });
+  track.addEventListener('touchend', function(e){
+    var diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) > 40) goTo(diff < 0 ? startIdx + 1 : startIdx - 1);
+  });
+})();
+
+/* Hero animations */
+(function() {
+  var heroSections = document.querySelectorAll('.hero');
+  if (!('IntersectionObserver' in window)) { heroSections.forEach(function(h){ h.classList.add('visible'); }); return; }
+  var heroObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) { e.target.classList.add('visible'); heroObs.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  heroSections.forEach(function(h){ heroObs.observe(h); });
+})();
+
+/* Staggered reveal */
+if ('IntersectionObserver' in window) {
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+}
+</script>
+</body>
+</html>
