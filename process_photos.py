@@ -15,7 +15,7 @@ try:
 except ImportError:
     print("\n  Run: pip install Pillow\n"); sys.exit(1)
 
-INBOX_DIR       = Path("photo folder path") #replace with path to folder with photos to be processed
+INBOX_DIR       = Path("photo folder path") #replace this with path to folder with photos to be processed
 THUMBS_DIR      = Path("photos/thumbs")
 FULL_DIR        = Path("photos/full")
 CONTENT_JSON    = Path("content.json")
