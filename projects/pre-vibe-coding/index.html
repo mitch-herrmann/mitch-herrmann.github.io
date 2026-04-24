@@ -103,10 +103,10 @@ nav.nav-light .nav-links a.active { color:#182636; border-color:rgba(24,38,54,.3
 .tweet-handle-name { font-family:var(--display); font-size:13px; font-weight:800; color:#182636; letter-spacing:-.01em; }
 .tweet-handle-at { font-family:var(--mono); font-size:10px; color:var(--hero-muted); }
 .tweet-carousel-viewport { overflow:hidden; border-radius:16px; box-shadow:0 24px 64px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.08); }
-.tweet-carousel-track { display:flex; transition:transform .4s cubic-bezier(.25,.46,.45,.94); will-change:transform; cursor:grab; user-select:none; touch-action:pan-y; }
+.tweet-carousel-track { display:flex; align-items:stretch; transition:transform .4s cubic-bezier(.25,.46,.45,.94); will-change:transform; cursor:grab; user-select:none; touch-action:pan-y; }
 .tweet-carousel-track.dragging { transition:none; cursor:grabbing; }
-.tweet-slide { min-width:100%; }
-.tweet-slide img { display:block; width:100%; pointer-events:none; }
+.tweet-slide { min-width:100%; display:flex; }
+.tweet-slide img { display:block; width:100%; object-fit:cover; pointer-events:none; }
 .tweet-carousel-footer { display:flex; align-items:center; justify-content:space-between; margin-top:14px; }
 .tweet-dots { display:flex; gap:6px; }
 .tweet-dot { width:6px; height:6px; border-radius:50%; background:rgba(24,38,54,.2); border:none; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
@@ -725,23 +725,26 @@ function toggleWhy(id) {
     if (Math.abs(diff) > 40) goTo(diff < 0 ? dragStartIdx + 1 : dragStartIdx - 1);
   });
   /* Touch swipe */
-  var touchStartX = 0, touchStartY = 0, touchStartIdx = 0, touchLocked = false;
+  var touchStartX = 0, touchStartY = 0, touchStartIdx = 0, touchLocked = '';
   track.addEventListener('touchstart', function(e){
     isTouch = true;
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchStartIdx = idx;
-    touchLocked = false;
+    touchLocked = '';
   }, { passive:true });
   track.addEventListener('touchmove', function(e){
+    if (touchLocked === 'v') return;
     var dx = Math.abs(e.touches[0].clientX - touchStartX);
     var dy = Math.abs(e.touches[0].clientY - touchStartY);
-    if (!touchLocked) touchLocked = dx > dy ? 'h' : 'v';
+    if (!touchLocked && (dx > 8 || dy > 8)) {
+      touchLocked = dx >= dy ? 'h' : 'v';
+    }
     if (touchLocked === 'h') e.preventDefault();
   }, { passive:false });
   track.addEventListener('touchend', function(e){
     var diff = e.changedTouches[0].clientX - touchStartX;
-    if (touchLocked === 'h' && Math.abs(diff) > 40) goTo(diff < 0 ? touchStartIdx + 1 : touchStartIdx - 1);
+    if (touchLocked !== 'v' && Math.abs(diff) > 40) goTo(diff < 0 ? touchStartIdx + 1 : touchStartIdx - 1);
     setTimeout(function(){ isTouch = false; }, 400);
   });
 })();
